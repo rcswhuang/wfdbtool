@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/device.png</file>
+        <file>image/device_e.png</file>
+        <file>image/info.png</file>
+        <file>image/power.png</file>
+        <file>image/power_e.png</file>
+        <file>image/receive.png</file>
+        <file>image/send.png</file>
+        <file>image/station.png</file>
+        <file>image/station_e.png</file>
+        <file>image/group.png</file>
+        <file>image/group_e.png</file>
+        <file>image/down.png</file>
+        <file>image/up.png</file>
+        <file>image/lock1.png</file>
+        <file>image/selectpower.png</file>
+        <file>image/unlock1.png</file>
+        <file>image/locktype.png</file>
+        <file>image/stationpoint.png</file>
+        <file>image/yc.png</file>
+        <file>image/yx.png</file>
+        <file>image/config.png</file>
+        <file>image/term.png</file>
+        <file>image/glossary.png</file>
+        <file>image/exit.png</file>
+        <file>image/exportkey.png</file>
+        <file>image/exportrule.png</file>
+        <file>image/glossarymgr.png</file>
+        <file>image/keymgr.png</file>
+        <file>image/save.png</file>
+        <file>image/about.png</file>
+        <file>image/addmword.png</file>
+        <file>image/addword.png</file>
+        <file>image/delword.png</file>
+        <file>image/additem.png</file>
+        <file>image/delitem.png</file>
+        <file>image/copy.png</file>
+        <file>image/paste.png</file>
+        <file>image/lockex.png</file>
+    </qresource>
+</RCC>
