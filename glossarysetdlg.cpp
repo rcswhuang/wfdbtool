@@ -194,7 +194,7 @@ void HGlossarySetDlg::loadGlossary()
     //找到文件加载
     char szPath[1024];
     getDataFilePath(DFPATH_INI,szPath);
-    strcat_s(szPath,"/default_glossaryitem_config.ini");
+    strcat(szPath,"/default_glossaryitem_config.ini");
     QString strPath = QString(szPath);
     QFile file(strPath);
     if(!file.exists()) return;

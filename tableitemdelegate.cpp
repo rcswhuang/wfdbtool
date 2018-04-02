@@ -309,7 +309,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
             }
 			//要按照当前遥信的类型进行设置
             DIGITAL *pDigital = ((HStation*)pCurItemObject)->findDigitalByIndex(wGroupID,index.row());
-            if(!pDigital) return false;
+            //if(!pDigital) return false;
             POINTTERM* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             if(pPointTerm)
             {

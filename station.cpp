@@ -1516,7 +1516,7 @@ bool HStation::loadDefaultLockType()
     }
     char szPath[1024];
     getDataFilePath(DFPATH_INI,szPath);
-    strcat_s(szPath,"/default_locktype_config.ini");
+    strcat(szPath,"/default_locktype_config.ini");
     QString strPath = QString(szPath);
     QFile file(strPath);
     //QFile file;

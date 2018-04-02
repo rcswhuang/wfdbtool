@@ -136,7 +136,7 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
     }
     if(QGuiApplication::mouseButtons() == Qt::RightButton)
     {
-        setSelectionBehavior(QAbstractItemView::SelectRows);
+        setSelectionBehavior(QAbstractItemView::SingleSelection);
 
         if(nModelType == TREEPARAM_ANALOGUE)
         {
@@ -160,23 +160,33 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
         }
         if(nModelType == TREEPARAM_DIGITAL)
         {
-            QMenu *menuDgt = new QMenu;
-            QAction* addDgtAction = new QAction(QStringLiteral("新增一个遥信"),this);
-            menuDgt->addAction(addDgtAction);
-            addDgtAction->setIcon(QIcon(":/image/addword.png"));
-            connect(addDgtAction,SIGNAL(triggered()),this,SLOT(addOneDigital()));
+            //要判断如果有行选择中则弹出选中列信息
+            if(selectionModel()->hasSelection())
+            {
+                QMenu *test = new QMenu;
+                QAction* selDgtAction = new QAction(QStringLiteral("选中列"),this);
+                test->addAction(selDgtAction);
+                test->popup(event->globalPos());
+            }
+            else
+            {
+                QMenu *menuDgt = new QMenu;
+                QAction* addDgtAction = new QAction(QStringLiteral("新增一个遥信"),this);
+                menuDgt->addAction(addDgtAction);
+                addDgtAction->setIcon(QIcon(":/image/addword.png"));
+                connect(addDgtAction,SIGNAL(triggered()),this,SLOT(addOneDigital()));
 
-            QAction* addMDgtAction = new QAction(QStringLiteral("新增多个遥信"),this);
-            addMDgtAction->setIcon(QIcon(":/image/addmword.png"));
-            menuDgt->addAction(addMDgtAction);
-            connect(addMDgtAction,SIGNAL(triggered()),this,SLOT(addMulDigital()));
+                QAction* addMDgtAction = new QAction(QStringLiteral("新增多个遥信"),this);
+                addMDgtAction->setIcon(QIcon(":/image/addmword.png"));
+                menuDgt->addAction(addMDgtAction);
+                connect(addMDgtAction,SIGNAL(triggered()),this,SLOT(addMulDigital()));
 
-            QAction* delDgtAction = new QAction(QStringLiteral("删除选中遥信"),this);
-            delDgtAction->setIcon(QIcon(":/image/delword.png"));
-            menuDgt->addAction(delDgtAction);
-            connect(delDgtAction,SIGNAL(triggered()),this,SLOT(delDigital()));
-
-            menuDgt->popup(event->globalPos());
+                QAction* delDgtAction = new QAction(QStringLiteral("删除选中遥信"),this);
+                delDgtAction->setIcon(QIcon(":/image/delword.png"));
+                menuDgt->addAction(delDgtAction);
+                connect(delDgtAction,SIGNAL(triggered()),this,SLOT(delDigital()));
+                menuDgt->popup(event->globalPos());
+            }
         }
 
     }

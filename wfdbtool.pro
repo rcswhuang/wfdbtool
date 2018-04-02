@@ -12,8 +12,7 @@ TARGET = WFDBTool
 TEMPLATE = app
 
 INCLUDEPATH += \
-                $(QTDIR)/include \
-                ..\include \
+                ../include \
 
 SOURCES +=  main.cpp\
     wftreewidgetitem.cpp \

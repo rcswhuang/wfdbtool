@@ -714,9 +714,6 @@ void MainTableModel::initAnalogueTransPoint()
     insertRows(0,ncount);
 }
 
-
-
-
 //将所有数据加入到对应的行
 bool MainTableModel::insertRows(int row, int count, const QModelIndex & parent /*= QModelIndex()*/ )
 {

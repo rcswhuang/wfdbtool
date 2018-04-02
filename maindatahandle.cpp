@@ -368,7 +368,7 @@ bool HMainDataHandle::loadDefaultPointTerm()
     //找到文件加载
     char szPath[1024];
     getDataFilePath(DFPATH_INI,szPath);
-    strcat_s(szPath,"/default_pointterm_config.ini");
+    strcat(szPath,"/default_pointterm_config.ini");
     QString strPath = QString(szPath);
     QFile file(strPath);
     //QFile file;
