@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GlossarySetDlg</class>
+ <widget class="QDialog" name="GlossarySetDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>409</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>操作术语定义</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../mainwindow.qrc">
+    <normaloff>:/image/config.png</normaloff>:/image/config.png</iconset>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>30</y>
+     <width>291</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="currentIndex">
+    <number>2</number>
+   </property>
+   <widget class="QWidget" name="czdcTab">
+    <attribute name="title">
+     <string>操作动词</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="ztwzTab">
+    <attribute name="title">
+     <string>状态与位置</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="bhmTab">
+    <attribute name="title">
+     <string>保护名</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="zycTab">
+    <attribute name="title">
+     <string>专用词</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="modifyBtn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>349</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addBtn">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>349</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>增加</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delBtn">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>349</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="loadDefaultBtn">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>379</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="saveDefaultBtn">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>380</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>关闭</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>5</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>常用操作术语定义:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>320</y>
+     <width>61</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>术语名称：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="syLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>320</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>3</x>
+     <y>57</y>
+     <width>291</width>
+     <height>250</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../mainwindow.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>modifyBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>GlossarySetDlg</receiver>
+   <slot>modifyGlossary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>34</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>27</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>delBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>GlossarySetDlg</receiver>
+   <slot>delGlossary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>367</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>GlossarySetDlg</receiver>
+   <slot>addGlossary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>155</x>
+     <y>385</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadDefaultBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>GlossarySetDlg</receiver>
+   <slot>saveGlossary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>386</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>139</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveDefaultBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>GlossarySetDlg</receiver>
+   <slot>closeGlossary()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>393</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>393</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>modifyGlossary()</slot>
+  <slot>addGlossary()</slot>
+  <slot>delGlossary()</slot>
+  <slot>loadGlossary()</slot>
+  <slot>saveGlossary()</slot>
+  <slot>closeGlossary()</slot>
+ </slots>
+</ui>

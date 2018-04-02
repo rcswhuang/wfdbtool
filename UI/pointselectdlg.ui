@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>pointSelectDlg</class>
+ <widget class="QDialog" name="pointSelectDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>282</width>
+    <height>219</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>282</width>
+    <height>219</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>282</width>
+    <height>219</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>282</width>
+    <height>219</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>测点关联定义</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../mainwindow.qrc">
+    <normaloff>:/image/config.png</normaloff>:/image/config.png</iconset>
+  </property>
+  <widget class="QComboBox" name="stationCombo">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>20</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>26</x>
+     <y>60</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>间隔</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="groupCombo">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>60</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>100</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>类型</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="typeCombo">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>140</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>关联测点</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="relatedPointCombo">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>140</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>26</x>
+     <y>20</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>厂站</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="undoBtn">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>撤销关联</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="okBtn">
+   <property name="geometry">
+    <rect>
+     <x>102</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>选择</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="noBtn">
+   <property name="geometry">
+    <rect>
+     <x>192</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>取消</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../mainwindow.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>groupCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>currentGroupChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>269</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>relatedPointCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>currentPointChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>240</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>undoBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>dropRelation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>92</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>selectRelation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>156</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>noBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>235</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>currentGroupChanged(int)</slot>
+  <slot>currentPointChanged(int)</slot>
+  <slot>dropRelation()</slot>
+  <slot>selectRelation()</slot>
+  <slot>cancelRelation()</slot>
+ </slots>
+</ui>
