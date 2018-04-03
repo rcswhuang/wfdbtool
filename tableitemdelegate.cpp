@@ -439,43 +439,33 @@ void  HTableItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & 
                 if(COL_STATION_LOCK == index.column())
                 {
                     nCurItemData = index.model()->data(index, Qt::UserRole).toInt();
-                    //pCombo->setShowFlag(flag);
                 }
             }
             break;
             case TREEPARAM_ANALOGUE:
 			{
-                ANALOGUE* pAna = HMainDataHandle::Instance()->findAnalogueByIndex((HStation*)pCurItemObject,wGroupID,index.row()); //按照间隔 行号来寻找
+                //ANALOGUE* pAna = HMainDataHandle::Instance()->findAnalogueByIndex((HStation*)pCurItemObject,wGroupID,index.row()); //按照间隔 行号来寻找
 				switch(index.column())
 				{
                     case COL_ANALOGUE_TYPE:
-                        nCurItemData = pAna->btAnalogueType;
-					break;
                     case COL_ANALOGUE_UNIT:
-                        nCurItemData = pAna->btUint;
+                       nCurItemData = index.model()->data(index, Qt::UserRole).toInt();
 					break;
 				}
 			}
 			break;
             case TREEPARAM_DIGITAL:
 			{
-                DIGITAL* pDig = HMainDataHandle::Instance()->findDigitalByIndex((HStation*)pCurItemObject,wGroupID,index.row());
+                //DIGITAL* pDig = HMainDataHandle::Instance()->findDigitalByIndex((HStation*)pCurItemObject,wGroupID,index.row());
 				switch(index.column())
 				{
-                case COL_DIGITAL_TYPE://测点类型
-                    nCurItemData = pDig->wPointTermID;
-                    break;
-                case COL_DIGITAL_OPERATERM://操作术语
-                    nCurItemData = pDig->wGlossaryID;
-                    break;
-                case COL_DIGITAL_LOCKTYPE:
-                    nCurItemData = pDig->wLockTypeID;
-                    break;
+                case COL_DIGITAL_TYPE://测点类型                   
+                case COL_DIGITAL_OPERATERM://操作术语                  
+                case COL_DIGITAL_LOCKTYPE:  
                 case COL_DIGITAL_OPERAFALG:
-                    nCurItemData = pDig->btOPFlag;
+                   nCurItemData = index.model()->data(index, Qt::UserRole).toInt();
                     break;
-				}
-
+                }
 			}
 			break;
 			default:

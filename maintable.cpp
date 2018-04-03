@@ -136,37 +136,49 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
     }
     if(QGuiApplication::mouseButtons() == Qt::RightButton)
     {
-        setSelectionBehavior(QAbstractItemView::SingleSelection);
+        //setSelectionBehavior(QAbstractItemView::SelectRows);
 
         if(nModelType == TREEPARAM_ANALOGUE)
         {
-            QMenu *menuAna = new QMenu;
-            QAction* addAnaAction = new QAction(QStringLiteral("新增一个遥测"),this);
-            addAnaAction->setIcon(QIcon(":/image/addword.png"));
-            menuAna->addAction(addAnaAction);
-            connect(addAnaAction,SIGNAL(triggered()),this,SLOT(addOneAnalogue()));
+            if(colSelect())
+            {
+                QMenu *fillMenu = new QMenu;
+                QAction* fillAct = new QAction(QStringLiteral("填充选中列"),this);
+                fillMenu->addAction(fillAct);
+                connect(fillAct,SIGNAL(triggered(bool)),this,SLOT(fillSelectCol()));
+                fillMenu->popup(event->globalPos());
+            }
+            else
+            {
+                QMenu *menuAna = new QMenu;
+                QAction* addAnaAction = new QAction(QStringLiteral("新增一个遥测"),this);
+                addAnaAction->setIcon(QIcon(":/image/addword.png"));
+                menuAna->addAction(addAnaAction);
+                connect(addAnaAction,SIGNAL(triggered()),this,SLOT(addOneAnalogue()));
 
-            QAction* addMAnaAction = new QAction(QStringLiteral("新增多个遥测"),this);
-            addMAnaAction->setIcon(QIcon(":/image/addmword.png"));
-            menuAna->addAction(addMAnaAction);
-            connect(addMAnaAction,SIGNAL(triggered()),this,SLOT(addMulAnalogue()));
+                QAction* addMAnaAction = new QAction(QStringLiteral("新增多个遥测"),this);
+                addMAnaAction->setIcon(QIcon(":/image/addmword.png"));
+                menuAna->addAction(addMAnaAction);
+                connect(addMAnaAction,SIGNAL(triggered()),this,SLOT(addMulAnalogue()));
 
-            QAction* delAnaAction = new QAction(QStringLiteral("删除选中遥测"),this);
-            delAnaAction->setIcon(QIcon(":/image/delword.png"));
-            menuAna->addAction(delAnaAction);
-            connect(delAnaAction,SIGNAL(triggered()),this,SLOT(delAnalogue()));
+                QAction* delAnaAction = new QAction(QStringLiteral("删除选中遥测"),this);
+                delAnaAction->setIcon(QIcon(":/image/delword.png"));
+                menuAna->addAction(delAnaAction);
+                connect(delAnaAction,SIGNAL(triggered()),this,SLOT(delAnalogue()));
 
             menuAna->popup(event->globalPos());
+            }
         }
         if(nModelType == TREEPARAM_DIGITAL)
         {
             //要判断如果有行选择中则弹出选中列信息
-            if(selectionModel()->hasSelection())
+            if(colSelect())
             {
-                QMenu *test = new QMenu;
-                QAction* selDgtAction = new QAction(QStringLiteral("选中列"),this);
-                test->addAction(selDgtAction);
-                test->popup(event->globalPos());
+                QMenu *fillMenu = new QMenu;
+                QAction* fillAct = new QAction(QStringLiteral("填充选中列"),this);
+                fillMenu->addAction(fillAct);
+                connect(fillAct,SIGNAL(triggered(bool)),this,SLOT(fillSelectCol()));
+                fillMenu->popup(event->globalPos());
             }
             else
             {
@@ -425,9 +437,6 @@ void MainTableView::upSelectRow()
     mainTableModel->initData(btType);
     resetColumnWidth();
     emit selectRow(preRow);
-
-
-
 }
 
 void MainTableView::downSelectRow()
@@ -567,5 +576,44 @@ void MainTableView::showDoubleDgtDialog()
 
         horBar->setValue(nValue);
     }
+}
 
+/*
+ * 判断当前列选择情况
+*/
+bool MainTableView::colSelect()
+{
+    int col = selectionModel()->currentIndex().column();
+    QModelIndexList modelList = selectionModel()->selectedIndexes();
+    for(int i = 0; i < modelList.count();i++)
+    {
+        QModelIndex index = modelList[i];
+        if(col != index.column())
+            return false;
+    }
+    if(modelList.count() > 1)
+        return true;
+
+    return false;
+}
+
+/*
+ * 填充选择列
+*/
+void MainTableView::fillSelectCol()
+{
+    MainTableModel* mainTableModel = (MainTableModel*)model();
+    if(mainTableModel)
+    {
+        QModelIndex index = selectionModel()->currentIndex();
+        QVariant var = mainTableModel->data(index);
+        QVariant userVar = mainTableModel->data(index,Qt::UserRole);
+        QModelIndexList modelList = selectionModel()->selectedIndexes();
+        for(int i = 0; i < modelList.count();i++)
+        {
+            QModelIndex index1 = modelList[i];
+            mainTableModel->setData(index1,var,Qt::DisplayRole);
+            mainTableModel->setData(index1,userVar,Qt::UserRole);
+        }
+    }
 }

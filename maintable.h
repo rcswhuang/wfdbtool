@@ -22,6 +22,7 @@ public:
     void setColumnWidthByType(int col,int nWidth);
     void upSelectRow();
     void downSelectRow();
+    bool colSelect();
 protected:
   //
 protected:
@@ -34,7 +35,7 @@ public slots:
     void addOneAnalogue();
     void addMulAnalogue();
     void delAnalogue();
-
+    void fillSelectCol();
 
     void showDoubleDgtDialog();
 

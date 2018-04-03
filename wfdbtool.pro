@@ -35,7 +35,8 @@ SOURCES +=  main.cpp\
     pointselectdlg.cpp \
     pointtermdlg.cpp \
     maintablemodeltrans.cpp \
-    locknodlg.cpp
+    locknodlg.cpp \
+    htransdatadlg.cpp
 
 HEADERS  +=    \
     wftreewidgetitem.h \
@@ -58,7 +59,8 @@ HEADERS  +=    \
     glossary.h \
     pointselectdlg.h \
     pointtermdlg.h \
-    locknodlg.h
+    locknodlg.h \
+    htransdatadlg.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \

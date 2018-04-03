@@ -62,8 +62,10 @@ public:
     bool setAnalgoueData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole ) ;
     bool setDigitalData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole ) ;
 public:
-	void  initData(uchar uType); //提供给MainWindow函数用的
-	void  setStationData(QObject* pObject){pNowStation = (HStation*)pObject;}
+    void initData(uchar uType); //提供给MainWindow函数用的
+    void setStationData(QObject* pObject){pNowStation = (HStation*)pObject;}
+    QVariant analogueData(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    QVariant digitalData(const QModelIndex & index, int role = Qt::DisplayRole) const;
 public:
     int    nPowerGrade;//电压等级
     ushort wGroupID;//间隔ID

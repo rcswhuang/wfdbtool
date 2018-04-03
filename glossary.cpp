@@ -5,10 +5,6 @@ HGlossary::HGlossary(QObject *parent) :
 {
 }
 
-
-
-
-
 HGlossaryGroup::HGlossaryGroup(QObject *parent)
 {
     glossaryGroup.wGlossaryCounts = 0;

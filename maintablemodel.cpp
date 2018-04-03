@@ -192,22 +192,12 @@ QVariant MainTableModel::data(const QModelIndex & index, int role/* = Qt::Displa
             {
                 //这里要提供Qt::UserRole的值 主要是因为有的设置部分不在model里面，而是在view里面
                 //view里面初始化可能需要data提供UserRole的值来判断 所以这里必须要提供
-                if(role == Qt::UserRole)
-                {
-                    DIGITAL* pDigital = pNowStation->findDigitalByIndex(wGroupID,row);
-                    if(pDigital)
-                    {
-                        if(col == COL_DIGITAL_TYPE)//测点类型
-                        {
-                            return 0;//pDigital->usPointTermID;
-                        }
-                        else if(col == COL_DIGITAL_DOUBLEDIGITAL)
-                        {
-
-                            return pDigital->wDoubleDgtID;
-                        }
-                    }
-                }
+                return digitalData(index,role);
+            }
+            break;
+            case TREEPARAM_ANALOGUE:
+            {
+                return analogueData(index,role);
             }
             break;
         }
@@ -334,13 +324,23 @@ bool MainTableModel::setAnalgoueData( const QModelIndex & index, const QVariant 
         {
             qstrcpy(pAnalogue->szAnalogueName ,value.toString().toLocal8Bit().data());
         }
-        else if(col == COL_ANALOGUE_DNAME)//自定义名称
+        else if(col == COL_ANALOGUE_DNAME)//自定义名称 原始名称
         {
-            qstrcpy(pAnalogue->szAnalogueName ,value.toString().toLocal8Bit().data());
+            qstrcpy(pAnalogue->szAnalogueOriginalName ,value.toString().toLocal8Bit().data());
+            POWERGRADE* pPower=pNowStation->findPowerGrade(pAnalogue->nPowerGrade);
+            EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)pNowStation->findEquipmentGroupByID(pAnalogue->wGroupID);
+            if(pGroup!=NULL && pPower!=NULL)
+            {
+                QString strAnalogueName =QStringLiteral("%1 %2 %3").arg(pPower->szPowerGradeName).arg(pGroup->szGroupName).arg(pAnalogue->szAnalogueOriginalName);
+                qstrcpy(pAnalogue->szAnalogueName,strAnalogueName.toLocal8Bit().data());
+                QModelIndex modelIndex = createIndex(row,0);
+                setData(modelIndex,QVariant(strAnalogueName));
+            }
         }
         else if(col == COL_ANALOGUE_DEVICENO) //设备编号
         {
             qstrcpy(pAnalogue->szEquipmentID ,value.toString().toLocal8Bit().data());
+
         }
         else if(col == COL_ANALOGUE_CC1)//CC1
         {
@@ -612,9 +612,10 @@ void MainTableModel::initData(uchar uType)
 
 void MainTableModel::initStation()
 {
-    int ncount = HMainDataHandle::Instance()->m_stationList.count();
-    if(ncount == 0) return;
-	insertRows(0,ncount);//这个地方不对
+    //int ncount = HMainDataHandle::Instance()->m_stationList.count();
+    if(!pNowStation) return;
+    //if(ncount == 0) return;
+    insertRows(0,1);//初始化只能是1个厂站
 }
 
 void  MainTableModel::initEquipmentList()
@@ -1085,7 +1086,100 @@ bool  MainTableModel::insertAnaloguePoint(int row, int count, const QModelIndex 
     return true;
 }
 
+QVariant MainTableModel::analogueData(const QModelIndex & index, int role) const
+{
+    int row = index.row();
+    int col = index.column();
+    ANALOGUE *pAnalogue = pNowStation->findAnalogueByIndex(wGroupID,row);
+    if(!pAnalogue)
+        return QVariant();
+    if(role == Qt::UserRole)
+    {
+        if(col == COL_ANALOGUE_TYPE)//测点类型
+        {
+             return pAnalogue->btAnalogueType;
+        }
+        else if(col == COL_ANALOGUE_UNIT)//单位
+        {
+            return pAnalogue->btUint;
+        }
+        else if(col == COL_ANALOGUE_TRANSFLAG)//转发标志
+        {
+            return pAnalogue->wSendFlag;
+        }
+        else if(col == COL_ANALOGUE_RELATEDIGITAL)//相关遥信
+        {
+            return pAnalogue->wRelDigitalID;
+        }
+    }
+    return QVariant();
+}
 
+QVariant MainTableModel::digitalData(const QModelIndex & index, int role) const
+{
+    int row = index.row();
+    int col = index.column();
+    DIGITAL* pDigital = pNowStation->findDigitalByIndex(wGroupID,row);
+    if(!pDigital)
+        return QVariant();
+    if(role == Qt::UserRole)
+    {
+        if(col == COL_DIGITAL_TYPE)//测点类型
+        {
+            return 0;//pDigital->usPointTermID;
+        }
+        else if(col == COL_DIGITAL_DOUBLEDIGITAL)
+        {
+
+            return pDigital->wDoubleDgtID;
+        }
+        if(col == COL_DIGITAL_TYPE)//测点类型
+        {
+             return pDigital->wPointTermID;
+        }
+        else if(col == COL_DIGITAL_TRANSFLAG)//转发标志
+        {
+            return pDigital->wSendFlag;
+        }
+        else if(col == COL_DIGITAL_OPERATERM) //操作术语
+        {
+            return pDigital->wGlossaryID;
+        }
+        else if(col == COL_DIGITAL_OPENRULE)//分规则
+        {
+            return pDigital->wRuleFenID ;
+        }
+        else if(col == COL_DIGITAL_CLOSERULE)//合规则
+        {
+            return pDigital->wRuleHeID;
+        }
+        else if(col == COL_DIGITAL_JXOPENRULE)//检修分规则
+        {
+            return pDigital->wRuleJXFenID;
+        }
+        else if(col == COL_DIGITAL_JXCLOSERULE)//检修合规则
+        {
+             return pDigital->wRuleJXHeID;
+        }
+        else if(col == COL_DIGITAL_DOUBLEDIGITAL)//双位置遥信
+        {
+            return pDigital->wDoubleDgtID;
+        }
+        else if(col == COL_DIGITAL_CALCULTE )//计算单元
+        {
+            return pDigital->wFormulaID;
+        }
+        else if(col == COL_DIGITAL_OPERAFALG)//操作标志
+        {
+            return pDigital->btOPFlag;
+        }
+        else if(col == COL_DIGITAL_LOCKTYPE)//锁类型
+        {
+            return pDigital->wLockTypeID;
+        }
+    }
+    return QVariant();
+}
 
 
 

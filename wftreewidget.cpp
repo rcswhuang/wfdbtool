@@ -87,7 +87,7 @@ void HTreeWidget::initTree()
                     HTreeWidgetItem *pTreeItem1 = new HTreeWidgetItem(pgItem,TREEPARAM_EQUIPMENTGROUP);
                     Q_ASSERT(pTreeItem1);
                     pTreeItem1->setText(0,QString(pEG->szGroupName));
-                    pTreeItem1->setIcon(0,QIcon(":/image/equipment.png"));
+                    pTreeItem1->setIcon(0,QIcon(":/image/device.png"));
                     pTreeItem1->setTreeWidgetItemID(pEG->wGroupID);
                     pTreeItem1->setItemData((QObject*)pStation);
 

@@ -110,9 +110,12 @@ void MainWindow::treeItemSelectChanged()
     uchar btType = pItem->getTreeWidgetItemType();
 
     mainTableDelegate->setModeType(btType);
-    mainTabWidget->setTabText(TYPE_TAB_STATION,QString(pCurStation->m_station.szStationName));
     mainTableDelegate->setItemData((QObject*)pItem->itemData());
     mainTableModel->setStationData((QObject*)pItem->itemData());
+    //tab页面
+    //if(bt)
+    mainTabWidget->setTabText(TYPE_TAB_STATION,QString(pCurStation->m_station.szStationName));
+
     if(btType == TREEPARAM_POWERGRADE)
     {
         mainTableModel->nPowerGrade = pItem->getTreeWidgetItemID();
