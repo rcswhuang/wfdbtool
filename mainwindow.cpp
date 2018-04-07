@@ -14,6 +14,7 @@
 #include "glossarysetdlg.h"
 #include "glossarydlg.h"
 #include "locknodlg.h"
+#include "hformulapi.h"
 #include <QDockWidget>
 #include <QSplitter>
 #include <QMenuBar>
@@ -402,7 +403,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-
 void MainWindow::configDigitalLockEx()//配置遥信扩展锁
 {
     HLockNoDlg dlg(this);
@@ -412,5 +412,5 @@ void MainWindow::configDigitalLockEx()//配置遥信扩展锁
     dlg.wGroupID = pItem->getTreeWidgetItemID();
     dlg.initDigitalInfo();
     dlg.exec();
-
 }
+

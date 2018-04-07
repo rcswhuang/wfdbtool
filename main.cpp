@@ -19,6 +19,10 @@ int main(int argv,char* args[])
   //  app.setStyleSheet(strStyle);
 
     HMainDataHandle::m_pInstance = HMainDataHandle::Instance();
+    if(!HMainDataHandle::m_pInstance->loadFormula())
+    {
+        return 0;//这个0需要注意
+    }
     MainWindow mw;
     mw.showMaximized();
 	return app.exec();

@@ -262,9 +262,6 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
     return true;
 }
 
-
-
-
 //////////////////////////////////////////////////////////间隔//////////////////////////////////////////////////////
 
 bool HStation::findEquipmentGroup(int nPowerGrade)
@@ -445,7 +442,7 @@ DIGITAL* HStation::addDigital(ushort wGroupID)
     strDigitalName = QStringLiteral("新增遥信%1").arg(nID);
     qstrcpy(pDigital->szDigitalOriginalName,strDigitalName.toLocal8Bit().data());
     pDigital->wPointTermID = (ushort)-1;//开关、刀闸 测点类型
-    pDigital->ulEuipmentID = (ulong)-1;//待定???
+    pDigital->ulEquipmentID = (ulong)-1;//待定???
     qstrcpy(pDigital->szEquipmentID,"");//设备编号 具有唯一性
     pDigital->wGroupID = pEq->wGroupID;//设备组
     pDigital->nPowerGrade = pEq->nPowerGrade;//电压等级
@@ -516,7 +513,7 @@ DIGITAL* HStation::findDigital(ushort wDigitalID)
 */
 DIGITAL* HStation::findDigitalByIndex(ushort wIndex)
 {
-    if(wIndex > m_nDigitalCounts)
+    if(wIndex >= m_nDigitalCounts)
         return NULL;
     return m_pDigitalList[wIndex];
 }
@@ -529,7 +526,7 @@ DIGITAL* HStation::findDigitalByIndex(ushort wIndex)
 //
 DIGITAL* HStation::findDigitalByIndex(ushort wGroupID,ushort wIndex)
 {
-    if((int)wGroupID > m_nEQGroupCounts)
+    if((int)wGroupID >= m_nEQGroupCounts)
         return NULL;
 	ushort index = (ushort)-1;
     QListIterator<DIGITAL*> iterator(m_pDigitalList);
@@ -866,7 +863,7 @@ DIGITALLOCKNO* HStation::findDigitalLockNoByID(ushort wDigitalID)
 
 DIGITALLOCKNO* HStation::findDigitalLockNoByIndex(ushort wIndex)
 {
-    if(wIndex > m_nDigitalCounts)
+    if(wIndex >= m_nDigitalCounts)
         return NULL;
 
     return m_pDigitalLockNoList[wIndex];
@@ -938,7 +935,7 @@ ANALOGUE* HStation::findAnalogue(ushort wAnalogueID)
 */
 ANALOGUE* HStation::findAnalogueByIndex(ushort wIndex)
 {
-    if(wIndex > m_nAnalogueCounts)
+    if(wIndex >= m_nAnalogueCounts)
         return NULL;
     return m_pAnalogueList[wIndex];
 }
@@ -1051,7 +1048,7 @@ bool HStation::deleteAnalogue(ushort wGroupID,ushort wIndex)
 */
 ANALOGUE* HStation::findAnalogueFromScada(ushort wIndex)
 {
-    if(wIndex > m_nAnalogueCounts)
+    if(wIndex >= m_nAnalogueCounts)
         return NULL;
 	
     /*for(int i = 0; i < m_pAnalogueList.count();i++)
@@ -1073,7 +1070,7 @@ ANALOGUE* HStation::findAnalogueFromScada(ushort wIndex)
 */
 ANALOGUE* HStation::findAnalogueToSim(ushort wIndex)
 {
-    if(wIndex > m_nAnalogueCounts)
+    if(wIndex >= m_nAnalogueCounts)
         return NULL;
     /*
 	for(int i = 0; i < m_pAnalogueList.count();i++)
@@ -1136,7 +1133,7 @@ StructAnalogueExt* HStation::findAnalogueExt(ushort wAnalogueID)
 */
 StructAnalogueExt* HStation::findAnalogueExtByIndex(ushort wIndex)
 {
-    if(wIndex > m_nAnalogueCounts)
+    if(wIndex >= m_nAnalogueCounts)
         return NULL;
 	
   return m_pAnalogueExtList[wIndex];
@@ -1148,7 +1145,7 @@ StructAnalogueExt* HStation::findAnalogueExtByIndex(ushort wIndex)
 */
 StructAnalogueExt* HStation::findAnalogueExtBySendIndex(ushort wSendIndex)
 {
-    if(wSendIndex > m_nAnalogueCounts)
+    if(wSendIndex >= m_nAnalogueCounts)
         return NULL;
 
 	for(int i = 0; i < m_pAnalogueExtList.count(); i++)
@@ -1169,7 +1166,7 @@ StructAnalogueExt* HStation::findAnalogueExtBySendIndex(ushort wSendIndex)
 */
 StructAnalogueExt* HStation::findAnalogueExtToSim2(ushort wIndex)
 {
-    if(wIndex > m_nAnalogueCounts)
+    if(wIndex >= m_nAnalogueCounts)
         return NULL;
 
 	for(int i = 0; i < m_pAnalogueExtList.count(); i++)
@@ -1184,7 +1181,7 @@ StructAnalogueExt* HStation::findAnalogueExtToSim2(ushort wIndex)
 	return NULL;
 }
 
-QString   HStation::analogueType(uchar btAnalogueType)
+QString HStation::analogueType(uchar btAnalogueType)
 {
     QString strTemp = "";
     switch(btAnalogueType)
@@ -1243,7 +1240,7 @@ QString   HStation::analogueType(uchar btAnalogueType)
     return strTemp;
 }
 
-QString   HStation::analogueUnit(uchar btAnalogueUnit)
+QString HStation::analogueUnit(uchar btAnalogueUnit)
 {
     QString strTemp = "";
     switch(btAnalogueUnit)//单位
@@ -1411,7 +1408,7 @@ bool HStation::deletePowerGrade(int  nPowerGrade)
 */
 WFLOCKTYPE* HStation::findLockType(ushort wLockTypeID)
 {
-    if(wLockTypeID > m_nLockTypeCounts)
+    if(wLockTypeID >= m_nLockTypeCounts)
         return NULL;
 	for(int i = 0; i < m_pLockTypeList.count();i++)
 	{
@@ -1809,17 +1806,5 @@ void  HStation::startTransListIndex(uchar btParamType)
             }
             wIndex++;
         }
-    }
+    }   
 }
-
-
-
-
-
-
-
-
-
-
-
-

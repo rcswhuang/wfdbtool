@@ -36,7 +36,8 @@ SOURCES +=  main.cpp\
     pointtermdlg.cpp \
     maintablemodeltrans.cpp \
     locknodlg.cpp \
-    htransdatadlg.cpp
+    htransdatadlg.cpp \
+    hdbtoolcallback.cpp
 
 HEADERS  +=    \
     wftreewidgetitem.h \
@@ -60,7 +61,8 @@ HEADERS  +=    \
     pointselectdlg.h \
     pointtermdlg.h \
     locknodlg.h \
-    htransdatadlg.h
+    htransdatadlg.h \
+    hdbtoolcallback.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \
@@ -86,7 +88,7 @@ unix{
 
     LIBPATH +=	\
 
-    LIBS += -L ../lib/ -ldatafile
+    LIBS += -L ../lib/ -ldatafile -lformula
 
 }
 
@@ -95,7 +97,8 @@ win32{
     MOC_DIR = temp/moc
     OBJECTS_DIR	= temp/obj
     LIBS += \
-         ../lib/datafile.lib
+         ../lib/datafile.lib \
+         ../lib/formula.lib
 
 }
 

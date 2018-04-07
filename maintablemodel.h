@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 #include <QStringList>
+#include "hformulapi.h"
 /*
  * 每一行都有一个QStringList来存放所有显示或者编辑的数据(Qt::DisplayRole或者Qt::EditRole)
  * 同时每一行还有User类型来存放数据库对应的数据(Qt::UserRole)

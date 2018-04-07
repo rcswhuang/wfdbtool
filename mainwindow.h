@@ -123,10 +123,5 @@ private:
     //定义方面的action
     QToolBar* defToolBar;//工具栏:主要涉及定义方面的(电压等级定义，锁类型定义等等)
 
-
-
-
-	
-
 };
 #endif

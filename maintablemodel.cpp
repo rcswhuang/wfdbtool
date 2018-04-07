@@ -935,6 +935,8 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
                 strDigitalList<<QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
             else
                 strDigitalList << "";
+
+
             QString strFen,strHe,strJXFen,strJXHe; //分规则、合规则、检修分规则、检修合规则（未完成）
             strDigitalList<<""<<""<<""<<"";
 			//锁类型、锁号(按照选取的锁结构有所不同，注意钥匙类型不同 这里有区别)
@@ -995,7 +997,12 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
             else strDigitalList << QString(pDoubleDigital->szDigitalName);
 			
 		    //计算公式(未完成)
+            if(pDigital->wFormulaID == 0)
+                pDigital->wFormulaID = (ushort)-1;
+            FORMULA *pFormula = getFormula(pDigital->wFormulaID);
 			QString strFormula = "";
+            if(pFormula)
+                strFormula = getFormulaText(pFormula,false);
 			strDigitalList << strFormula;
 			
 			//电压等级

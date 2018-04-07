@@ -1,5 +1,7 @@
 ﻿#include "maindatahandle.h"
-#include "publicdata.h"
+//#include "publicdata.h"
+#include "hformulapi.h"
+#include "hdbtoolcallback.h"
 #include <QListIterator>
 #include <QStringList>
 #include <QVector>
@@ -25,7 +27,8 @@ HMainDataHandle* HMainDataHandle::Instance()
 		//初始化操作
         m_pInstance->loadData();
 		//1.初始化规则编辑模块
-		//2.初始化公式模块
+        //2.初始化公式模块 放在main函数里面调用
+        //m_pInstance->loadFormulaList();
 		//3.初始化插件列表
 		//4.初始化钥匙类型
 	}
@@ -211,9 +214,6 @@ void HMainDataHandle::saveData()
     loadDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
     dataFileHandle.wTotal = fileHandle.wDigitalLockNo;
     saveDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
-
-
-
 }
 
 void HMainDataHandle::openDBDataFile(FILEHANDLE* filehandle)
@@ -707,6 +707,47 @@ void HMainDataHandle::setGroupListOriName(HStation* pStation,ushort wGroupIndex,
 	}
 }
 
+bool HMainDataHandle::loadFormula()
+{
+    if(!initFormula(formulaCallback,MODULE_ID) || !loadFormulaList())
+        return false;
+    return true;
+}
+
 //设置
-	
-	
+bool HMainDataHandle::loadFormulaList()
+{
+    QList<FORMULA*> formulaList;
+    QList<ITEM*> itemList;
+    DATAFILEHEADER head;
+    memset(&head,0,sizeof(DATAFILEHEADER));
+    openDB(FILE_TYPE_FORMULA);
+    loadDataFileHeader(FILE_TYPE_FORMULA,&head);
+    for(int i = 1; i <= head.wTotal;i++)
+    {
+        FORMULA* formula = new FORMULA;
+        loadDBRecord(FILE_TYPE_FORMULA,i,formula);
+        formulaList.append(formula);
+    }
+    closeDB(FILE_TYPE_FORMULA);
+
+    openDB(FILE_TYPE_ITEM);
+    memset(&head,0,sizeof(DATAFILEHEADER));
+    loadDataFileHeader(FILE_TYPE_ITEM,&head);
+    for(int i = 1; i <= head.wTotal;i++)
+    {
+        ITEM* item = new ITEM;
+        loadDBRecord(FILE_TYPE_ITEM,i,item);
+        itemList.append(item);
+    }
+    closeDB(FILE_TYPE_ITEM);
+
+    bool bret = loadFormulaData(formulaList,itemList);
+
+    while(!formulaList.isEmpty())
+        delete formulaList.takeFirst();
+    while(!itemList.isEmpty())
+        delete itemList.takeFirst();
+    return bret;
+}
+/*********************************定义回调函数*********************************************/

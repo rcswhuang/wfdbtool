@@ -1,5 +1,6 @@
 ﻿#include "maintable.h"
 #include "dbtoolapi.h"
+#include "hformulapi.h"
 #include "publicdata.h"
 #include "maintablemodel.h"
 #include "tableitemdelegate.h"
@@ -510,7 +511,36 @@ void MainTableView::downSelectRow()
     emit selectRow(afterRow);
 }
 
+void MainTableView::showCalculteDialog()
+{
+    QModelIndex modelIndex = currentIndex();
+    HTableItemDelegate* pDelegate = (HTableItemDelegate*)itemDelegate(modelIndex);
+    if(!pDelegate) return;
+    HStation* pStation = (HStation*)pDelegate->curItemObject();
+    if(!pStation) return;
+    ushort wGroupID = pDelegate->groupID();
+    int nDigitalIndex = modelIndex.row();
+    DIGITAL* pDigital = HMainDataHandle::Instance()->findDigitalByIndex(pStation,wGroupID,nDigitalIndex);
+    if(pDigital)
+    {
+        if(pDigital->wFormulaID == 0)
+            pDigital->wFormulaID = (ushort)-1;
+        FORMULA formula;
+        if(createFormula(&formula,pDigital->wFormulaID) && addFormula(&formula,pDigital->wFormulaID,FORMULATYPE_TWO))
+        {
+            pDigital->wFormulaID = formula.wNo;
+        }
+    }
 
+    MainTableModel* mainModel = (MainTableModel*)model();
+    if(mainModel)
+    {
+        mainModel->initData(TREEPARAM_DIGITAL);
+        setModelType(TREEPARAM_DIGITAL);
+        resetColumnWidth();
+    }
+
+}
 //双位置遥信关联部分
 void MainTableView::showDoubleDgtDialog()
 {

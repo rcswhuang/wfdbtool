@@ -6,6 +6,7 @@
 #include "dbtoolapi.h"
 #include "station.h"
 #include "glossary.h"
+
 #include <QList>
 class QObject;
 class HStation;
@@ -30,6 +31,9 @@ public:
 	bool      loadData();
     void      saveData();
 
+    //加载fromula公式
+    bool loadFormula();
+    bool loadFormulaList();
 	//需要修改
     ANALOGUE* findAnalogueByIndex(HStation*,ushort wGroupID,ushort wIndex);
     DIGITAL*  findDigitalByIndex(HStation*,ushort wGroupID,ushort wIndex);

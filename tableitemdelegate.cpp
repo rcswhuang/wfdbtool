@@ -510,7 +510,7 @@ void  HTableItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & 
                     case COL_DIGITAL_CALCULTE:
 					{
 						disconnect(pBtn,SIGNAL(clicked()),pView,SLOT(showCalculteDialog()));
-						connect(pBtn,SIGNAL(clicked()),pView,SLOT(showCalculteDialog()));
+                        connect(pBtn,SIGNAL(clicked()),pView,SLOT(showCalculteDialog()));
 					}
 					break;
 				}

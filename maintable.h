@@ -38,6 +38,7 @@ public slots:
     void fillSelectCol();
 
     void showDoubleDgtDialog();
+    void showCalculteDialog();
 
 private:
     int nModelType;
