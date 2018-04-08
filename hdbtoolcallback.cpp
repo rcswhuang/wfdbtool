@@ -99,7 +99,7 @@ bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDB
 
         if(TYPE_DIGITAL == param->btType)
         {
-            pStation = HMainDataHandle::Instance()->findStation(param->wPoint);
+            pStation = HMainDataHandle::Instance()->findStation(param->wStation);
             if(!pStation) return false;
             DIGITAL *digital = pStation->findDigitalByIndex(param->wPoint);
             if(!digital) return false;
@@ -118,9 +118,10 @@ bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDB
 
         if(TYPE_GROUP == param->btType)
         {
-            pStation = HMainDataHandle::Instance()->findStation(param->wPoint);
+            pStation = HMainDataHandle::Instance()->findStation(param->wStation);
             if(!pStation) return false;
             EQUIPMENTGROUP *equipmentGroup = pStation->findEquipmentGroupByIndex(param->wPoint);
+            if(!equipmentGroup) return false;
             ((EQUIPMENTGROUP*)param->pBuffer)->wStationID = equipmentGroup->wStationID;
             ((EQUIPMENTGROUP*)param->pBuffer)->wGroupID = equipmentGroup->wGroupID;
             ((EQUIPMENTGROUP*)param->pBuffer)->wGroupIndex = equipmentGroup->wGroupIndex;

@@ -1187,23 +1187,3 @@ QVariant MainTableModel::digitalData(const QModelIndex & index, int role) const
     }
     return QVariant();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
