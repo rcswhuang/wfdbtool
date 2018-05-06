@@ -7,7 +7,7 @@ HPointSelectDlg::HPointSelectDlg(QWidget *parent) :
 {
     ui->setupUi(this);
     wGroupID = (int)-1;
-    wDigitalID = (int)-1;
+    wPointID = (int)-1;
     strDoubleDigitalName = "";
 }
 
@@ -65,7 +65,7 @@ void HPointSelectDlg::currentGroupChanged(int nIndex)
 
 void HPointSelectDlg::dropRelation()
 {
-    wDigitalID = (ushort)-1;
+    wPointID = (ushort)-1;
     emit QDialog::accept();
 }
 
@@ -76,7 +76,7 @@ void HPointSelectDlg::selectRelation()
     DIGITAL *pDigital = pStation->findDigital(wDigitalNo);
     if(pDigital)
     {
-        wDigitalID = pDigital->wDigitalID;
+        wPointID = pDigital->wDigitalID;
         strDoubleDigitalName = (QString)pDigital->szDigitalName;
     }
     emit QDialog::accept();
@@ -108,7 +108,7 @@ void HPointSelectDlg::refreshPointCombo()
             nIndex++;
             ui->relatedPointCombo->addItem(pDigital->szDigitalOriginalName,QVariant(pDigital->wDigitalID));
         }
-        if(pDigital->wDigitalID == wDigitalID)
+        if(pDigital->wDigitalID == wPointID)
         {
             bfind = true;
             ui->relatedPointCombo->setCurrentIndex(nIndex);
@@ -116,5 +116,4 @@ void HPointSelectDlg::refreshPointCombo()
     }
     if(!bfind)
         ui->relatedPointCombo->setCurrentIndex(0);
-
 }

@@ -28,7 +28,7 @@ public:
     HStation* pStation;
     ushort wStationID;
     ushort wGroupID;//当前测点ID的组
-    ushort wDigitalID;//双位置点的ID
+    ushort wPointID;//双位置点的ID
     uchar btPointType;//测点类型:遥测还是遥信
     QString strDoubleDigitalName;
 };

@@ -1,6 +1,7 @@
 #include "hdbtoolcallback.h"
 #include "hformulapi.h"
 #include "maindatahandle.h"
+#include "pointselectdlg.h"
 //公式类的回调函数
 bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDBID)
 {
@@ -166,4 +167,26 @@ bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDB
         break;
     }
     return true;
+}
+
+///////////////////////////////////////////规则类回调函数//////////////////////////////////////////////////////////
+bool __cdecl ruleCallback (int msgType,RULEPARAM *ruleParam)
+{
+    if(!ruleParam)
+        return;
+    switch(msgType)
+    {
+    case WM_SEL_POINT:
+        HPointSelectDlg dlg(this);
+        dlg.pStation = pStation;
+        dlg.wPoin;
+        dlg.btPointType = ruleParam->btPointType;
+        dlg.initDlg();
+        if(QDialog::Accepted == dlg.exec())
+        {
+        }
+        break;
+    default:
+        break;
+    }
 }
