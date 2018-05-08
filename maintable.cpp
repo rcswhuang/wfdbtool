@@ -561,13 +561,13 @@ void MainTableView::showDoubleDgtDialog()
     HPointSelectDlg dlg(this);
     dlg.pStation = pStation;
     dlg.wGroupID = wGroupID;//当前遥信点的组号
-    dlg.wDigitalID = nDoubleDigitalID; //当前遥信点
+    dlg.wPointID = nDoubleDigitalID; //当前遥信点
     dlg.btPointType = TYPE_DIGITAL;
     dlg.initDlg();
     if(QDialog::Accepted == dlg.exec())
     {           
         //寻找双位置遥信点
-        DIGITAL *pDigital1 = pStation->findDigital(dlg.wDigitalID);
+        DIGITAL *pDigital1 = pStation->findDigital(dlg.wPointID);
         if(pDigital1 == NULL)//没找到
         {
             //找到之前已关联的遥信点

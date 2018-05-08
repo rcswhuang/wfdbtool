@@ -80,15 +80,15 @@ RESOURCES += \
 
 
 unix{
-    UI_DIR = .ui
-    MOC_DIR = .moc
-    OBJECTS_DIR	= .obj
+  #  UI_DIR = .ui
+   # MOC_DIR = .moc
+   # OBJECTS_DIR	= .obj
 
     DEFINES += \
 
     LIBPATH +=	\
 
-    LIBS += -L ../lib/ -ldatafile -lformula
+    LIBS += -L ../lib -ldatafile -lformula
 
 }
 

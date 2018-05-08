@@ -251,6 +251,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>typeCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>pointSelectDlg</receiver>
+   <slot>currentTypeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>13</x>
+     <y>84</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>currentGroupChanged(int)</slot>
@@ -258,5 +274,6 @@
   <slot>dropRelation()</slot>
   <slot>selectRelation()</slot>
   <slot>cancelRelation()</slot>
+  <slot>currentTypeChanged(int)</slot>
  </slots>
 </ui>

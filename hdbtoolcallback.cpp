@@ -173,18 +173,21 @@ bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDB
 bool __cdecl ruleCallback (int msgType,RULEPARAM *ruleParam)
 {
     if(!ruleParam)
-        return;
+        return false;
     switch(msgType)
     {
     case WM_SEL_POINT:
-        HPointSelectDlg dlg(this);
-        dlg.pStation = pStation;
-        dlg.wPoin;
+    {
+        HPointSelectDlg dlg(NULL);
+        dlg.pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
+        dlg.wPointID = ruleParam->wPointNo;
         dlg.btPointType = ruleParam->btPointType;
         dlg.initDlg();
         if(QDialog::Accepted == dlg.exec())
         {
+
         }
+    }
         break;
     default:
         break;

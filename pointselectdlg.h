@@ -20,7 +20,8 @@ public:
     //void setDoubleDigitalID(int wID){nDoubleDigitalID = wID;}
 public slots:
     void currentGroupChanged(int nIndex);
-    void currentPointChanged(int nIndex){};
+    void currentPointChanged(int nIndex){}
+    void currentTypeChanged(int nIndex);
     void dropRelation();
     void selectRelation();
 public:
