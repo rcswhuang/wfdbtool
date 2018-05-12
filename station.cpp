@@ -899,6 +899,7 @@ ANALOGUE* HStation::addAnalogue(ushort wGroupID)
     pAna->wGroupID = wGroupID;
     pAna->nPowerGrade = pEG->nPowerGrade;
     pAna->wRelDigitalID = (ushort)-1;//相关遥信
+    pAna->fValue = 0.0;
     pAna->fCC1 = 0.0;
     pAna->fCC2 = 0.0;
     pAna->fCC3 = 0.0;
