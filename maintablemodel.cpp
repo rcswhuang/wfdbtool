@@ -246,7 +246,9 @@ bool  MainTableModel::setData(const QModelIndex & index, const QVariant & value,
                 if(!pGroup) return false;
                 if(col == COL_EQUIPGL_NAME)//直接写到数据结构中
                 {
-                    qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
+                    //qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
+                    pNowStation->renameEquipmentGroup(pGroup->wGroupID,value.toString().toLocal8Bit().data());
+
                 }
                 else if(col == COL_EQUIPGL_ORINAME)
                 {
@@ -264,7 +266,8 @@ bool  MainTableModel::setData(const QModelIndex & index, const QVariant & value,
                 if(!pGroup) return false;
                 if(col == COL_POWERGRADE_NAME)//直接写到数据结构中
                 {
-                     qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
+                    pNowStation->renameEquipmentGroup(pGroup->wGroupID,value.toString().toLocal8Bit().data());
+                     //qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
                 }
                 else if(col == COL_POWERGRADE_ORINAME)
                 {
@@ -282,7 +285,8 @@ bool  MainTableModel::setData(const QModelIndex & index, const QVariant & value,
                 if(!pGroup) return false;
                 if(col == COL_EQUIPG_NAME)
                 {
-                     qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
+                    pNowStation->renameEquipmentGroup(pGroup->wGroupID,value.toString().toLocal8Bit().data());
+                     //qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
                 }
                 else if(col == COL_EQUIPG_ORINAME)
                 {

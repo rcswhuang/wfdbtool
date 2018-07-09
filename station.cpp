@@ -402,7 +402,8 @@ void HStation::renameEquipmentGroup(ushort wGroupID, const char* szEquipmentGrou
     EQUIPMENTGROUP* pEq = findEquipmentGroupByID(wGroupID);
 	if(pEq == NULL)
 		return;
-    //pEq->strGroupName = QString(szEquipmentGroupName);
+    qstrcpy(pEq->szGroupName,szEquipmentGroupName);
+
     //间隔名改了 对应的遥信遥测组合名称也要变化
     QListIterator<DIGITAL*> iterator(m_pDigitalList);
 	while(iterator.hasNext())
@@ -410,10 +411,32 @@ void HStation::renameEquipmentGroup(ushort wGroupID, const char* szEquipmentGrou
         DIGITAL* pDigital = (DIGITAL*)iterator.next();
         if(pDigital->wGroupID == wGroupID)
 		{
-			//待定 需将遥信组合名称调整 遥测也是需要整合
-			//QString strDigital = 
+            POINTTERM* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POWERGRADE* pPower=findPowerGrade(pDigital->nPowerGrade);
+            EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)findEquipmentGroupByID(pDigital->wGroupID);
+            if(pTerm!=NULL && pPower!=NULL && strlen(pDigital->szEquipmentID)>0)
+            {
+                QString strDigitalName =QStringLiteral("%1 %2 %3 %4").arg(pPower->szPowerGradeName).arg(pGroup->szGroupName).arg(pDigital->szEquipmentID).arg(pTerm->szTermName);
+                qstrcpy(pDigital->szDigitalName,strDigitalName.toLocal8Bit().data());
+            }
 		}
 	}
+
+    QListIterator<ANALOGUE*> iterator1(m_pAnalogueList);
+    while(iterator.hasNext())
+    {
+        ANALOGUE* pAna = (ANALOGUE*)iterator1.next();
+        if(pAna->wGroupID == wGroupID)
+        {
+            POWERGRADE* pPower=findPowerGrade(pAna->nPowerGrade);
+            EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)findEquipmentGroupByID(pAna->wGroupID);
+            if(pGroup!=NULL && pPower!=NULL)
+            {
+                QString strAnalogueName =QStringLiteral("%1 %2 %3").arg(pPower->szPowerGradeName).arg(pGroup->szGroupName).arg(pAna->szAnalogueOriginalName);
+                qstrcpy(pAna->szAnalogueName,strAnalogueName.toLocal8Bit().data());
+            }
+        }
+    }
 }
 
 /*

@@ -382,7 +382,7 @@ bool HMainDataHandle::loadDefaultPointTerm()
         QString strLine = stream.readLine();
         if(strLine.isEmpty()) continue;
         QStringList strPointTermList = strLine.split('#');
-        if(strPointTermList.count() > 3)
+        if(strPointTermList.count() != 3)
             continue;
         uchar btType = (uchar)strPointTermList[0].toUInt();
         addPointTerm(btType,strPointTermList[1].toLocal8Bit().data(),strPointTermList[2].toLocal8Bit().data());
