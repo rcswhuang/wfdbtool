@@ -6,7 +6,7 @@
 #include "dbtoolapi.h"
 #include "station.h"
 #include "glossary.h"
-
+#include "huserdb.h"
 #include <QList>
 class QObject;
 class HStation;
@@ -85,6 +85,7 @@ public:
 	QList<HStation*> m_stationList;//厂站列表
     QList<POINTTERM*> m_pointTermList;//所有测点类型定义
     QList<HGlossaryGroup*> m_pGlossaryGroupList;
+    QList<HUserDb*> m_pUserDbList;
 	
 private:
     ushort m_wKeyType;//0,无钥匙，1,2 --26,27版钥匙，3--usb钥匙

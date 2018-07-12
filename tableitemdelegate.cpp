@@ -222,9 +222,9 @@ QWidget* HTableItemDelegate::createEquipmentAnalogueEditor( QWidget * parent, co
 		{
 			HCheckComboBox *pcom = new HCheckComboBox(parent);
 			QStringList strNameList;
-            strNameList << QStringLiteral("从监控接受")<< QStringLiteral("送监控") <<QStringLiteral("发送模拟屏");
+            strNameList << QStringLiteral("从监控接受")<< QStringLiteral("送监控");
             QVector<ushort> wFlagList;
-            wFlagList<<TRANS_ANALOGUE_FROMSCADA << TRANS_ANALOGUE_TOSCADA <<TRANS_ANALOGUE_TOMNP;
+            wFlagList<<TRANS_ANALOGUE_FROMSCADA << TRANS_ANALOGUE_TOSCADA;
             pcom->setItemInfo(strNameList,wFlagList);
             return pcom;
 		}
@@ -290,9 +290,9 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
 		{
 			HCheckComboBox* pBox = new HCheckComboBox(parent);
 			QStringList strNameList;
-            strNameList << QStringLiteral("从监控接受 ")<<QStringLiteral("送监控 ")<<QStringLiteral("送模拟屏 ");
+            strNameList << QStringLiteral("从监控接受 ")<<QStringLiteral("送监控 ");
             QVector<ushort> wFlagList;
-            wFlagList<<TRANS_DIGITAL_FROMSCADA<<TRANS_DIGITAL_TOSCADA<<TRANS_DIGITAL_TOMNP;
+            wFlagList<<TRANS_DIGITAL_FROMSCADA<<TRANS_DIGITAL_TOSCADA;
             pBox->setItemInfo(strNameList,wFlagList);
             pWidget = pBox;
 		}

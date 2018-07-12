@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QVector>
 #include "publicdata.h"
+
 //定义独立五防厂站类
 class HStation : public QObject
 {
@@ -196,10 +197,10 @@ public:
     int m_nLockTypeCounts;
 	
     //遥信扩展 注意遥信扩展 个数就和遥信个数一致
-    QList<StructDigitalExt*> m_pDigitalExtList;
+    //QList<StructDigitalExt*> m_pDigitalExtList;
 
     //遥测扩展 个数和遥测个数一致
-    QList<StructAnalogueExt*> m_pAnalogueExtList;
+    //QList<StructAnalogueExt*> m_pAnalogueExtList;
 	
     //五防锁号 个数和遥信个数一致
     QList<DIGITALLOCKNO*> m_pDigitalLockNoList;
@@ -209,17 +210,8 @@ public:
     //五防到监控的点列表
     QVector<ushort> m_wDigitalToScadaList;
 
-    //转到模拟屏的点
-    QVector<ushort> m_wDigitalToSimList;
-
     //scada到五防
     QVector<ushort> m_wDigitalFromScadaList;
-
-
-    //以下遥测转发	： 存储遥测ID号
-
-    //发送到模拟屏遥测
-    QVector<ushort> m_wAnalogueToSimList;
 
     //从scada中接受遥测
     QVector<ushort> m_wAnalogueFromScadaList;

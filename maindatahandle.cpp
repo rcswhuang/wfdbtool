@@ -8,7 +8,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
-//#include <QList>
 HMainDataHandle::HMainDataHandle()
 {
     m_wKeyType = KEYSET_NOKEY;
@@ -125,6 +124,40 @@ bool HMainDataHandle::loadData()
 		m_stationList.append(pStation);
     }
 	//closeDBDataFile(filehandle);
+
+    //加载插件代码  用 MACRO这个来代替  加载Qt编译出来的动态库
+    char szPluginPath[128];
+    getDataFilePath(DFPATH_PLUGIN,szPluginPath);//已经是d:/wf/plugin文件夹
+    QString strPluginName = QString(szPluginPath) + "/" + "run";//防止在d:/wf/plugin/run文件夹里面的dll才加载
+    QDir dir(strPluginName);
+    if(dir.exists())
+    {
+        QStringList strPluginList = dir.entryList(QDir::Files);//要加后缀过滤
+        for(int i = 0; i< strPluginList.count();i++)
+        {
+            strPluginName += strPluginList[i];
+            if(!QLibrary::isLibrary(strPluginName))
+            {
+                continue;
+            }
+            QLibrary library(strPluginName);
+            if(library.load())
+            {
+                PLUGINPROC pluginProc = (PLUGINPROC)library.resolve("pluginProc");
+                if(!pluginProc)
+                    library.unload();
+                else
+                {
+                    HUserDb *userDb = new HUserDb;
+                    userDb->strUserDBName = strPluginName;
+                    userDb->pluginProc = pluginProc;
+                    userDb->loadData();
+                    m_pUserDbList.append(userDb);
+                }
+            }
+        }
+    }
+
 	return true;
 }
 
@@ -214,6 +247,14 @@ void HMainDataHandle::saveData()
     loadDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
     dataFileHandle.wTotal = fileHandle.wDigitalLockNo;
     saveDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
+
+    //插件保存
+    for(int i = 0; i < m_pUserDbList.count();i++)
+    {
+        HUserDb* userDb = (HUserDb*)m_pUserDbList[i];
+        if(!userDb) continue;
+        userDb->saveData();
+    }
 }
 
 void HMainDataHandle::openDBDataFile(FILEHANDLE* filehandle)

@@ -52,11 +52,9 @@ HStation::~HStation()
         delete (DIGITALLOCKNO*)m_pDigitalLockNoList.takeFirst();
 
     //五防到监控的点列表
-    m_wDigitalToScadaList.clear();
-    m_wDigitalToSimList.clear();
+    m_wDigitalToScadaList.clear();  
     m_wDigitalFromScadaList.clear();
 
-    m_wAnalogueToSimList.clear();
     m_wAnalogueFromScadaList.clear();
     m_wAnalogueToScadaList.clear();
 }
@@ -681,16 +679,6 @@ bool HStation::deleteDigital(ushort wGroupID,ushort wIndex)
         if(nID == wDigitalID)
             m_wDigitalToScadaList.remove(wSendFlagIndex);
     }
-
-    wSendFlagIndex = (ushort)-1;
-    for(int i = 0; i < m_wDigitalToSimList.count();i++)
-    {
-        int nID = m_wDigitalToSimList[i];
-        wSendFlagIndex++;
-        if(nID == wDigitalID)
-            m_wDigitalToSimList.remove(wSendFlagIndex);
-    }
-
     return true;
 }
 
@@ -758,7 +746,7 @@ DIGITAL* HStation::findDigitalToSim(ushort wIndex)
 DIGITAL* HStation::findDigitalFromUtwf(ushort wIndex)
 {
 	//转发utwf的 在digitalext里面 通过digitalID 来寻找
-    QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
+    /*QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
 	while(iterator.hasNext())
 	{
 		StructDigitalExt* pDE = (StructDigitalExt*)iterator.next();
@@ -767,7 +755,7 @@ DIGITAL* HStation::findDigitalFromUtwf(ushort wIndex)
 		{
             return findDigital(pDE->wDigitalID);
 		}
-	}
+    }*/
 	return NULL;
 }
 
@@ -777,7 +765,7 @@ DIGITAL* HStation::findDigitalFromUtwf(ushort wIndex)
 */
 DIGITAL* HStation::findDigitalFromGroupJoinAndQuit(ushort wIndex)
 {
-    QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
+   /* QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
 	while(iterator.hasNext())
 	{
 		StructDigitalExt* pDE = (StructDigitalExt*)iterator.next();
@@ -786,7 +774,7 @@ DIGITAL* HStation::findDigitalFromGroupJoinAndQuit(ushort wIndex)
 		{
             return findDigital(pDE->wDigitalID);
 		}
-	}
+    }*/
 	return NULL;
 }
 
@@ -796,7 +784,7 @@ DIGITAL* HStation::findDigitalFromGroupJoinAndQuit(ushort wIndex)
 */
 void HStation::initDigitalExt(StructDigitalExt* pDigitalExt)
 {
-    pDigitalExt->wStationID = (ushort)-1;
+    /*pDigitalExt->wStationID = (ushort)-1;
     pDigitalExt->wDigitalID = (ushort)-1;
     pDigitalExt->wFromUTWFIndex = (ushort)-1;
     pDigitalExt->wSendIndex = (ushort)-1;
@@ -805,7 +793,7 @@ void HStation::initDigitalExt(StructDigitalExt* pDigitalExt)
     pDigitalExt->wReserve1 = (ushort)-1;
     pDigitalExt->wReserve2 = (ushort)-1;
     pDigitalExt->wReserve3 = (ushort)-1;
-    pDigitalExt->wReserve4 = (ushort)-1;
+    pDigitalExt->wReserve4 = (ushort)-1;*/
 }
 
 /*
@@ -814,14 +802,14 @@ void HStation::initDigitalExt(StructDigitalExt* pDigitalExt)
 */
 StructDigitalExt* HStation::findDigitalExt(ushort wDigitalID)
 {
-    QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
+    /*QListIterator<StructDigitalExt*> iterator(m_pDigitalExtList);
     while(iterator.hasNext())
     {
         StructDigitalExt* pDE = (StructDigitalExt*)iterator.next();
         Q_ASSERT(pDE);
         if(pDE->wDigitalID == wDigitalID)
             return pDE;
-    }
+    }*/
     return NULL;
 }
 
@@ -831,10 +819,11 @@ StructDigitalExt* HStation::findDigitalExt(ushort wDigitalID)
 */
 StructDigitalExt* HStation::findDigitalExtByIndex(ushort wIndex)
 {
-	if(m_pDigitalExtList.count() == 0)
+    /*if(m_pDigitalExtList.count() == 0)
 		return NULL;
 		
-    return m_pDigitalExtList[wIndex];
+    return m_pDigitalExtList[wIndex];*/
+    return NULL;
 }
 
 //////////////////////////////////////////////////////////////////遥信锁号扩展/////////////////////////////////////////////////////
@@ -1054,15 +1043,6 @@ bool HStation::deleteAnalogue(ushort wGroupID,ushort wIndex)
         if(nID == nAnalogueID)
             m_wAnalogueToScadaList.remove(wSendFlagIndex);
 	}
-
-    wSendFlagIndex = (ushort)-1;
-    for(int i = 0; i < m_wAnalogueToSimList.count();i++)
-	{
-        int nID = m_wAnalogueToSimList[i];
-        wSendFlagIndex++;
-        if(nID == nAnalogueID)
-            m_wAnalogueToSimList.remove(wSendFlagIndex);
-	}
 	return true;
 }
 	
@@ -1136,6 +1116,7 @@ void HStation::initAnalogueExt(StructAnalogueExt* pAnalogueExt)
 */
 StructAnalogueExt* HStation::findAnalogueExt(ushort wAnalogueID)
 {
+    /*
 	if(m_pAnalogueExtList.count() == 0)
 		return NULL;
 	
@@ -1147,7 +1128,7 @@ StructAnalogueExt* HStation::findAnalogueExt(ushort wAnalogueID)
         if(pAnaExt->wAnalogueID == wAnalogueID)
   			return pAnaExt;
   	}
-  }
+  }*/
   return NULL;
 }
 
@@ -1157,10 +1138,12 @@ StructAnalogueExt* HStation::findAnalogueExt(ushort wAnalogueID)
 */
 StructAnalogueExt* HStation::findAnalogueExtByIndex(ushort wIndex)
 {
+    /*
     if(wIndex >= m_nAnalogueCounts)
         return NULL;
 	
-  return m_pAnalogueExtList[wIndex];
+  return m_pAnalogueExtList[wIndex];*/
+    return NULL;
 }
 
 /*
@@ -1169,7 +1152,7 @@ StructAnalogueExt* HStation::findAnalogueExtByIndex(ushort wIndex)
 */
 StructAnalogueExt* HStation::findAnalogueExtBySendIndex(ushort wSendIndex)
 {
-    if(wSendIndex >= m_nAnalogueCounts)
+    /*if(wSendIndex >= m_nAnalogueCounts)
         return NULL;
 
 	for(int i = 0; i < m_pAnalogueExtList.count(); i++)
@@ -1180,7 +1163,7 @@ StructAnalogueExt* HStation::findAnalogueExtBySendIndex(ushort wSendIndex)
             if(pAnaExt->wSendIndex == wSendIndex)
 				return pAnaExt;
 		}
-	}
+    }*/
 	return NULL;
 }
 
@@ -1190,7 +1173,7 @@ StructAnalogueExt* HStation::findAnalogueExtBySendIndex(ushort wSendIndex)
 */
 StructAnalogueExt* HStation::findAnalogueExtToSim2(ushort wIndex)
 {
-    if(wIndex >= m_nAnalogueCounts)
+   /* if(wIndex >= m_nAnalogueCounts)
         return NULL;
 
 	for(int i = 0; i < m_pAnalogueExtList.count(); i++)
@@ -1201,7 +1184,7 @@ StructAnalogueExt* HStation::findAnalogueExtToSim2(ushort wIndex)
             if(pAnaExt->wToSimulatorIndex2 == wIndex)
 				return pAnaExt;
 		}
-	}
+    }*/
 	return NULL;
 }
 
@@ -1660,22 +1643,6 @@ void HStation::refreshTransListIndex(uchar btParamType)//刷新接受和转发�
         }
     }
 
-    wIndex = 0;
-    if(TREEPARAM_DIGITALTOSIM == btParamType)
-    {
-        for(int i = 0; i < m_wDigitalToSimList.count();i++)
-        {
-            ushort wDigitaID = m_wDigitalToSimList[i];
-            DIGITAL* pDigital = (DIGITAL*)findDigital(wDigitaID);
-            if(pDigital)
-            {
-                pDigital->wToSimIndex = wIndex;
-                wIndex++;
-            }
-        }
-    }
-
-
 
 ////////////////////////////////////遥测部分//////////////////////////////////////////
     wIndex = 0;
@@ -1693,20 +1660,6 @@ void HStation::refreshTransListIndex(uchar btParamType)//刷新接受和转发�
         }
     }
 
-    wIndex = 0;
-    if(TREEPARAM_ANALOGUETOSIM == btParamType)
-    {
-        for(int i = 0; i < m_wAnalogueToSimList.count();i++)
-        {
-            ushort wAnalogueID = m_wAnalogueToSimList[i];
-            ANALOGUE* pAna = (ANALOGUE*)findAnalogue(wAnalogueID);
-            if(pAna)
-            {
-                pAna->wToSimIndex = wIndex;
-                wIndex++;
-            }
-        }
-    }
 
     wIndex = 0;
     if(TREEPARAM_ANALOGUETOSCADA == btParamType)
@@ -1761,43 +1714,7 @@ void  HStation::startTransListIndex(uchar btParamType)
         }
     }
 
-    wIndex = 0;
-    if(TREEPARAM_DIGITALTOSIM == btParamType)
-    {
-        while(wIndex < m_nDigitalCounts)
-        {
-            for(int i = 0; i < m_pDigitalList.count();i++)
-            {
-                DIGITAL* pDigital = (DIGITAL*)m_pDigitalList[i];
-                if(pDigital && pDigital->wToSimIndex != (ushort)-1 && pDigital->wToSimIndex == wIndex)
-                {
-                    m_wDigitalToSimList.append(pDigital->wDigitalID);
-                }
-            }
-            wIndex++;
-        }
-    }
-
-
-
     //////////////////////////////////遥测部分///////////////////////////////////////
-    wIndex = 0;
-    if(TREEPARAM_ANALOGUETOSIM == btParamType)
-    {
-        while(wIndex < m_nAnalogueCounts)
-        {
-            for(int i = 0; i < m_pAnalogueList.count();i++)
-            {
-                ANALOGUE* pAna = (ANALOGUE*)m_pAnalogueList[i];
-                if(pAna && pAna->wToSimIndex != (ushort)-1 && pAna->wToSimIndex == wIndex)
-                {
-                    m_wAnalogueToSimList.append(pAna->wAnalogueID);
-                }
-            }
-            wIndex++;
-        }
-    }
-
     wIndex = 0;
     if(TREEPARAM_ANALOGUETOSCADA == btParamType)
     {

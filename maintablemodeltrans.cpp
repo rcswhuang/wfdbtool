@@ -21,12 +21,9 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
         iteratorEnd = pNowStation->m_wDigitalFromScadaList.end();
         break;
     case TREEPARAM_DIGITALTOSCADA:
-        iteratorStart = pNowStation->m_wDigitalFromScadaList.begin();
-        iteratorEnd = pNowStation->m_wDigitalFromScadaList.end();
+        iteratorStart = pNowStation->m_wDigitalToScadaList.begin();
+        iteratorEnd = pNowStation->m_wDigitalToScadaList.end();
         break;
-    case TREEPARAM_DIGITALTOSIM:
-        iteratorStart = pNowStation->m_wDigitalFromScadaList.begin();
-        iteratorEnd = pNowStation->m_wDigitalFromScadaList.end();
     }
     if(iteratorStart == NULL || iteratorEnd == NULL)
         return false;
@@ -55,8 +52,6 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
             strTrans += QStringLiteral("从监控接受,");     /*从监控接受*/
         if(TRANS_DIGITAL_TOSCADA == (pDigital->wSendFlag & TRANS_DIGITAL_TOSCADA) && (uchar)-1 != pDigital->wToScadaIndex)
             strTrans += QStringLiteral("送监控,");        /*送监控,*/
-        if(TRANS_DIGITAL_TOMNP == (pDigital->wSendFlag & TRANS_DIGITAL_TOMNP) && (uchar)-1 != pDigital->wToSimIndex)
-            strTrans += QStringLiteral("送模拟屏,");      /*送模拟屏,*/
         if(!strTrans.isEmpty())
             strTrans = strTrans.left(strTrans.length() - 1);
         strDigitalList<<strTrans;
@@ -171,9 +166,6 @@ bool  MainTableModel::insertAnalogueTransPoint(uchar btType,int row, int count, 
         iteratorStart = pNowStation->m_wAnalogueToScadaList.begin();
         iteratorEnd = pNowStation->m_wAnalogueToScadaList.end();
         break;
-    case TREEPARAM_ANALOGUETOSIM:
-        iteratorStart = pNowStation->m_wAnalogueToSimList.begin();
-        iteratorEnd = pNowStation->m_wAnalogueToSimList.end();
     }
     if(iteratorStart == NULL || iteratorEnd == NULL)
         return false;
@@ -197,8 +189,6 @@ bool  MainTableModel::insertAnalogueTransPoint(uchar btType,int row, int count, 
             strTemp += QStringLiteral("从监控接受,");      /*从监控接受,*/
         if(TRANS_ANALOGUE_TOSCADA == (pAna->wSendFlag & TRANS_ANALOGUE_TOSCADA) && (ushort)-1 != pAna->wToScadaIndex)
             strTemp += QStringLiteral("送监控,");      /*送监控,*/
-        if(TRANS_ANALOGUE_TOMNP == (pAna->wSendFlag & TRANS_ANALOGUE_TOMNP) && (ushort)-1 != pAna->wToSimIndex)
-            strTemp += QStringLiteral("送模拟屏,");      /*送模拟屏,*/
         strTemp = strTemp.left(strTemp.length() - 1);
         strAnalogueList<<strTemp;//转发标志
 

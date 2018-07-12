@@ -37,7 +37,8 @@ SOURCES +=  main.cpp\
     maintablemodeltrans.cpp \
     locknodlg.cpp \
     htransdatadlg.cpp \
-    hdbtoolcallback.cpp
+    hdbtoolcallback.cpp \
+    huserdb.cpp
 
 HEADERS  +=    \
     wftreewidgetitem.h \
@@ -62,7 +63,8 @@ HEADERS  +=    \
     pointtermdlg.h \
     locknodlg.h \
     htransdatadlg.h \
-    hdbtoolcallback.h
+    hdbtoolcallback.h \
+    huserdb.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \

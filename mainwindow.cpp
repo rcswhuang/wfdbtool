@@ -107,8 +107,20 @@ void MainWindow::currentTreeItemChanged(QTreeWidgetItem * current, QTreeWidgetIt
 void MainWindow::treeItemSelectChanged()
 {
     HTreeWidgetItem* pItem = (HTreeWidgetItem*)pTreeWidget->currentItem();
-    pCurStation = (HStation*)pItem->itemData();
     uchar btType = pItem->getTreeWidgetItemType();
+    if(btType == TREEPARAM_USERDBROOT || btType == TREEPARAM_USERDB)
+    {
+        if(btType == TREEPARAM_USERDB)
+        {
+            HUserDb *userDb = (HUserDb*)pItem->itemData();
+            if(userDb)
+            {
+                userDb->pluginConfig();
+            }
+        }
+        return;
+    }
+    pCurStation = (HStation*)pItem->itemData();
 
     mainTableDelegate->setModeType(btType);
     mainTableDelegate->setItemData((QObject*)pItem->itemData());
@@ -155,8 +167,6 @@ void MainWindow::treeItemSelectChanged()
     mainTableModel->initData(btType);
     mainTableView->setModelType(btType);
     mainTableView->resetColumnWidth();
-
-
 }
 
 void MainWindow::createAction()

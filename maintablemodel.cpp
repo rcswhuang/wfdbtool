@@ -87,14 +87,6 @@ void MainTableModel::initHeaderInfo()
     pEquipmentAnalogue[COL_ANALOGUE_GRADIENT] = QStringLiteral("梯度");                /*梯度*/
     pEquipmentAnalogue[COL_ANALOGUE_POWERGRADE] = QStringLiteral("电压等级");         /*电压等级*/
     pEquipmentAnalogue[COL_ANALOGUE_EQUIPMENTGROUP] = QStringLiteral("间隔");          /*间隔*/
-	
-	/*pDigitalFromScada;
-	pDigitalToScada;
-	pDigitalToSim;
-	pAnalogueToSim;
-	pDigitalFromUtwf;
-	pAnalogueToSim2;
-	*/
 }
 
 void MainTableModel::initHeader()
@@ -283,7 +275,7 @@ bool  MainTableModel::setData(const QModelIndex & index, const QVariant & value,
                 (*strItemList)[col] = QString(value.toString());
                 EQUIPMENTGROUP* pGroup = pNowStation->findEquipmentGroupByID(wGroupID);
                 if(!pGroup) return false;
-                if(col == COL_EQUIPG_NAME)
+                if(col == COL_EQUIPG_NAME)////
                 {
                     pNowStation->renameEquipmentGroup(pGroup->wGroupID,value.toString().toLocal8Bit().data());
                      //qstrcpy(pGroup->szGroupName,value.toString().toLocal8Bit().data());
@@ -391,10 +383,6 @@ bool MainTableModel::setAnalgoueData( const QModelIndex & index, const QVariant 
             else
                 pAnalogue->wToScadaIndex = pNowStation->delOneObject(pAnalogue->wAnalogueID,&pNowStation->m_wAnalogueToScadaList);
 
-            if(TRANS_ANALOGUE_TOMNP == (pAnalogue->wSendFlag & TRANS_ANALOGUE_TOMNP))
-                pAnalogue->wToSimIndex = pNowStation->addOneObject(pAnalogue->wAnalogueID,&pNowStation->m_wAnalogueToSimList);
-            else
-                pAnalogue->wToSimIndex = pNowStation->delOneObject(pAnalogue->wAnalogueID,&pNowStation->m_wAnalogueToSimList);
         }
         else if(col == COL_ANALOGUE_RELATEDIGITAL)//相关遥信
         {
@@ -473,12 +461,6 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
                 pDigital->wToScadaIndex = pNowStation->addOneObject(pDigital->wDigitalID,&pNowStation->m_wDigitalToScadaList);
             else
                 pDigital->wToScadaIndex = pNowStation->delOneObject(pDigital->wDigitalID,&pNowStation->m_wDigitalToScadaList);
-
-            if(TRANS_DIGITAL_TOMNP == (pDigital->wSendFlag & TRANS_DIGITAL_TOMNP))
-                pDigital->wToSimIndex = pNowStation->addOneObject(pDigital->wDigitalID,&pNowStation->m_wDigitalToSimList);
-            else
-                pDigital->wToSimIndex = pNowStation->delOneObject(pDigital->wDigitalID,&pNowStation->m_wDigitalToSimList);
-
         }
         else if(col == COL_DIGITAL_OPERATERM) //操作术语
         {
@@ -685,9 +667,6 @@ void MainTableModel::initDigitalTransPoint()
     case TREEPARAM_DIGITALFROMSCADA:
         ncount = pNowStation->m_wDigitalFromScadaList.count();
         break;
-    case TREEPARAM_DIGITALTOSIM:
-        ncount = pNowStation->m_wDigitalToSimList.count();
-        break;
     case TREEPARAM_DIGITALTOSCADA:
         ncount = pNowStation->m_wDigitalToScadaList.count();
         break;
@@ -705,9 +684,6 @@ void MainTableModel::initAnalogueTransPoint()
     {
     case TREEPARAM_ANALOGUEFROMSCADA:
         ncount = pNowStation->m_wAnalogueFromScadaList.count();
-        break;
-    case TREEPARAM_ANALOGUETOSIM:
-        ncount = pNowStation->m_wAnalogueToSimList.count();
         break;
     case TREEPARAM_ANALOGUETOSCADA:
         ncount = pNowStation->m_wAnalogueToScadaList.count();
@@ -929,8 +905,6 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
                 strTrans += QStringLiteral("从监控接受,");     /*从监控接受*/
             if(TRANS_DIGITAL_TOSCADA == (pDigital->wSendFlag & TRANS_DIGITAL_TOSCADA) && (ushort)-1 != pDigital->wToScadaIndex)
                 strTrans += QStringLiteral("送监控,");        /*送监控,*/
-            if(TRANS_DIGITAL_TOMNP == (pDigital->wSendFlag & TRANS_DIGITAL_TOMNP) && (ushort)-1 != pDigital->wToSimIndex)
-                strTrans += QStringLiteral("送模拟屏,");      /*送模拟屏,*/
             if(!strTrans.isEmpty())
                 strTrans = strTrans.left(strTrans.length() - 1);
 			strDigitalList<<strTrans;//
@@ -1057,8 +1031,6 @@ bool  MainTableModel::insertAnaloguePoint(int row, int count, const QModelIndex 
                 strTemp += QStringLiteral("从监控接受,");      /*从监控接受,*/
             if(TRANS_ANALOGUE_TOSCADA == (pAna->wSendFlag & TRANS_ANALOGUE_TOSCADA) && (ushort)-1 != pAna->wToScadaIndex)
                 strTemp += QStringLiteral("送监控,");      /*送监控,*/
-            if(TRANS_ANALOGUE_TOMNP == (pAna->wSendFlag & TRANS_ANALOGUE_TOMNP) && (ushort)-1 != pAna->wToSimIndex)
-                strTemp += QStringLiteral("送模拟屏,");      /*送模拟屏,*/
             strTemp = strTemp.left(strTemp.length() - 1);
             strAnalogueList<<strTemp;//转发标志
 

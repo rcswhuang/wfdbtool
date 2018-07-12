@@ -108,52 +108,78 @@ void HTreeWidget::initTree()
             }
         }
 
-        HTreeWidgetItem *fromScadaYXItem = new HTreeWidgetItem(stationItem,TREEPARAM_DIGITALFROMSCADA);
+        HTreeWidgetItem *monitorSystem = new HTreeWidgetItem(stationItem,TREEPARAM_SCADASYSTEM);
+        monitorSystem->setItemData((QObject*)pStation);
+        monitorSystem->setText(0,QStringLiteral("监控数据"));
+        monitorSystem->setIcon(0,QIcon(":/image/Monitor.png"));
+        stationItem->addChild(monitorSystem);
+
+        HTreeWidgetItem *fromScadaYXItem = new HTreeWidgetItem(monitorSystem,TREEPARAM_DIGITALFROMSCADA);
         fromScadaYXItem->setItemData((QObject*)pStation);
         fromScadaYXItem->setText(0,QStringLiteral("从监控接收遥信"));
         fromScadaYXItem->setIcon(0,QIcon(":/image/receive.png"));
-        stationItem->addChild(fromScadaYXItem);
+        monitorSystem->addChild(fromScadaYXItem);
 
-        HTreeWidgetItem *sendScadaYXItem = new HTreeWidgetItem(stationItem,TREEPARAM_DIGITALTOSCADA);
+        HTreeWidgetItem *fromScadaYCItem = new HTreeWidgetItem(monitorSystem,TREEPARAM_ANALOGUEFROMSCADA);
+        fromScadaYCItem->setItemData((QObject*)pStation);
+        fromScadaYCItem->setText(0,QStringLiteral("从监控接收遥测"));
+        fromScadaYCItem->setIcon(0,QIcon(":/image/receive.png"));
+        monitorSystem->addChild(fromScadaYCItem);
+
+        HTreeWidgetItem *sendScadaYXItem = new HTreeWidgetItem(monitorSystem,TREEPARAM_DIGITALTOSCADA);
         sendScadaYXItem->setItemData((QObject*)pStation);
         sendScadaYXItem->setText(0,QStringLiteral("发送监控遥信"));
         sendScadaYXItem->setIcon(0,QIcon(":/image/send.png"));
-        stationItem->addChild(sendScadaYXItem);
+        monitorSystem->addChild(sendScadaYXItem);
 
-        HTreeWidgetItem *sendMnpYXItem = new HTreeWidgetItem(stationItem,TREEPARAM_DIGITALTOSIM);
+        HTreeWidgetItem *sendScadaYCItem = new HTreeWidgetItem(monitorSystem,TREEPARAM_ANALOGUETOSCADA);
+        sendScadaYCItem->setItemData((QObject*)pStation);
+        sendScadaYCItem->setText(0,QStringLiteral("发送监控遥测"));
+        sendScadaYCItem->setIcon(0,QIcon(":/image/send.png"));
+        monitorSystem->addChild(sendScadaYCItem);
+
+        /*HTreeWidgetItem *sendMnpYXItem = new HTreeWidgetItem(stationItem,TREEPARAM_DIGITALTOSIM);
         sendMnpYXItem->setItemData((QObject*)pStation);
         sendMnpYXItem->setText(0,QStringLiteral("发送模拟屏遥信"));
         sendMnpYXItem->setIcon(0,QIcon(":/image/send.png"));
-        stationItem->addChild(sendMnpYXItem);
-
+        stationItem->addChild(sendMnpYXItem);*/
       /*  HTreeWidgetItem *fromUTYXItem = new HTreeWidgetItem(stationItem,TREEPARAM_ANALOGUEFROMSCADA);
         fromUTYXItem->setItemData((QObject*)pStation);
         fromUTYXItem->setText(0,QStringLiteral("从优特接收的遥信"));
         fromUTYXItem->setIcon(0,QIcon(":/image/receive.png"));
         stationItem->addChild(fromUTYXItem);*/
 
-        HTreeWidgetItem *fromScadaYCItem = new HTreeWidgetItem(stationItem,TREEPARAM_ANALOGUEFROMSCADA);
-        fromScadaYCItem->setItemData((QObject*)pStation);
-        fromScadaYCItem->setText(0,QStringLiteral("从监控接收遥测"));
-        fromScadaYCItem->setIcon(0,QIcon(":/image/receive.png"));
-        stationItem->addChild(fromScadaYCItem);
 
-        HTreeWidgetItem *sendScadaYCItem = new HTreeWidgetItem(stationItem,TREEPARAM_ANALOGUETOSCADA);
-        sendScadaYCItem->setItemData((QObject*)pStation);
-        sendScadaYCItem->setText(0,QStringLiteral("发送监控遥测"));
-        sendScadaYCItem->setIcon(0,QIcon(":/image/send.png"));
-        stationItem->addChild(sendScadaYCItem);
 
+
+
+        /*
         HTreeWidgetItem *sendMnpYCItem = new HTreeWidgetItem(stationItem,TREEPARAM_ANALOGUETOSIM);
         sendMnpYCItem->setItemData((QObject*)pStation);
         sendMnpYCItem->setText(0,QStringLiteral("发送模拟屏遥测"));
         sendMnpYCItem->setIcon(0,QIcon(":/image/send.png"));
-        stationItem->addChild(sendMnpYCItem);
-
-
+        stationItem->addChild(sendMnpYCItem);*/
+        HTreeWidgetItem *userDbRootItem = new HTreeWidgetItem(0,TREEPARAM_USERDBROOT);
+        userDbRootItem->setText(0,QStringLiteral("插件配置"));
+        userDbRootItem->setIcon(0,QIcon(":/image/plugin.png"));
+        //下面是配置具体插件
+        QList<HUserDb*> userDbList = HMainDataHandle::Instance()->m_pUserDbList;
+        for(int i = 0; i < userDbList.count();i++)
+        {
+            HUserDb* userDb = userDbList[i];
+            if(!userDb) continue;
+            HTreeWidgetItem *userDbItem = new HTreeWidgetItem(userDbRootItem,TREEPARAM_USERDB);
+            userDbItem->setItemData((QObject*)userDb);
+            char buf[64];
+            userDb->pluginName(buf);
+            userDbItem->setText(0,QString(buf));
+            userDbItem->setIcon(0,QIcon(":/image/pluginc.png"));
+            userDbRootItem->addChild(userDbItem);
+        }
 
         addTopLevelItem(stationItem);
         expandItem(stationItem);
+        addTopLevelItem(userDbRootItem);
     }
 }
 
@@ -176,6 +202,10 @@ void HTreeWidget::setItemIcon(HTreeWidgetItem *pCurItem, HTreeWidgetItem *pPreIt
     {
         pCurItem->setIcon(0,QIcon(":/image/device_e.png"));
     }
+    else if(pCurItem->getTreeWidgetItemType() == TREEPARAM_SCADASYSTEM)
+    {
+        pCurItem->setIcon(0,QIcon(":/image/Monitor_e.png"));
+    }
 
     //之前修改成完成态
     if(pPreItem == NULL) return;
@@ -195,6 +225,10 @@ void HTreeWidget::setItemIcon(HTreeWidgetItem *pCurItem, HTreeWidgetItem *pPreIt
     {
         pPreItem->setIcon(0,QIcon(":/image/device.png"));
     }
+    else if(pPreItem->getTreeWidgetItemType() == TREEPARAM_SCADASYSTEM)
+    {
+        pPreItem->setIcon(0,QIcon(":/image/Monitor.png"));
+    }
 }
 
 /*
@@ -208,9 +242,6 @@ void HTreeWidget::currentItemChanged(HTreeWidgetItem * currentItem, HTreeWidgetI
 
 void HTreeWidget::contextMenuEvent(QContextMenuEvent * event )
 {
-
-
-	
 	//如果不是可编辑的 就返回
 
     QPoint point = event->pos();
