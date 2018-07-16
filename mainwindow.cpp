@@ -24,21 +24,6 @@
 #include <QMessageBox>
 
 
-MainWindow* MainWindow::m_pInstance = NULL;
-MainWindow* MainWindow::Instance()
-{
-	if(!m_pInstance)
-		m_pInstance = new MainWindow();
-	return m_pInstance;
-}
-
-void MainWindow::Exitance()
-{
-	if(m_pInstance)
-		delete m_pInstance;
-}
-
-
 MainWindow::MainWindow(QWidget * parent/* = 0*/, Qt::WindowFlags flags /*= 0*/)
             :QMainWindow(parent,flags)
 {
@@ -77,6 +62,7 @@ MainWindow::MainWindow(QWidget * parent/* = 0*/, Qt::WindowFlags flags /*= 0*/)
 
 MainWindow::~MainWindow()
 {
+    HMainDataHandle::Instance()->Exintance();
 }
 
 void MainWindow::connectAction()

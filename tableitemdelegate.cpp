@@ -588,7 +588,7 @@ void  HTableItemDelegate::updateEditorGeometry ( QWidget * editor, const QStyleO
 	if(strClassName.compare(QPushButton::staticMetaObject.className()) == 0)
 	{
 		QRect rect;
-        rect.setLeft(option.rect.left() + (option.rect.right() - option.rect.left()) * 3/4);
+        rect.setLeft(option.rect.right()-25);
 		rect.setRight(option.rect.right());
 		rect.setTop( option.rect.top());
 		rect.setBottom(option.rect.bottom());

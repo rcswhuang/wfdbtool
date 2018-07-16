@@ -37,6 +37,7 @@ HMainDataHandle* HMainDataHandle::Instance()
 void HMainDataHandle::Exintance()
 {
 	//1.释放规则
+    exitFormula();
 	//2.释放公式
 	//3.释放钥匙
 	//4.释放厂站信息
@@ -255,6 +256,8 @@ void HMainDataHandle::saveData()
         if(!userDb) continue;
         userDb->saveData();
     }
+
+    saveFormulaData();//保存规则
 }
 
 void HMainDataHandle::openDBDataFile(FILEHANDLE* filehandle)

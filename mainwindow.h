@@ -23,9 +23,6 @@ public:
 	MainWindow(QWidget * parent = 0, Qt::WindowFlags flags = 0);
 	~MainWindow();
 public:
-	static MainWindow* m_pInstance;
-	static MainWindow* Instance();
-	static void Exitance();
     QSplitter* pSplitter;
 
 public:

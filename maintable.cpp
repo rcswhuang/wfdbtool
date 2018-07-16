@@ -1,4 +1,7 @@
-﻿#include "maintable.h"
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
+#include "maintable.h"
 #include "dbtoolapi.h"
 #include "hformulapi.h"
 #include "publicdata.h"
@@ -15,7 +18,7 @@
 #include <QGuiApplication>
 #include <QMap>
 #include <QItemSelectionModel>
-
+#include <QTextCodec>
 MainTableView::MainTableView(QWidget * parent):QTableView(parent)
 {
     setShowGrid(true);
@@ -513,9 +516,14 @@ void MainTableView::downSelectRow()
 
 void MainTableView::showCalculteDialog()
 {
+    QScrollBar *horBar = horizontalScrollBar();
+    int nValue = horBar->value();
+
     QModelIndex modelIndex = currentIndex();
     HTableItemDelegate* pDelegate = (HTableItemDelegate*)itemDelegate(modelIndex);
     if(!pDelegate) return;
+    MainTableModel* mainModel = (MainTableModel*)model();
+    if(!mainModel) return;
     HStation* pStation = (HStation*)pDelegate->curItemObject();
     if(!pStation) return;
     ushort wGroupID = pDelegate->groupID();
@@ -529,16 +537,12 @@ void MainTableView::showCalculteDialog()
         if(createFormula(&formula,pDigital->wFormulaID) && addFormula(&formula,pDigital->wFormulaID,FORMULATYPE_TWO))
         {
             pDigital->wFormulaID = formula.wNo;
+            QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+            QString strText = getFormulaText(&formula,false);
+            mainModel->setDigitalData(modelIndex,strText,Qt::DisplayRole);
         }
     }
-
-    MainTableModel* mainModel = (MainTableModel*)model();
-    if(mainModel)
-    {
-        mainModel->initData(TREEPARAM_DIGITAL);
-        setModelType(TREEPARAM_DIGITAL);
-        resetColumnWidth();
-    }
+    horBar->setValue(nValue);
 
 }
 //双位置遥信关联部分

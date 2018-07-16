@@ -1,4 +1,7 @@
-﻿#include "maintablemodel.h"
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
+#include "maintablemodel.h"
 #include "dbtoolapi.h"
 #include "station.h"
 #include "publicdata.h"
@@ -488,7 +491,7 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         }
         else if(col == COL_DIGITAL_CALCULTE )//计算单元
         {
-            pDigital->wFormulaID = value.toUInt();
+            pDigital->wFormulaID = value.toUInt(); //不需要，在计算单元结束的时候已经操作
         }
         else if(col == COL_DIGITAL_OPERAFALG)//操作标志
         {
