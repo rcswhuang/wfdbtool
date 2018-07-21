@@ -1,6 +1,7 @@
 ﻿#include "maindatahandle.h"
 //#include "publicdata.h"
 #include "hformulapi.h"
+#include "hruleeditapi.h"
 #include "hdbtoolcallback.h"
 #include <QListIterator>
 #include <QStringList>
@@ -24,6 +25,7 @@ HMainDataHandle* HMainDataHandle::Instance()
 	{
 		m_pInstance = new HMainDataHandle();
 		//初始化操作
+        m_pInstance->loadRule();
         m_pInstance->loadData();
 		//1.初始化规则编辑模块
         //2.初始化公式模块 放在main函数里面调用
@@ -749,6 +751,13 @@ void HMainDataHandle::setGroupListOriName(HStation* pStation,ushort wGroupIndex,
 	{
         sprintf(pGroup->szGroupOriginalName ,strOriName.toLocal8Bit().data());
 	}
+}
+
+bool HMainDataHandle::loadRule()
+{
+    if(!initRuleFiles(TYPE_APP_WF,ruleCallback))
+        return false;
+    return true;
 }
 
 bool HMainDataHandle::loadFormula()

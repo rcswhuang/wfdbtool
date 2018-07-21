@@ -543,8 +543,133 @@ void MainTableView::showCalculteDialog()
         }
     }
     horBar->setValue(nValue);
-
 }
+
+void MainTableView::showFormulaDialog(quint8 type,quint8 col)
+{
+    //先要获取哪个遥信需要进行规则操作
+    QScrollBar *horBar = horizontalScrollBar();
+    int nValue = horBar->value();
+    if(type == 0) return;
+    QModelIndex modelIndex = currentIndex();
+    HTableItemDelegate* pDelegate = (HTableItemDelegate*)itemDelegate(modelIndex);
+    if(!pDelegate) return;
+    MainTableModel* mainModel = (MainTableModel*)model();
+    if(!mainModel) return;
+    HStation* pStation = (HStation*)pDelegate->curItemObject();
+    if(!pStation) return;
+    ushort wGroupID = pDelegate->groupID();
+    int nDigitalIndex = modelIndex.row();
+    DIGITAL* pDigital = HMainDataHandle::Instance()->findDigitalByIndex(pStation,wGroupID,nDigitalIndex);
+    if(!pDigital) return;
+    if(type == 1) //编辑规则
+    {
+        QString strRuleFormula;//规则公式
+        //分合规则公式
+        ushort wNo = 0;
+        quint16 type = 0;
+        if(col == COL_DIGITAL_OPENRULE)
+        {
+            type = CTRL_OPEN;
+            wNo = pDigital->wRuleFenID;
+        }
+        else if(col == COL_DIGITAL_CLOSERULE)
+        {
+            type = CTRL_CLOSE;
+            wNo = pDigital->wRuleHeID;
+        }
+        else if(col == COL_DIGITAL_JXOPENRULE)
+        {
+            type = CTRL_JXOPEN;
+            wNo = pDigital->wRuleJXFenID;
+        }
+        else if(col == COL_DIGITAL_JXCLOSERULE)
+        {
+            type = CTRL_JXCLOSE;
+            wNo = pDigital->wRuleJXHeID;
+        }
+        bool bok = openRuleWindow(pDigital->wStationID,TYPE_DIGITAL,pDigital->wDigitalID,type,wNo,TYPE_RULE_GENERAL,strRuleFormula);
+        if(bok)
+        {
+            if(strRuleFormula.isEmpty())
+            {
+                if(col == COL_DIGITAL_OPENRULE)
+                    pDigital->wRuleFenID = (ushort)-1;
+                else if(col == COL_DIGITAL_CLOSERULE)
+                    pDigital->wRuleHeID = (ushort)-1;
+                else if(col == COL_DIGITAL_JXOPENRULE)
+                    pDigital->wRuleJXFenID = (ushort)-1;
+                else if(col == COL_DIGITAL_JXCLOSERULE)
+                    pDigital->wRuleJXHeID = (ushort)-1;
+                mainModel->setDigitalData(modelIndex,"",Qt::DisplayRole);
+            }
+            else
+            {
+                QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+                FORMULA formula;
+                if(col == COL_DIGITAL_OPENRULE)
+                    formula.wNo = pDigital->wRuleFenID;
+                else if(col == COL_DIGITAL_CLOSERULE)
+                    formula.wNo = pDigital->wRuleHeID;
+                else if(col == COL_DIGITAL_JXOPENRULE)
+                    formula.wNo = pDigital->wRuleJXFenID;
+                else if(col == COL_DIGITAL_JXCLOSERULE)
+                    formula.wNo = pDigital->wRuleJXHeID;
+                if(compileFormula(strRuleFormula.toLocal8Bit().data(),&formula) && addFormula(&formula,formula.wNo,FORMULATYPE_TWO))
+                {
+                    if(col == COL_DIGITAL_OPENRULE)
+                        pDigital->wRuleFenID = formula.wNo;
+                    else if(col == COL_DIGITAL_CLOSERULE)
+                        pDigital->wRuleHeID = formula.wNo;
+                    else if(col == COL_DIGITAL_JXOPENRULE)
+                        pDigital->wRuleJXFenID = formula.wNo;
+                    else if(col == COL_DIGITAL_JXCLOSERULE)
+                        pDigital->wRuleJXHeID = formula.wNo;
+                    mainModel->setDigitalData(modelIndex,strRuleFormula,Qt::DisplayRole);
+                }
+            }
+        }
+    }
+    else if(type == 2) //删除规则
+    {
+        //分合规则公式
+        ushort wNo = 0;
+        quint16 type = 0;
+        if(col == COL_DIGITAL_OPENRULE)
+        {
+            type == CTRL_OPEN;
+            wNo = pDigital->wRuleFenID;
+        }
+        else if(col == COL_DIGITAL_CLOSERULE)
+        {
+            type = CTRL_CLOSE;
+            wNo = pDigital->wRuleHeID;
+        }
+        else if(col == COL_DIGITAL_JXOPENRULE)
+        {
+            type = CTRL_JXOPEN;
+            wNo = pDigital->wRuleJXFenID;
+        }
+        else if(col == COL_DIGITAL_JXCLOSERULE)
+        {
+            type = CTRL_JXCLOSE;
+            wNo = pDigital->wRuleJXHeID;
+        }
+        deleteFormula(wNo);
+        delRuleFile(pDigital->wStationID,TYPE_DIGITAL,pDigital->wDigitalID,type);
+        if(col == COL_DIGITAL_OPENRULE)
+            pDigital->wRuleFenID = (ushort)-1;
+        else if(col == COL_DIGITAL_CLOSERULE)
+            pDigital->wRuleHeID = (ushort)-1;
+        else if(col == COL_DIGITAL_JXOPENRULE)
+            pDigital->wRuleJXFenID = (ushort)-1;
+        else if(col == COL_DIGITAL_JXCLOSERULE)
+            pDigital->wRuleJXHeID = (ushort)-1;
+        mainModel->setDigitalData(modelIndex,"",Qt::DisplayRole);
+    }
+    horBar->setValue(nValue);
+}
+
 //双位置遥信关联部分
 void MainTableView::showDoubleDgtDialog()
 {

@@ -5,6 +5,7 @@
 #include "maintable.h"
 #include "maintablemodel.h"
 #include "mulcombobox.h"
+#include "hformuladlg.h"
 #include <QLineEdit>
 #include <QPushButton>
 #include <QMenu>
@@ -329,11 +330,8 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
         case COL_DIGITAL_JXOPENRULE:
         case COL_DIGITAL_JXCLOSERULE:
 		{
-            //QPushButton* pBtn = new QPushButton(QStringLiteral("..."),parent);
-            QMenu* pMenu = new QMenu;
-            QAction* testAct = new QAction("test",parent);
-            pMenu->addAction(testAct);
-            pWidget = pMenu;
+            HFormulaDlg* dlg = new HFormulaDlg(parent);
+            pWidget = dlg;
 		}
 		break;
         case COL_DIGITAL_LOCKTYPE:
@@ -404,6 +402,54 @@ void  HTableItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & 
 		QString strContent = index.model()->data(index,Qt::EditRole).toString();
 		pEditor->setText(strContent);
 	}
+    else if(strClassName.compare(HFormulaDlg::staticMetaObject.className()) == 0)
+    {
+        HFormulaDlg* pFormulaDlg = qobject_cast<HFormulaDlg*>(editor);
+        MainTableView* pView = (MainTableView*)parent();//初始化的时候要注意 将view的对象传进来
+        int ncolumn = index.column();
+        switch(ucModeType)
+        {
+            case TREEPARAM_DIGITAL:
+            {
+                switch(ncolumn)
+                {
+                    case COL_DIGITAL_OPENRULE:
+                    {
+                        pFormulaDlg->m_btCol = COL_DIGITAL_OPENRULE;
+                        disconnect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                        connect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                    }
+                    break;
+                    case COL_DIGITAL_CLOSERULE:
+                    {
+                        pFormulaDlg->m_btCol = COL_DIGITAL_CLOSERULE;
+                        disconnect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                        connect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                    }
+                    break;
+                    case COL_DIGITAL_JXOPENRULE:
+                    {
+                        pFormulaDlg->m_btCol = COL_DIGITAL_JXOPENRULE;
+                        disconnect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                        connect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                    }
+                    break;
+                    case COL_DIGITAL_JXCLOSERULE:
+                    {
+                        pFormulaDlg->m_btCol = COL_DIGITAL_JXCLOSERULE;
+                        disconnect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                        connect(pFormulaDlg,SIGNAL(operaRuleType(quint8,quint8)),pView,SLOT(showFormulaDialog(quint8,quint8)));
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        pFormulaDlg->show();
+
+    }
 	else if(strClassName.compare(HCheckComboBox::staticMetaObject.className()) == 0)
 	{
 		HCheckComboBox* pCombo = qobject_cast<HCheckComboBox*>(editor);
@@ -491,16 +537,6 @@ void  HTableItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & 
 			{
 				switch(ncolumn)
 				{
-                    case COL_DIGITAL_OPENRULE:
-                    case COL_DIGITAL_CLOSERULE:
-                    case COL_DIGITAL_JXOPENRULE:
-                    case COL_DIGITAL_JXCLOSERULE:
-					{
-						disconnect(pBtn,SIGNAL(clicked()),pView,SLOT(showRuleDialog()));
-						connect(pBtn,SIGNAL(clicked()),pView,SLOT(showRuleDialog()));
-						//pView->show
-					}
-					break;
                     case COL_DIGITAL_DOUBLEDIGITAL:
 					{
 						disconnect(pBtn,SIGNAL(clicked()),pView,SLOT(showDoubleDgtDialog()));
@@ -595,12 +631,12 @@ void  HTableItemDelegate::updateEditorGeometry ( QWidget * editor, const QStyleO
        // option.rect = rect;
         editor->setGeometry(rect);
 	}
-    else if(strClassName.compare(QMenu::staticMetaObject.className()) == 0)
+    else if(strClassName.compare(HFormulaDlg::staticMetaObject.className()) == 0)
     {
         QRect rect;
 
         //15,27 应该的view的边框的宽度
-        QPoint point1 = ((MainTableView*)pParent)->mapToGlobal(QPoint(option.rect.left()+15,option.rect.bottom()+27));
+        QPoint point1 = ((MainTableView*)pParent)->mapToGlobal(QPoint(option.rect.left()+15,option.rect.bottom()));
         //QPoint point2 = editor->mapToGlobal(QPoint(option.rect.top(),option.rect.bottom()));
         rect.setX(point1.x());
         rect.setY(point1.y());

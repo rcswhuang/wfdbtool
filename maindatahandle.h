@@ -4,6 +4,8 @@
 //供树形、表格型对象使用，避免直接对厂站的操作
 #include "publicdata.h"
 #include "dbtoolapi.h"
+#include "hformulapi.h"
+#include "hruleeditapi.h"
 #include "station.h"
 #include "glossary.h"
 #include "huserdb.h"
@@ -34,6 +36,9 @@ public:
     //加载fromula公式
     bool loadFormula();
     bool loadFormulaList();
+
+    //加载规则
+    bool loadRule();
 	//需要修改
     ANALOGUE* findAnalogueByIndex(HStation*,ushort wGroupID,ushort wIndex);
     DIGITAL*  findDigitalByIndex(HStation*,ushort wGroupID,ushort wIndex);

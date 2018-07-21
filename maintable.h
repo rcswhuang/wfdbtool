@@ -39,6 +39,7 @@ public slots:
 
     void showDoubleDgtDialog();
     void showCalculteDialog();
+    void showFormulaDialog(quint8 type,quint8 col);
 
 private:
     int nModelType;

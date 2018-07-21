@@ -38,7 +38,8 @@ SOURCES +=  main.cpp\
     locknodlg.cpp \
     htransdatadlg.cpp \
     hdbtoolcallback.cpp \
-    huserdb.cpp
+    huserdb.cpp \
+    hformuladlg.cpp
 
 HEADERS  +=    \
     wftreewidgetitem.h \
@@ -64,7 +65,8 @@ HEADERS  +=    \
     locknodlg.h \
     htransdatadlg.h \
     hdbtoolcallback.h \
-    huserdb.h
+    huserdb.h \
+    hformuladlg.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \
@@ -75,7 +77,8 @@ FORMS    += mainwindow.ui \
     UI/glossarysetdlg.ui \
     UI/glossarysetdlg.ui \
     UI/pointselectdlg.ui \
-    UI/locknodlg.ui
+    UI/locknodlg.ui \
+    UI/formuladlg.ui
 
 RESOURCES += \
     mainwindow.qrc
@@ -90,7 +93,7 @@ unix{
 
     LIBPATH +=	\
 
-    LIBS += -L ../lib -ldatafile -lformula
+    LIBS += -L ../lib -ldatafile -lformula -lrule
 
 }
 
@@ -100,7 +103,8 @@ win32{
     OBJECTS_DIR	= temp/obj
     LIBS += \
          ../lib/datafile.lib \
-         ../lib/formula.lib
+         ../lib/formula.lib \
+         ../lib/rule.lib
 
 }
 

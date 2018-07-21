@@ -1,9 +1,12 @@
+﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
+#pragma execution_character_set("utf-8")
+#endif
 #include "hdbtoolcallback.h"
 #include "hformulapi.h"
 #include "maindatahandle.h"
 #include "pointselectdlg.h"
 //公式类的回调函数
-bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDBID)
+bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int nDBID)
 {
     switch (nMsgType) {
     case FM_GETDBINFO:
@@ -170,7 +173,7 @@ bool __cdecl formulaCallback(int nMsgType, WPARAM wParam, LPARAM lParam, int nDB
 }
 
 ///////////////////////////////////////////规则类回调函数//////////////////////////////////////////////////////////
-bool __cdecl ruleCallback (int msgType,RULEPARAM *ruleParam)
+bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
 {
     if(!ruleParam)
         return false;
@@ -187,9 +190,39 @@ bool __cdecl ruleCallback (int msgType,RULEPARAM *ruleParam)
         {
 
         }
+        return true;
+    }
+        break;
+    case WM_ID_GETDBINFO:
+    {
+        HStation* pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
+        if(!pStation) return false;
+        QString strtest = QString(pStation->m_station.szStationName);
+        ruleParam->strStationName = strtest;
+
+        if(TYPE_DIGITAL == ruleParam->btPointType)
+        {
+            DIGITAL* digital = pStation->findDigital(ruleParam->wPointNo);
+            if(!digital) return false;
+            ruleParam->strPointName = digital->szDigitalName;
+            ruleParam->strAttr = QStringLiteral("工程值");
+            ruleParam->strProtectName = QString(digital->szEquipmentID);
+        }
+        else if(TYPE_ANALOGUE == ruleParam->btPointType)
+        {
+            ANALOGUE* analogue = pStation->findAnalogue(ruleParam->wPointNo);
+            if(!analogue) return false;
+            ruleParam->strPointName = QString(analogue->szAnalogueName);
+            ruleParam->strAttr = QStringLiteral("工程值");
+        }
+        else
+            return false;
+        return true;
     }
         break;
     default:
+        return false;
         break;
     }
+    return true;
 }
