@@ -170,9 +170,7 @@ void HTreeWidget::initTree()
             if(!userDb) continue;
             HTreeWidgetItem *userDbItem = new HTreeWidgetItem(userDbRootItem,TREEPARAM_USERDB);
             userDbItem->setItemData((QObject*)userDb);
-            char buf[64];
-            userDb->pluginName(buf);
-            userDbItem->setText(0,QString(buf));
+            userDbItem->setText(0,QString(userDb->m_strPluginName));
             userDbItem->setIcon(0,QIcon(":/image/pluginc.png"));
             userDbRootItem->addChild(userDbItem);
         }

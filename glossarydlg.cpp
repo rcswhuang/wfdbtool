@@ -407,7 +407,7 @@ void HGlossaryDlg::delGlossary()
 {
     //弹出提示
     QMessageBox::StandardButton reply = QMessageBox::warning(this,QStringLiteral("警告"),QStringLiteral("确认删除该组操作术语?"),QMessageBox::Yes|QMessageBox::No);
-    if(QMessageBox::Yes == reply);
+    if(QMessageBox::Yes == reply)
     {
         QTreeWidgetItem *pItem = ui->treeWidget->currentItem();
         QTreeWidgetItem *pParentItem = pItem->parent();

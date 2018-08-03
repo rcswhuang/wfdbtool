@@ -101,7 +101,7 @@ void MainWindow::treeItemSelectChanged()
             HUserDb *userDb = (HUserDb*)pItem->itemData();
             if(userDb)
             {
-                userDb->pluginConfig();
+                userDb->showConfigWindow();
             }
         }
         return;

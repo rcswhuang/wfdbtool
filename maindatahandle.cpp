@@ -41,6 +41,7 @@ void HMainDataHandle::Exintance()
 	//1.释放规则
     exitFormula();
 	//2.释放公式
+    //exitRuleFiles();
 	//3.释放钥匙
 	//4.释放厂站信息
 }
@@ -131,11 +132,11 @@ bool HMainDataHandle::loadData()
     //加载插件代码  用 MACRO这个来代替  加载Qt编译出来的动态库
     char szPluginPath[128];
     getDataFilePath(DFPATH_PLUGIN,szPluginPath);//已经是d:/wf/plugin文件夹
-    QString strPluginName = QString(szPluginPath) + "/" + "run";//防止在d:/wf/plugin/run文件夹里面的dll才加载
+    QString strPluginName = QString(szPluginPath) + "/" + "run/";//防止在d:/wf/plugin/run文件夹里面的dll才加载
     QDir dir(strPluginName);
     if(dir.exists())
     {
-        QStringList strPluginList = dir.entryList(QDir::Files);//要加后缀过滤
+        QStringList strPluginList = dir.entryList(QStringList("*.dll"),QDir::Files);//要加后缀过滤
         for(int i = 0; i< strPluginList.count();i++)
         {
             strPluginName += strPluginList[i];
@@ -152,9 +153,9 @@ bool HMainDataHandle::loadData()
                 else
                 {
                     HUserDb *userDb = new HUserDb;
-                    userDb->strUserDBName = strPluginName;
-                    userDb->pluginProc = pluginProc;
-                    userDb->loadData();
+                    userDb->m_pluginProc = pluginProc;
+                    userDb->pluginInfo();
+                    userDb->pluginConfig(pluginCallback);
                     m_pUserDbList.append(userDb);
                 }
             }
@@ -260,6 +261,7 @@ void HMainDataHandle::saveData()
     }
 
     saveFormulaData();//保存规则
+    saveRuleFiles();
 }
 
 void HMainDataHandle::openDBDataFile(FILEHANDLE* filehandle)

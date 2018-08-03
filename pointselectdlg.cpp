@@ -1,6 +1,7 @@
 ﻿#include "pointselectdlg.h"
 #include "ui_pointselectdlg.h"
 
+//厂站切换未实现 --huangw
 HPointSelectDlg::HPointSelectDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::pointSelectDlg)
@@ -66,13 +67,39 @@ void HPointSelectDlg::dropRelation()
 
 void HPointSelectDlg::selectRelation()
 {
+    //信号和槽在ui里面关联
+    quint8 nType = ui->typeCombo->itemData(ui->typeCombo->currentIndex()).toUInt();
     int nIndex = ui->relatedPointCombo->currentIndex();
-    ushort wDigitalNo = QVariant(ui->relatedPointCombo->itemData(nIndex,Qt::UserRole)).toUInt();
-    DIGITAL *pDigital = pStation->findDigital(wDigitalNo);
-    if(pDigital)
+    ushort wPtID = QVariant(ui->relatedPointCombo->itemData(nIndex,Qt::UserRole)).toUInt();
+    if(TYPE_DIGITAL == nType)
     {
-        wPointID = pDigital->wDigitalID;
-        strDoubleDigitalName = (QString)pDigital->szDigitalName;
+        DIGITAL *pDigital = pStation->findDigital(wPtID);
+        if(pDigital)
+        {
+            wPointID = pDigital->wDigitalID;
+            strDoubleDigitalName = (QString)pDigital->szDigitalName;
+            wStationID = pDigital->wStationID;
+            wGroupID = pDigital->wGroupID;
+            btPointType = TYPE_DIGITAL;
+            strStationName = pStation->m_station.szStationName;
+            strPointName = pDigital->szDigitalName;
+            strGroupName = pDigital->szEquipmentID;
+        }
+    }
+    else if(TYPE_ANALOGUE == nType)
+    {
+        ANALOGUE *pAna = pStation->findAnalogue(wPtID);
+        if(pAna)
+        {
+            wPointID = pAna->wAnalogueID;
+            strDoubleDigitalName = (QString)pAna->szAnalogueName;
+            wStationID = pAna->wStationID;
+            wGroupID = pAna->wGroupID;
+            btPointType = TYPE_ANALOGUE;
+            strStationName = pStation->m_station.szStationName;
+            strPointName = pAna->szAnalogueName;
+            strGroupName = pAna->szEquipmentID;
+        }
     }
    QDialog::accept();
 }

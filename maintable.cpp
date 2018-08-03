@@ -637,7 +637,7 @@ void MainTableView::showFormulaDialog(quint8 type,quint8 col)
         quint16 type = 0;
         if(col == COL_DIGITAL_OPENRULE)
         {
-            type == CTRL_OPEN;
+            type = CTRL_OPEN;
             wNo = pDigital->wRuleFenID;
         }
         else if(col == COL_DIGITAL_CLOSERULE)
@@ -655,6 +655,8 @@ void MainTableView::showFormulaDialog(quint8 type,quint8 col)
             type = CTRL_JXCLOSE;
             wNo = pDigital->wRuleJXHeID;
         }
+        if(wNo == (ushort)-1)
+            return;
         deleteFormula(wNo);
         delRuleFile(pDigital->wStationID,TYPE_DIGITAL,pDigital->wDigitalID,type);
         if(col == COL_DIGITAL_OPENRULE)

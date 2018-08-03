@@ -19,6 +19,7 @@ HFormulaDlg::HFormulaDlg(QWidget *parent) :
     ui->createRuleBtn->setStyleSheet(strSheet);
     ui->delRuleBtn->setStyleSheet(strSheet);
     ui->cancleOpBtn->setStyleSheet(strSheet);
+    ui->cancleOpBtn->setVisible(false);
 }
 
 HFormulaDlg::~HFormulaDlg()
@@ -37,6 +38,7 @@ void HFormulaDlg::delRuleBtn_click()
 {
     m_btType = 2;
     QDialog::accept();
+    emit operaRuleType(m_btType,m_btCol);
 }
 
 void HFormulaDlg::cancelBtn_click()

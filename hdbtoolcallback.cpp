@@ -2,7 +2,6 @@
 #pragma execution_character_set("utf-8")
 #endif
 #include "hdbtoolcallback.h"
-#include "hformulapi.h"
 #include "maindatahandle.h"
 #include "pointselectdlg.h"
 //公式类的回调函数
@@ -181,14 +180,33 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
     {
     case WM_SEL_POINT:
     {
+        HStation* pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
+        if(!pStation) return false;
         HPointSelectDlg dlg(NULL);
-        dlg.pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
+        dlg.pStation = pStation;
         dlg.wPointID = ruleParam->wPointNo;
         dlg.btPointType = ruleParam->btPointType;
         dlg.initDlg();
         if(QDialog::Accepted == dlg.exec())
         {
-
+            ruleParam->wStationNo = dlg.wStationID;//站号
+            ruleParam->wDeviceNo = dlg.wGroupID; //装置ID 联锁组态用
+            ruleParam->btPointType = dlg.btPointType; //测点类型 五防用
+            ruleParam->wPointNo = dlg.wPointID;
+            if(ruleParam->btPointType == TYPE_ANALOGUE)
+            {
+                ruleParam->wAttr = ATTR_ANA_VALUE;
+                ruleParam->btInsideType = TYPE_INSIDE_ANALOGUE;
+            }
+            else if(ruleParam->btPointType == TYPE_DIGITAL)
+            {
+                ruleParam->wAttr = ATTR_DGT_VALUE;
+                ruleParam->btInsideType = TYPE_INSIDE_DIGITAL;
+            }
+            ruleParam->strStationName = dlg.strStationName;
+            ruleParam->strProtectName = dlg.strGroupName;
+            ruleParam->strPointName = dlg.strPointName;
+            ruleParam->strAttr = QStringLiteral("工程值");
         }
         return true;
     }
@@ -197,8 +215,7 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
     {
         HStation* pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
         if(!pStation) return false;
-        QString strtest = QString(pStation->m_station.szStationName);
-        ruleParam->strStationName = strtest;
+        ruleParam->strStationName = QString(pStation->m_station.szStationName);
 
         if(TYPE_DIGITAL == ruleParam->btPointType)
         {
@@ -223,6 +240,46 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
     default:
         return false;
         break;
+    }
+    return true;
+}
+/////
+bool __cdecl pluginCallback(int nMsgType,HWPARAM wParam,HLPARAM lParam)
+{
+    switch (nMsgType) {
+    case FM_FINDDBINFO:
+    {
+        PLUGINPARAM *param = (PLUGINPARAM*)lParam;
+        HStation *pStation = NULL;
+        if(TYPE_NULL == param->btType)
+        {
+            pStation = HMainDataHandle::Instance()->findStationByIndex(param->wPoint);//从0开始遍历
+            if(!pStation) return false;
+            memcpy(((STATION*)param->pBuffer),&pStation->m_station,sizeof(STATION));
+            return true;
+        }
+
+        if(TYPE_ANALOGUE == param->btType)
+        {
+            pStation = HMainDataHandle::Instance()->findStation(param->wStation);
+            if(!pStation) return false;
+            ANALOGUE *analogue = pStation->findAnalogueByIndex(param->wPoint);
+            if(!analogue) return false;
+            memcpy(((ANALOGUE*)param->pBuffer),analogue,sizeof(ANALOGUE));
+            return true;
+        }
+
+        if(TYPE_DIGITAL == param->btType)
+        {
+            pStation = HMainDataHandle::Instance()->findStation(param->wStation);
+            if(!pStation) return false;
+            DIGITAL *digital = pStation->findDigitalByIndex(param->wPoint);
+            if(!digital) return false;
+            memcpy(((DIGITAL*)param->pBuffer),digital,sizeof(DIGITAL));
+            return true;
+        }
+        break;
+    }
     }
     return true;
 }

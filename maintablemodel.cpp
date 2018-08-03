@@ -491,7 +491,7 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         }
         else if(col == COL_DIGITAL_CALCULTE )//计算单元
         {
-            pDigital->wFormulaID = value.toUInt(); //不需要，在计算单元结束的时候已经操作
+            pDigital->wFormulaID = value.toUInt(); //
         }
         else if(col == COL_DIGITAL_OPERAFALG)//操作标志
         {
@@ -919,7 +919,30 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
 
 
             QString strFen,strHe,strJXFen,strJXHe; //分规则、合规则、检修分规则、检修合规则（未完成）
-            strDigitalList<<""<<""<<""<<"";
+            FORMULA *pFormula = getFormula(pDigital->wRuleFenID);
+            strFen = "";
+            if(pFormula)
+                strFen = getFormulaText(pFormula,false);
+            strDigitalList << strFen;
+
+            pFormula = getFormula(pDigital->wRuleHeID);
+            strHe = "";
+            if(pFormula)
+                strHe = getFormulaText(pFormula,false);
+            strDigitalList << strHe;
+
+            pFormula = getFormula(pDigital->wRuleJXFenID);
+            strJXFen = "";
+            if(pFormula)
+                strJXFen = getFormulaText(pFormula,false);
+            strDigitalList << strJXFen;
+
+            pFormula = getFormula(pDigital->wRuleJXHeID);
+            strJXHe = "";
+            if(pFormula)
+                strJXHe = getFormulaText(pFormula,false);
+            strDigitalList << strJXHe;
+
 			//锁类型、锁号(按照选取的锁结构有所不同，注意钥匙类型不同 这里有区别)
             WFLOCKTYPE *pLockType = pNowStation->findLockType(pDigital->wLockTypeID);
 			ushort keyType = 0;
@@ -969,7 +992,7 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
                         strLockNo = QString("%1").arg(pDigital->dwLockNo,0,16);
 					else
 						strLockNo = "";
-                    strDigitalList << strLockNo<<"11"<<"222";//分、合锁号这里要闭锁住不能输入
+                    strDigitalList << strLockNo<<"11"<<"222";//分、合锁号这里要闭锁住不能输入  huangw
 				}
 			}
 			//双点遥信
@@ -980,7 +1003,7 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
 		    //计算公式(未完成)
             if(pDigital->wFormulaID == 0)
                 pDigital->wFormulaID = (ushort)-1;
-            FORMULA *pFormula = getFormula(pDigital->wFormulaID);
+            pFormula = getFormula(pDigital->wFormulaID);
 			QString strFormula = "";
             if(pFormula)
                 strFormula = getFormulaText(pFormula,false);
