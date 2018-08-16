@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>HGlossaryDlg</class>
- <widget class="QDialog" name="HGlossaryDlg">
+ <class>optermdlg</class>
+ <widget class="QDialog" name="optermdlg">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -297,7 +297,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableWidget" name="glossaryTable"/>
+      <widget class="QTableWidget" name="termTable"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">

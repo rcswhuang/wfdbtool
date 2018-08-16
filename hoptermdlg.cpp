@@ -1,5 +1,5 @@
-﻿#include "glossarydlg.h"
-#include "ui_glossarydlg.h"
+﻿#include "hoptermdlg.h"
+#include "ui_optermdlg.h"
 #include "dbtoolapi.h"
 #include <QTreeWidgetItem>
 #include <QFile>
@@ -10,9 +10,9 @@
 #include <QTextCodec>
 #include <QTableWidgetItem>
 
-HGlossaryDlg::HGlossaryDlg(QWidget *parent) :
+HOpTermDlg::HOpTermDlg(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::HGlossaryDlg)
+    ui(new Ui::optermdlg)
 {
     ui->setupUi(this);
     pDataHandle = HMainDataHandle::Instance();
@@ -21,30 +21,30 @@ HGlossaryDlg::HGlossaryDlg(QWidget *parent) :
     initDlg();
 }
 
-HGlossaryDlg::~HGlossaryDlg()
+HOpTermDlg::~HOpTermDlg()
 {
     delete ui;
 }
 
-void HGlossaryDlg::initDlg()
+void HOpTermDlg::initDlg()
 {
     //
     ui->defaultBtn->hide();
     setComboBoxState(false);
 
     //Table
-    ui->glossaryTable->setSelectionMode(/*QAbstractItemView::SingleSelection*/QAbstractItemView::ContiguousSelection);
-    ui->glossaryTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->glossaryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->glossaryTable->setSortingEnabled(false);
-    ui->glossaryTable->setShowGrid(true);
-    ui->glossaryTable->setColumnCount(1);
-    ui->glossaryTable->setColumnWidth(0,300);
+    ui->termTable->setSelectionMode(/*QAbstractItemView::SingleSelection*/QAbstractItemView::ContiguousSelection);
+    ui->termTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->termTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->termTable->setSortingEnabled(false);
+    ui->termTable->setShowGrid(true);
+    ui->termTable->setColumnCount(1);
+    ui->termTable->setColumnWidth(0,300);
     QStringList headerLabels;
     headerLabels << QStringLiteral("术语名");
-    ui->glossaryTable->setHorizontalHeaderLabels(headerLabels);
+    ui->termTable->setHorizontalHeaderLabels(headerLabels);
    // ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->glossaryTable->horizontalHeader()->setHighlightSections(false);
+    ui->termTable->horizontalHeader()->setHighlightSections(false);
     connect(ui->treeWidget,SIGNAL(itemSelectionChanged()),this,SLOT(treeItemSelectionChanged()));
 
 
@@ -56,7 +56,7 @@ void HGlossaryDlg::initDlg()
     connect(ui->specialCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(characterSelectChanged(int)));
 
     //table
-    connect(ui->glossaryTable->model(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(glossaryGroupNameChanged()));
+    connect(ui->termTable->model(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(termGroupNameChanged()));
     //connect(ui->glossaryTable,SIGNAL(itemDoubleClicked(QTableWidgetItem*)),this,SLOT(glossaryEditDClicked()));
     //connect(pLineEdit,SIGNAL(editingFinished()),this,SLOT(glossaryGroupNameChanged()));
 
@@ -64,7 +64,7 @@ void HGlossaryDlg::initDlg()
     connect(ui->closeBtn,SIGNAL(clicked()),this,SLOT(accept()));
 }
 
-void HGlossaryDlg::initLeftTree()
+void HOpTermDlg::initLeftTree()
 {
     ui->treeWidget->clear();
     ui->treeWidget->setRootIsDecorated(true);
@@ -72,11 +72,11 @@ void HGlossaryDlg::initLeftTree()
     ui->treeWidget->setIconSize(QSize(16,16));
     //创建开关操作术语
     QTreeWidgetItem* pItem = new QTreeWidgetItem(ui->treeWidget,QTreeWidgetItem::UserType);
-    TREEGLOSSARY* pKG = new TREEGLOSSARY;
+    TREETERM* pKG = new TREETERM;
     pKG->btTreeType = TREEPARAM_GLOSSARYLIST;
-    pKG->btGlossaryType = TYPE_POINT_KAIGUAN;
+    pKG->btOpTermType = TYPE_POINT_KAIGUAN;
     pKG->wGroupID = 65535;
-    pKG->wGlossaryID = 65535;
+    pKG->wOpTermID = 65535;
     initTreeWidgetItem(pItem,pKG->btTreeType,pKG->btGlossaryType);//初始化子树
     QVariant variant;
     variant.setValue(pKG);
@@ -88,12 +88,12 @@ void HGlossaryDlg::initLeftTree()
 
     //创建刀闸操作术语
     QTreeWidgetItem* pItem1 = new QTreeWidgetItem(ui->treeWidget,QTreeWidgetItem::UserType);
-    TREEGLOSSARY* pDZ= new TREEGLOSSARY;
+    TREETERM* pDZ= new TREETERM;
 
     pDZ->btTreeType = TREEPARAM_GLOSSARYLIST;
-    pDZ->btGlossaryType = TYPE_POINT_DAOZHA;
+    pDZ->btOpTermType = TYPE_POINT_DAOZHA;
     pDZ->wGroupID = 65535;
-    pDZ->wGlossaryID = 65535;
+    pDZ->wOpTermID = 65535;
     initTreeWidgetItem(pItem1,pDZ->btTreeType,pDZ->btGlossaryType);//初始化子树
     //QVariant variant;
     variant.setValue(pDZ);
@@ -104,11 +104,11 @@ void HGlossaryDlg::initLeftTree()
 
     //创建信号操作术语
     QTreeWidgetItem* pItem2 = new QTreeWidgetItem(ui->treeWidget,QTreeWidgetItem::UserType);
-    TREEGLOSSARY* pXH = new TREEGLOSSARY;
+    TREETERM* pXH = new TREETERM;
     pXH->btTreeType = TREEPARAM_GLOSSARYLIST;
-    pXH->btGlossaryType = TYPE_POINT_XINHAO;
+    pXH->btOpTermType = TYPE_POINT_XINHAO;
     pXH->wGroupID = 65535;
-    pXH->wGlossaryID = 65535;
+    pXH->wOpTermID = 65535;
     initTreeWidgetItem(pItem2,pXH->btTreeType,pXH->btGlossaryType);//初始化子树
     //QVariant variant;
     variant.setValue(pXH);
@@ -119,11 +119,11 @@ void HGlossaryDlg::initLeftTree()
 
     //创建缺省操作术语
     QTreeWidgetItem* pItem3 = new QTreeWidgetItem(ui->treeWidget,QTreeWidgetItem::UserType);
-    TREEGLOSSARY* pQX = new TREEGLOSSARY;
+    TREETERM* pQX = new TREETERM;
     pQX->btTreeType = TREEPARAM_GLOSSARYLIST;
-    pQX->btGlossaryType = TYPE_POINT_DEFAULT;
+    pQX->btOpTermType = TYPE_POINT_DEFAULT;
     pQX->wGroupID = 65535;
-    pQX->wGlossaryID = 65535;
+    pQX->wOpTermID = 65535;
     initTreeWidgetItem(pItem3,pQX->btTreeType,pQX->btGlossaryType);//初始化子树
    // QVariant var;
     variant.setValue(pQX);
@@ -133,8 +133,7 @@ void HGlossaryDlg::initLeftTree()
     ui->treeWidget->addTopLevelItem(pItem3);
 }
 
-
-void HGlossaryDlg::initRightWidget()
+void HOpTermDlg::initRightWidget()
 {
     ui->operatorCombo->addItem("");
     ui->protectCombo->addItem("");
@@ -208,7 +207,7 @@ void HGlossaryDlg::initRightWidget()
 }
 
 //后面两个参数要不要无所谓，因为参数都可以从树数据结构中获取
-void HGlossaryDlg::initTreeWidgetItem(QTreeWidgetItem *pItem, quint8 btTreeType, int nGlossaryType)
+void HOpTermDlg::initTreeWidgetItem(QTreeWidgetItem *pItem, quint8 btTreeType, int nOpTermType)
 {
     if(pItem == NULL) return;
 
@@ -219,53 +218,53 @@ void HGlossaryDlg::initTreeWidgetItem(QTreeWidgetItem *pItem, quint8 btTreeType,
     {
         QVariant var;
         int nCount = 0;//获取开关、刀闸、信号大类型下术语组的个数
-        QList<HOpTermGroup*> pGlossaryList;
-        nCount = pDataHandle->glossaryListByGroupType(nGlossaryType,pGlossaryList);
-        QString strGlossary;
+        QList<HOpTermGroup*> pOpTermList;
+        nCount = pDataHandle->glossaryListByGroupType(nOpTermType,pOpTermList);
+        QString strOpTerm;
         for(int i = 0; i < nCount;i++)
         {
-            HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)pGlossaryList[i];
-            if(pGlossaryGroup)
+            HOpTermGroup* pOpTermGroup = (HOpTermGroup*)pOpTermList[i];
+            if(pOpTermGroup)
             {
                 QTreeWidgetItem* item0 = new QTreeWidgetItem(pItem,QTreeWidgetItem::UserType);
-                TREEGLOSSARY* pTree = new TREEGLOSSARY;
+                TREETERM* pTree = new TREETERM;
                 pTree->btTreeType = TREEPARAM_GLOSSARY;
-                pTree->btGlossaryType = pGlossaryGroup->glossaryGroup.btGlossaryGroupType;//开关刀闸信号默认
-                pTree->wGroupID = pGlossaryGroup->glossaryGroup.wGlossaryGroupID;
-                pTree->wGlossaryID = 0;
+                pTree->btOpTermType = pOpTermGroup->opTermGroup.btOpTermGroupType;//开关刀闸信号默认
+                pTree->wGroupID = pOpTermGroup->opTermGroup.wOpTermGroupID;
+                pTree->wOpTermID = 0;
                 var.setValue(pTree);
                 item0->setData(0,Qt::UserRole,var);
-                item0->setText(0,QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup));
+                item0->setText(0,QString(pOpTermGroup->opTermGroup.szOpTermGroup));
                 item0->setIcon(0,QIcon(":/image/glossary.png"));
 
                 //QString strGlossary;
-                for(int j =0; j < pGlossaryGroup->pGlossaryList.count();j++)
+                for(int j =0; j < pOpTermGroup->pOpTermList.count();j++)
                 {
-                    OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->pGlossaryList[j];
-                    pTree = new TREEGLOSSARY;
-                    if(pGlossary->btGlossaryType == TYPE_GLOSSARY_FEN)
+                    OPTERM* pOpTerm = (OPTERM*)pOpTermGroup->pOpTermList[j];
+                    pTree = new TREETERM;
+                    if(pOpTerm->btOpTermType == TYPE_GLOSSARY_FEN)
                     {
                         pTree->btTreeType = TREEPARAM_GLOSSARY_OPEN;
-                        strGlossary = QStringLiteral("分操作语句");
+                        strOpTerm = QStringLiteral("分操作语句");
                     }
-                    else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_HE)
+                    else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_HE)
                     {
                         pTree->btTreeType = TREEPARAM_GLOSSARY_CLOSE;
-                        strGlossary = QStringLiteral("合操作语句");
+                        strOpTerm = QStringLiteral("合操作语句");
                     }
-                    else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_TISHI)
+                    else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_TISHI)
                     {
                         pTree->btTreeType = TREEPARAM_GLOSSARY_TISHI;
-                        strGlossary = QStringLiteral("提示性操作语句");
+                        strOpTerm = QStringLiteral("提示性操作语句");
                     }
 
-                    pTree->btGlossaryType = pGlossary->btGlossaryType;//开关刀闸信号默认
-                    pTree->wGroupID = pGlossary->wGlossaryGroupID;
-                    pTree->wGlossaryID = pGlossary->wGlossaryID;
+                    pTree->btOpTermType = pOpTerm->btOpTermType;//开关刀闸信号默认
+                    pTree->wGroupID = pOpTerm->wOpTermGroupID;
+                    pTree->wOpTermID = pOpTerm->wOpTermID;
                     var.setValue(pTree);
                     QTreeWidgetItem* item1 = new QTreeWidgetItem(item0,QTreeWidgetItem::UserType);
                     item1->setData(0,Qt::UserRole,var);
-                    item1->setText(0,strGlossary);
+                    item1->setText(0,strOpTerm);
                     item1->setIcon(0,QIcon(":/image/glossary.png"));
                 }
             }
@@ -273,37 +272,37 @@ void HGlossaryDlg::initTreeWidgetItem(QTreeWidgetItem *pItem, quint8 btTreeType,
     }
     else if(btTreeType == TREEPARAM_GLOSSARY)
     {
-        TREEGLOSSARY* pTreeGlossary = QVariant(pItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-        HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
+        TREETERM* pTreeTerm = QVariant(pItem->data(0,Qt::UserRole)).value<TREETERM*>();
+        HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
         QVariant var;
-        QString strGlossary;
-        for(int j =0; j < pGlossaryGroup->pGlossaryList.count();j++)
+        QString strOpTerm;
+        for(int j =0; j < pOpTermGroup->pOpTermList.count();j++)
         {
-            OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->pGlossaryList[j];
-            TREEGLOSSARY* pTree = new TREEGLOSSARY;
-            if(pGlossary->btGlossaryType == TYPE_GLOSSARY_FEN)
+            OPTERM* pOpTerm = (OPTERM*)pOpTermGroup->pOpTermList[j];
+            TREETERM* pTree = new TREETERM;
+            if(pOpTerm->btOpTermType == TYPE_GLOSSARY_FEN)
             {
                 pTree->btTreeType = TREEPARAM_GLOSSARY_OPEN;
-                strGlossary = QStringLiteral("分操作语句");
+                strOpTerm = QStringLiteral("分操作语句");
             }
-            else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_HE)
+            else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_HE)
             {
                 pTree->btTreeType = TREEPARAM_GLOSSARY_CLOSE;
-                strGlossary = QStringLiteral("合操作语句");
+                strOpTerm = QStringLiteral("合操作语句");
             }
-            else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_TISHI)
+            else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_TISHI)
             {
                 pTree->btTreeType = TREEPARAM_GLOSSARY_TISHI;
-                strGlossary = QStringLiteral("提示性操作语句");
+                strOpTerm = QStringLiteral("提示性操作语句");
             }
 
-            pTree->btGlossaryType = pGlossary->btGlossaryType;//开关刀闸信号默认
-            pTree->wGroupID = pGlossary->wGlossaryGroupID;
-            pTree->wGlossaryID = pGlossary->wGlossaryID;
+            pTree->btOpTermType = pOpTerm->btOpTermType;//开关刀闸信号默认
+            pTree->wGroupID = pOpTerm->wOpTermGroupID;
+            pTree->wOpTermID = pOpTerm->wOpTermID;
             var.setValue(pTree);
             QTreeWidgetItem* item1 = new QTreeWidgetItem(pItem,QTreeWidgetItem::UserType);
             item1->setData(0,Qt::UserRole,var);
-            item1->setText(0,strGlossary);
+            item1->setText(0,strOpTerm);
             item1->setIcon(0,QIcon(":/image/glossary.png"));
         }
     }
@@ -311,46 +310,45 @@ void HGlossaryDlg::initTreeWidgetItem(QTreeWidgetItem *pItem, quint8 btTreeType,
     emit ui->treeWidget->itemSelectionChanged();
 }
 
-
-void HGlossaryDlg::contextMenuEvent(QContextMenuEvent *event)
+void HOpTermDlg::contextMenuEvent(QContextMenuEvent *event)
 {
     QTreeWidgetItem* pItem = ui->treeWidget->currentItem();
-    TREEGLOSSARY* pGlossary = QVariant(pItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-    if(pGlossary->btTreeType == TREEPARAM_GLOSSARYLIST)//最顶层菜单
+    TREETERM* pTreeTerm = QVariant(pItem->data(0,Qt::UserRole)).value<TREETERM*>();
+    if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARYLIST)//最顶层菜单
     {
 
-        if(pGlossary->btGlossaryType == TYPE_POINT_KAIGUAN)
+        if(pTreeTerm->btOpTermType == TYPE_POINT_KAIGUAN)
         {
             QMenu *menuKG = new QMenu;
             QAction* addKGAct = new QAction(QStringLiteral("增加开关操作术语"),this);
             addKGAct->setIcon(QIcon(":/image/additem.png"));
             addKGAct->setStatusTip(QStringLiteral("增加一个新的开关操作术语"));
             menuKG->addAction(addKGAct);
-            connect(addKGAct,SIGNAL(triggered()),this,SLOT(addKGGlossary()));
+            connect(addKGAct,SIGNAL(triggered()),this,SLOT(addKGTerm()));
             menuKG->popup(event->globalPos());
         }
-        else if(pGlossary->btGlossaryType == TYPE_POINT_DAOZHA)
+        else if(pTreeTerm->btOpTermType == TYPE_POINT_DAOZHA)
         {
             QMenu *menuDZ = new QMenu;
             QAction* addDZAct = new QAction(QStringLiteral("增加刀闸操作术语"),this);
             addDZAct->setIcon(QIcon(":/image/additem.png"));
             addDZAct->setStatusTip(QStringLiteral("增加一个新的刀闸操作术语"));
             menuDZ->addAction(addDZAct);
-            connect(addDZAct,SIGNAL(triggered()),this,SLOT(addDZGlossary()));
+            connect(addDZAct,SIGNAL(triggered()),this,SLOT(addDZTerm()));
             menuDZ->popup(event->globalPos());
         }
-        else if(pGlossary->btGlossaryType == TYPE_POINT_XINHAO)
+        else if(pTreeTerm->btOpTermType == TYPE_POINT_XINHAO)
         {
             QMenu *menuXH = new QMenu;
             QAction* addXHAct = new QAction(QStringLiteral("增加信号操作术语"),this);
             addXHAct->setIcon(QIcon(":/image/additem.png"));
             addXHAct->setStatusTip(QStringLiteral("增加一个新的信号操作术语"));
             menuXH->addAction(addXHAct);
-            connect(addXHAct,SIGNAL(triggered()),this,SLOT(addXHGlossary()));
+            connect(addXHAct,SIGNAL(triggered()),this,SLOT(addXHTerm()));
             menuXH->popup(event->globalPos());
         }
     }
-    else if(pGlossary->btTreeType == TREEPARAM_GLOSSARY)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY)
     {
         //根据类型找到对应的术语组
 
@@ -359,17 +357,17 @@ void HGlossaryDlg::contextMenuEvent(QContextMenuEvent *event)
         addTSAct->setIcon(QIcon(":/image/additem.png"));
         addTSAct->setStatusTip(QStringLiteral("增加一个新的提示操作术语"));
         menuTS->addAction(addTSAct);
-        connect(addTSAct,SIGNAL(triggered()),this,SLOT(addTSGlossary()));
+        connect(addTSAct,SIGNAL(triggered()),this,SLOT(addTSTerm()));
 
         QAction* delTSAct = new QAction(QStringLiteral("删除操作术语"),this);
         delTSAct->setIcon(QIcon(":/image/delitem.png"));
         delTSAct->setStatusTip(QStringLiteral("删除一个提示操作术语"));
         menuTS->addAction(delTSAct);
-        connect(delTSAct,SIGNAL(triggered()),this,SLOT(delGlossary()));
+        connect(delTSAct,SIGNAL(triggered()),this,SLOT(delTerm()));
 
         menuTS->popup(event->globalPos());
     }
-    else if(pGlossary->btTreeType == TREEPARAM_GLOSSARY_TISHI)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY_TISHI)
     {
         //删除提示术语
         QMenu *menuTS = new QMenu;
@@ -377,33 +375,33 @@ void HGlossaryDlg::contextMenuEvent(QContextMenuEvent *event)
         delTSAct->setIcon(QIcon(":/image/delitem.png"));
         delTSAct->setStatusTip(QStringLiteral("删除一个新的提示操作术语"));
         menuTS->addAction(delTSAct);
-        connect(delTSAct,SIGNAL(triggered()),this,SLOT(delTSGlossary()));
+        connect(delTSAct,SIGNAL(triggered()),this,SLOT(delTSTerm()));
         menuTS->popup(event->globalPos());
     }
 }
 
-void HGlossaryDlg::addKGGlossary()
+void HOpTermDlg::addKGTerm()
 {
     if(NULL == pDataHandle) return;
     pDataHandle->addGlossaryGroup(TYPE_POINT_KAIGUAN);
     initTreeWidgetItem(ui->treeWidget->currentItem(),TREEPARAM_GLOSSARYLIST,TYPE_POINT_KAIGUAN);
 }
 
-void HGlossaryDlg::addDZGlossary()
+void HOpTermDlg::addDZTerm()
 {
     if(NULL == pDataHandle) return;
     pDataHandle->addGlossaryGroup(TYPE_POINT_DAOZHA);
     initTreeWidgetItem(ui->treeWidget->currentItem(),TREEPARAM_GLOSSARYLIST,TYPE_POINT_DAOZHA);
 }
 
-void HGlossaryDlg::addXHGlossary()
+void HOpTermDlg::addXHTerm()
 {
     if(NULL == pDataHandle) return;
     pDataHandle->addGlossaryGroup(TYPE_POINT_XINHAO);
     initTreeWidgetItem(ui->treeWidget->currentItem(),TREEPARAM_GLOSSARYLIST,TYPE_POINT_XINHAO);
 }
 
-void HGlossaryDlg::delGlossary()
+void HOpTermDlg::delTerm()
 {
     //弹出提示
     QMessageBox::StandardButton reply = QMessageBox::warning(this,QStringLiteral("警告"),QStringLiteral("确认删除该组操作术语?"),QMessageBox::Yes|QMessageBox::No);
@@ -413,138 +411,137 @@ void HGlossaryDlg::delGlossary()
         QTreeWidgetItem *pParentItem = pItem->parent();
         if(pItem)
         {
-            TREEGLOSSARY* pTreeGlossary = QVariant(pItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-            if(pTreeGlossary)
+            TREETERM* pTreeTerm = QVariant(pItem->data(0,Qt::UserRole)).value<TREETERM*>();
+            if(pTreeTerm)
             {
-                pDataHandle->delGlossary(pTreeGlossary->btGlossaryType,pTreeGlossary->wGroupID);
-                initTreeWidgetItem(pParentItem,TREEPARAM_GLOSSARYLIST,pTreeGlossary->btGlossaryType);
+                pDataHandle->delGlossary(pTreeTerm->btOpTermType,pTreeTerm->wGroupID);
+                initTreeWidgetItem(pParentItem,TREEPARAM_GLOSSARYLIST,pTreeTerm->btOpTermType);
             }
         }
     }
 }
 
-void HGlossaryDlg::addTSGlossary()
+void HOpTermDlg::addTSTerm()
 {
     QTreeWidgetItem *pItem = ui->treeWidget->currentItem();
     if(pItem)
     {
-        TREEGLOSSARY* pTreeGlossary = QVariant(pItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-        if(pTreeGlossary)
+        TREETERM* pTreeTerm = QVariant(pItem->data(0,Qt::UserRole)).value<TREETERM*>();
+        if(pTreeTerm)
         {
-            pDataHandle->addTishiGlossary(pTreeGlossary->btGlossaryType,pTreeGlossary->wGroupID);
-            initTreeWidgetItem(pItem,pTreeGlossary->btTreeType,pTreeGlossary->btGlossaryType);
+            pDataHandle->addTishiGlossary(pTreeTerm->btOpTermType,pTreeTerm->wGroupID);
+            initTreeWidgetItem(pItem,pTreeTerm->btTreeType,pTreeTerm->btOpTermType);
         }
     }
 }
 
-void HGlossaryDlg::delTSGlossary()
+void HOpTermDlg::delTSTerm()
 {
     QTreeWidgetItem *pItem = ui->treeWidget->currentItem();
     QTreeWidgetItem *pParentItem = pItem->parent();
-    TREEGLOSSARY* pParentGlossaryItem = QVariant(pParentItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
+    TREETERM* pParentTermItem = QVariant(pParentItem->data(0,Qt::UserRole)).value<TREETERM*>();
     if(pItem)
     {
-        TREEGLOSSARY* pTreeGlossary = QVariant(pItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-        if(pTreeGlossary)
+        TREETERM* pTreeTerm = QVariant(pItem->data(0,Qt::UserRole)).value<TREETERM*>();
+        if(pTreeTerm)
         {
             //删除注意：删除类型(开关)下的某个组号(groupID)里面的具体提示术语(nGlossaryID),分合提示术语的树数据结构是找不到开关刀闸等类型的
-            pDataHandle->delTishiGlossary(pParentGlossaryItem->btGlossaryType,pTreeGlossary->wGroupID,pTreeGlossary->wGlossaryID);
-            initTreeWidgetItem(pParentItem,pParentGlossaryItem->btTreeType,pParentGlossaryItem->btGlossaryType);
+            pDataHandle->delTishiGlossary(pParentTermItem->btOpTermType,pTreeTerm->wGroupID,pTreeTerm->wOpTermID);
+            initTreeWidgetItem(pParentItem,pParentTermItem->btTreeType,pParentTermItem->btOpTermType);
         }
     }
 }
 
-void HGlossaryDlg::treeItemSelectionChanged()
+void HOpTermDlg::treeItemSelectionChanged()
 {
     QTreeWidgetItem *pCurItem = ui->treeWidget->currentItem();
-    TREEGLOSSARY* pTreeGlossary= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-    ui->glossaryTable->clearContents();
-    ui->glossaryTable->setRowCount(0);
+    TREETERM* pTreeTerm = QVariant(pCurItem->data(0,Qt::UserRole)).value<TREETERM*>();
+    ui->termTable->clearContents();
+    ui->termTable->setRowCount(0);
     ui->operatorLineEdit->clear();
-    ui->glossaryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    if(pTreeGlossary->btTreeType == TREEPARAM_GLOSSARYLIST)
+    ui->termTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARYLIST)
     {
         setComboBoxState(false);
-        ui->glossaryTable->setEditTriggers(QAbstractItemView::DoubleClicked);
-        QList<HOpTermGroup*> pGlossaryList;
-        int nCount = pDataHandle->glossaryListByGroupType(pTreeGlossary->btGlossaryType,pGlossaryList);
+        ui->termTable->setEditTriggers(QAbstractItemView::DoubleClicked);
+        QList<HOpTermGroup*> pOpTermList;
+        int nCount = pDataHandle->glossaryListByGroupType(pTreeTerm->btOpTermType,pOpTermList);
         for(int i = 0; i < nCount;i++)
         {
-            HOpTermGroup* pGroup = (HOpTermGroup*)pGlossaryList[i];
+            HOpTermGroup* pGroup = (HOpTermGroup*)pOpTermList[i];
             if(pGroup)
             {
-                ui->glossaryTable->setRowCount(i+1);
+                ui->termTable->setRowCount(i+1);
                 QTableWidgetItem* item0 = new QTableWidgetItem;
-                item0->setText(pGroup->glossaryGroup.szGloassaryGroup);
-                item0->setData(Qt::UserRole,QVariant(pGroup->glossaryGroup.wGlossaryGroupID));
-                ui->glossaryTable->setItem(i,0,item0);
+                item0->setText(pGroup->opTermGroup.szOpTermGroup);
+                item0->setData(Qt::UserRole,QVariant(pGroup->opTermGroup.wOpTermGroupID));
+                ui->termTable->setItem(i,0,item0);
             }
         }
     }
-    else if(pTreeGlossary->btTreeType == TREEPARAM_GLOSSARY)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY)
     {
         setComboBoxState(false);
-        HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-        if(!pGlossaryGroup) return;
-        ui->glossaryTable->setRowCount(pGlossaryGroup->pGlossaryList.count());
-        for(int i = 0; i < pGlossaryGroup->pGlossaryList.count();i++)
+        HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+        if(!pOpTermGroup) return;
+        ui->termTable->setRowCount(pOpTermGroup->pOpTermList.count());
+        for(int i = 0; i < pOpTermGroup->pOpTermList.count();i++)
         {
-            OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->pGlossaryList[i];
-            if(pGlossary)
+            OPTERM* pOpTerm= (OPTERM*)pOpTermGroup->pOpTermList[i];
+            if(pOpTerm)
             {
                 QTableWidgetItem* item0 = new QTableWidgetItem;
                 QString strTemp = QStringLiteral("空操作");
-                if(pGlossary->btGlossaryType == TYPE_GLOSSARY_FEN)
+                if(pOpTerm->btOpTermType == TYPE_GLOSSARY_FEN)
                     strTemp = QStringLiteral("分操作");
-                else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_HE)
+                else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_HE)
                     strTemp = QStringLiteral("合操作");
-                else if(pGlossary->btGlossaryType == TYPE_GLOSSARY_TISHI)
+                else if(pOpTerm->btOpTermType == TYPE_GLOSSARY_TISHI)
                     strTemp = QStringLiteral("提示操作");
                 item0->setText(strTemp);
-                ui->glossaryTable->setItem(i,0,item0);
+                ui->termTable->setItem(i,0,item0);
             }
         }
     }
-    else if(pTreeGlossary->btTreeType == TREEPARAM_GLOSSARY_OPEN)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY_OPEN)
     {
         setComboBoxState(true);
-        HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-        if(!pGlossaryGroup) return;
-        OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->findGlossary(pTreeGlossary->wGlossaryID);
-        if(pGlossary)
+        HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+        if(!pOpTermGroup) return;
+        OPTERM* pOpTerm = (OPTERM*)pOpTermGroup->findOpTerm(pTreeTerm->wOpTermID);
+        if(pOpTerm)
         {
-            ui->GroupLineEdit->setText(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
-            ui->operatorLineEdit->setText(QString(pGlossary->szGlossary));
+            ui->GroupLineEdit->setText(pOpTermGroup->opTermGroup.szOpTermGroup);
+            ui->operatorLineEdit->setText(QString(pOpTerm->szOpTerm));
         }
     }
-    else if(pTreeGlossary->btTreeType == TREEPARAM_GLOSSARY_CLOSE)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY_CLOSE)
     {
         setComboBoxState(true);
-        HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-        if(!pGlossaryGroup) return;
-        OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->findGlossary(pTreeGlossary->wGlossaryID);
-        if(pGlossary)
+        HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+        if(!pOpTermGroup) return;
+        OPTERM* pOpTerm = (OPTERM*)pOpTermGroup->findGlossary(pTreeTerm->wOpTermID);
+        if(pOpTerm)
         {
-            ui->GroupLineEdit->setText(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
-            ui->operatorLineEdit->setText(QString(pGlossary->szGlossary));
+            ui->GroupLineEdit->setText(pOpTermGroup->opTermGroup.szOpTermGroup);
+            ui->operatorLineEdit->setText(QString(pOpTerm->szOpTerm));
         }
     }
-    else if(pTreeGlossary->btTreeType == TREEPARAM_GLOSSARY_TISHI)
+    else if(pTreeTerm->btTreeType == TREEPARAM_GLOSSARY_TISHI)
     {
         setComboBoxState(true);
-        HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-        if(!pGlossaryGroup) return;
-        OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->findGlossary(pTreeGlossary->wGlossaryID);
-        if(pGlossary)
+        HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+        if(!pOpTermGroup) return;
+        OPTERM* pOpTerm = (OPTERM*)pOpTermGroup->findGlossary(pTreeTerm->wOpTermID);
+        if(pOpTerm)
         {
-            ui->GroupLineEdit->setText(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
-            ui->operatorLineEdit->setText(QString(pGlossary->szGlossary));
+            ui->GroupLineEdit->setText(pOpTermGroup->opTermGroup.szOpTermGroup);
+            ui->operatorLineEdit->setText(QString(pOpTerm->szOpTerm));
         }
     }
 }
 
-
-void HGlossaryDlg::operatorSelectChanged(int nCurrentIndex)
+void HOpTermDlg::operatorSelectChanged(int nCurrentIndex)
 {
     QString strOperator = ui->operatorCombo->currentText();
     if(!strOperator.isEmpty())
@@ -560,7 +557,7 @@ void HGlossaryDlg::operatorSelectChanged(int nCurrentIndex)
     }
 }
 
-void HGlossaryDlg::protectSelectChanged(int nCurrentIndex)
+void HOpTermDlg::protectSelectChanged(int nCurrentIndex)
 {
     QString strProtect = ui->protectCombo->currentText();
     if(!strProtect.isEmpty())
@@ -576,7 +573,7 @@ void HGlossaryDlg::protectSelectChanged(int nCurrentIndex)
     }
 }
 
-void HGlossaryDlg::stateSelectChanged(int nCurrentIndex)
+void HOpTermDlg::stateSelectChanged(int nCurrentIndex)
 {
     QString strState = ui->stateCombo->currentText();
     if(!strState.isEmpty())
@@ -592,7 +589,7 @@ void HGlossaryDlg::stateSelectChanged(int nCurrentIndex)
     }
 }
 
-void HGlossaryDlg::dictSelectChanged(int nCurrentIndex)
+void HOpTermDlg::dictSelectChanged(int nCurrentIndex)
 {
     QString strDict = ui->dictCombo->currentText();
     if(!strDict.isEmpty())
@@ -608,7 +605,7 @@ void HGlossaryDlg::dictSelectChanged(int nCurrentIndex)
     }
 }
 
-void HGlossaryDlg::characterSelectChanged(int nCurrentIndex)
+void HOpTermDlg::characterSelectChanged(int nCurrentIndex)
 {
     QString strCharacter = "";
     if(nCurrentIndex == 1)
@@ -638,30 +635,30 @@ void HGlossaryDlg::characterSelectChanged(int nCurrentIndex)
     }
 }
 
-void HGlossaryDlg::operatorEditChanged(const QString &string)
+void HOpTermDlg::operatorEditChanged(const QString &string)
 {
     QTreeWidgetItem *pCurItem = ui->treeWidget->currentItem();
-    TREEGLOSSARY* pTreeGlossary= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-    HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-    if(!pGlossaryGroup) return;
-    OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->findGlossary(pTreeGlossary->wGlossaryID);
-    if(!pGlossary) return;
-    qstrcpy(pGlossary->szGlossary,string.toLocal8Bit().data());
+    TREETERM* pTreeTerm= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREETERM*>();
+    HOpTermGroup *pTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+    if(!pTermGroup) return;
+    OPTERM* pOpTerm = (OPTERM*)pTermGroup->findOpTerm(pTreeTerm->wOpTermID);
+    if(!pOpTerm) return;
+    qstrcpy(pOpTerm->szOpTerm,string.toLocal8Bit().data());
 }
 
 //setText 是不能用string的
-void HGlossaryDlg::operatorTextChanged(const QString &string)
+void HOpTermDlg::operatorTextChanged(const QString &string)
 {
     QTreeWidgetItem *pCurItem = ui->treeWidget->currentItem();
-    TREEGLOSSARY* pTreeGlossary= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-    HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(pTreeGlossary->wGroupID);
-    if(!pGlossaryGroup) return;
-    OPTERM* pGlossary = (OPTERM*)pGlossaryGroup->findGlossary(pTreeGlossary->wGlossaryID);
-    if(!pGlossary) return;
-    qstrcpy(pGlossary->szGlossary,string.toLocal8Bit().data());
+    TREETERM* pTreeTerm= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREETERM*>();
+    HOpTermGroup *pTermGroup = pDataHandle->findGlossaryGroupID(pTreeTerm->wGroupID);
+    if(!pTermGroup) return;
+    OPTERM* pOpTerm = (OPTERM*)pTermGroup->findOpTerm(pTreeTerm->wOpTermID);
+    if(!pOpTerm) return;
+    qstrcpy(pOpTerm->szOpTerm,string.toLocal8Bit().data());
 }
 
-void HGlossaryDlg::setComboBoxState(bool bState)
+void HOpTermDlg::setComboBoxState(bool bState)
 {
     //
     if(bState)
@@ -700,15 +697,15 @@ void HGlossaryDlg::setComboBoxState(bool bState)
         ui->glossaryTable->show();*/
 }
 
-void HGlossaryDlg::glossaryGroupNameChanged()
+void HOpTermDlg::termGroupNameChanged()
 {
-    QTableWidgetItem* pTableItem = ui->glossaryTable->currentItem();
+    QTableWidgetItem* pTableItem = ui->termTable->currentItem();
     if(!pTableItem) return;
     QString strNewGroupName = pTableItem->text();
     int groupID = pTableItem->data(Qt::UserRole).toInt();
     QTreeWidgetItem *pCurItem = ui->treeWidget->currentItem();
-    TREEGLOSSARY* pTreeGlossary= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREEGLOSSARY*>();
-    HOpTermGroup *pGlossaryGroup = pDataHandle->findGlossaryGroupID(groupID);
-    qstrcpy(pGlossaryGroup->glossaryGroup.szGloassaryGroup,strNewGroupName.toLocal8Bit().data());
-    initTreeWidgetItem(pCurItem,TREEPARAM_GLOSSARYLIST,pTreeGlossary->btGlossaryType);
+    TREETERM* pTreeTerm= QVariant(pCurItem->data(0,Qt::UserRole)).value<TREETERM*>();
+    HOpTermGroup *pOpTermGroup = pDataHandle->findGlossaryGroupID(groupID);
+    qstrcpy(pOpTermGroup->opTermGroup.szOpTermGroup,strNewGroupName.toLocal8Bit().data());
+    initTreeWidgetItem(pCurItem,TREEPARAM_GLOSSARYLIST,pTreeTerm->btOpTermType);
 }

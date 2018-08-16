@@ -12,7 +12,7 @@
 #include "pointtermdlg.h"
 #include "locktypedlg.h"
 #include "glossarysetdlg.h"
-#include "glossarydlg.h"
+#include "hoptermdlg.h"
 #include "locknodlg.h"
 #include "hformulapi.h"
 #include <QDockWidget>
