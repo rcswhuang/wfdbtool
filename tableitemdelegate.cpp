@@ -302,7 +302,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
 		{
 			QComboBox* pCombo = new QComboBox(parent);
             pCombo->addItem("",(int)-1);
-            HGlossaryGroup *pGlossaryGroup = NULL;
+            HOpTermGroup *pGlossaryGroup = NULL;
             pGlossaryGroup = HMainDataHandle::Instance()->defaultGloassaryGroup();
             if(pGlossaryGroup)
             {
@@ -314,7 +314,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
             POINTTERM* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             if(pPointTerm)
             {
-                QList<HGlossaryGroup*> glossaryList;
+                QList<HOpTermGroup*> glossaryList;
                 HMainDataHandle::Instance()->glossaryListByGroupType(pPointTerm->btType,glossaryList);
                 for(int i = 0; i < glossaryList.count();i++)
                 {

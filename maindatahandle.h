@@ -7,7 +7,7 @@
 #include "hformulapi.h"
 #include "hruleeditapi.h"
 #include "station.h"
-#include "glossary.h"
+#include "hopterm.h"
 #include "huserdb.h"
 #include <QList>
 class QObject;
@@ -63,13 +63,13 @@ public:
 	void getAppOperaGlossaryID(QVector<ushort>&,uchar type);
 
     //操作术语重新定义部分
-    HGlossaryGroup* findGlossaryGroupID(ushort wGroupID);
+    HOpTermGroup* findGlossaryGroupID(ushort wGroupID);
     int addGlossaryGroup(uchar btGroupType);
-    int glossaryListByGroupType(uchar btGroupType,QList<HGlossaryGroup*> &list);//通过类型来获取下面所有的术语组
+    int glossaryListByGroupType(uchar btGroupType,QList<HOpTermGroup*> &list);//通过类型来获取下面所有的术语组
     bool delGlossary(uchar btGroupType,ushort wGroupID);
     bool addTishiGlossary(uchar btGroupType,ushort wGroupID);//类型 下面的组号
     bool delTishiGlossary(uchar btGroupType,ushort wGroupID,ushort wGlossaryID);//类型 下面的组号 术语ID
-    HGlossaryGroup* defaultGloassaryGroup();//获得默认的操作术语组，通常只有一组
+    HOpTermGroup* defaultGloassaryGroup();//获得默认的操作术语组，通常只有一组
     ushort defaultGloassaryGroupID();//获得默认的操作术语组，通常只有一组
 	//设置厂站信息
     void setStationAddr(HStation* pStation,ushort wAddr);
@@ -89,7 +89,7 @@ public:
 	QObject* pCurItemObject;//当前对象，点击树结构时，设置树关联对象到handle里面
 	QList<HStation*> m_stationList;//厂站列表
     QList<POINTTERM*> m_pointTermList;//所有测点类型定义
-    QList<HGlossaryGroup*> m_pGlossaryGroupList;
+    QList<HOpTermGroup*> m_pGlossaryGroupList;
     QList<HUserDb*> m_pUserDbList;
 	
 private:

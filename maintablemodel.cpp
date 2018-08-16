@@ -911,7 +911,7 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
             if(!strTrans.isEmpty())
                 strTrans = strTrans.left(strTrans.length() - 1);
 			strDigitalList<<strTrans;//
-            HGlossaryGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
+            HOpTermGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
             if(pGlossaryGroup)
                 strDigitalList<<QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
             else

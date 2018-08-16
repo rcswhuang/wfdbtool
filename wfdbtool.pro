@@ -31,7 +31,6 @@ SOURCES +=  main.cpp\
     locktypedlg.cpp \
     glossarysetdlg.cpp \
     glossarydlg.cpp \
-    glossary.cpp \
     pointselectdlg.cpp \
     pointtermdlg.cpp \
     maintablemodeltrans.cpp \
@@ -39,7 +38,8 @@ SOURCES +=  main.cpp\
     htransdatadlg.cpp \
     hdbtoolcallback.cpp \
     huserdb.cpp \
-    hformuladlg.cpp
+    hformuladlg.cpp \
+    hopterm.cpp
 
 HEADERS  +=    \
     wftreewidgetitem.h \
@@ -59,14 +59,14 @@ HEADERS  +=    \
     locktypedlg.h \
     glossarydlg.h \
     glossarysetdlg.h \
-    glossary.h \
     pointselectdlg.h \
     pointtermdlg.h \
     locknodlg.h \
     htransdatadlg.h \
     hdbtoolcallback.h \
     huserdb.h \
-    hformuladlg.h
+    hformuladlg.h \
+    hopterm.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \

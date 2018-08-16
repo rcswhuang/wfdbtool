@@ -56,7 +56,7 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
             strTrans = strTrans.left(strTrans.length() - 1);
         strDigitalList<<strTrans;
 
-        HGlossaryGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
+        HOpTermGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
         if(pGlossaryGroup)
             strDigitalList<<QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
         else

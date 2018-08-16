@@ -71,7 +71,7 @@ bool HMainDataHandle::loadData()
     loadDataFileHeader(FILE_TYPE_GLOSSARYGROUP,&dataFileHandle);
     for(int i = 0; i < dataFileHandle.wTotal;i++)
     {
-        HGlossaryGroup* pGlossaryGroup = new HGlossaryGroup;
+        HOpTermGroup* pGlossaryGroup = new HOpTermGroup;
         if(!pGlossaryGroup)
             break;
         if(false == loadDBRecord(FILE_TYPE_GLOSSARYGROUP,++fileHandle.wGlossaryGroup,&pGlossaryGroup->glossaryGroup))
@@ -91,7 +91,7 @@ bool HMainDataHandle::loadData()
     bool bfind = false;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
         {
             bfind = true;
@@ -183,7 +183,7 @@ void HMainDataHandle::saveData()
     createDB(FILE_TYPE_GLOSSARYGROUP);
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         if(pGlossaryGroup)
         {
             pGlossaryGroup->saveData(fileHandle);
@@ -512,14 +512,14 @@ void HMainDataHandle::getAppOperaGlossaryID(QVector<ushort>& vecList,uchar btTyp
 }
 
 //寻找组号
-HGlossaryGroup* HMainDataHandle::findGlossaryGroupID(ushort wGroupID)
+HOpTermGroup* HMainDataHandle::findGlossaryGroupID(ushort wGroupID)
 {
     if(m_pGlossaryGroupList.count() == 0)
         return NULL;
-    HGlossaryGroup* pGlossaryGroup = NULL;
+    HOpTermGroup* pGlossaryGroup = NULL;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         if(pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
             return pGlossaryGroup;
     }
@@ -537,7 +537,7 @@ int HMainDataHandle::addGlossaryGroup(uchar btGlossaryType)
     QString strGroupName = QStringLiteral("新增操作术语");
     if(btGlossaryType == TYPE_POINT_DEFAULT)
         strGroupName = QStringLiteral("缺省操作术语");
-    HGlossaryGroup* pGlossaryGroup = new HGlossaryGroup;
+    HOpTermGroup* pGlossaryGroup = new HOpTermGroup;
     pGlossaryGroup->glossaryGroup.wGlossaryGroupID = nID;
     pGlossaryGroup->glossaryGroup.btGlossaryGroupType = btGlossaryType;
     qstrcpy(pGlossaryGroup->glossaryGroup.szGloassaryGroup,strGroupName.toLocal8Bit().data());
@@ -548,13 +548,13 @@ int HMainDataHandle::addGlossaryGroup(uchar btGlossaryType)
 
 
 //通过类型
-int HMainDataHandle::glossaryListByGroupType(uchar btGlossaryType,QList<HGlossaryGroup*> &list)
+int HMainDataHandle::glossaryListByGroupType(uchar btGlossaryType,QList<HOpTermGroup*> &list)
 {
      if(m_pGlossaryGroupList.count() == 0) return 0;
      int nCount = 0;
      for(int i = 0; i < m_pGlossaryGroupList.count();i++)
      {
-         HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+         HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
          if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGlossaryType)
          {
              list.append(pGlossaryGroup);
@@ -569,7 +569,7 @@ bool HMainDataHandle::delGlossary(uchar btGroupType,ushort wGroupID)
     if(m_pGlossaryGroupList.count() == 0) return false;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
         {
@@ -587,7 +587,7 @@ bool HMainDataHandle::addTishiGlossary(uchar btGroupType,ushort wGroupID)//类�
     if(m_pGlossaryGroupList.count() == 0) return false;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
         {
@@ -602,7 +602,7 @@ bool HMainDataHandle::delTishiGlossary(uchar btGroupType,ushort wGroupID,ushort 
     if(m_pGlossaryGroupList.count() == 0) return false;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
         {
@@ -612,12 +612,12 @@ bool HMainDataHandle::delTishiGlossary(uchar btGroupType,ushort wGroupID,ushort 
     return true;
 }
 
-HGlossaryGroup* HMainDataHandle::defaultGloassaryGroup()
+HOpTermGroup* HMainDataHandle::defaultGloassaryGroup()
 {
     if(m_pGlossaryGroupList.count() == 0) return NULL;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
             return pGlossaryGroup;
 
@@ -630,7 +630,7 @@ ushort HMainDataHandle::defaultGloassaryGroupID()
     if(m_pGlossaryGroupList.count() == 0) return (ushort)-1;
     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
     {
-        HGlossaryGroup* pGlossaryGroup = (HGlossaryGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
             return pGlossaryGroup->glossaryGroup.wGlossaryGroupID;
 
