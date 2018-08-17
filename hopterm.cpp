@@ -19,7 +19,7 @@ HOpTermGroup::~HOpTermGroup()
 bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
 {
     openDB(FILE_TYPE_OPTERM);
-    for(int i = 0; i < opTermGroup.wGlossaryCounts;i++)
+    for(int i = 0; i < opTermGroup.wOpTermCounts;i++)
     {
         OPTERM* pOpTerm = new OPTERM;
         if(false == loadDBRecord(FILE_TYPE_OPTERM,++fileHandle.wOpTerm,pOpTerm))
@@ -69,7 +69,7 @@ void HOpTermGroup::initFenHe()
 {
     OPTERM * pOpTermFen = new OPTERM;
     pOpTermFen->wOpTermGroupID = opTermGroup.wOpTermGroupID;
-    pOpTermFen->btOpTermType = TYPE_GLOSSARY_FEN;
+    pOpTermFen->btOpTermType = TYPE_OPTERM_FEN;
     pOpTermFen->wOpTermID = generatorID();
     QString strOpTerm = QStringLiteral("断开@");
     qstrcpy(pOpTermFen->szOpTerm,strOpTerm.toLocal8Bit().data());
@@ -78,7 +78,7 @@ void HOpTermGroup::initFenHe()
 
     OPTERM * pOpTermHe = new OPTERM;
     pOpTermHe->wOpTermGroupID = opTermGroup.wOpTermGroupID;
-    pOpTermHe->btOpTermType = TYPE_GLOSSARY_FEN;
+    pOpTermHe->btOpTermType = TYPE_OPTERM_HE;
     pOpTermHe->wOpTermID = generatorID();
     strOpTerm = QStringLiteral("合上@");
     qstrcpy(pOpTermHe->szOpTerm,strOpTerm.toLocal8Bit().data());
@@ -90,7 +90,7 @@ void HOpTermGroup::addOpTermTishi()
 {
     OPTERM *pOpTerm = new OPTERM;
     pOpTerm->wOpTermGroupID = opTermGroup.wOpTermGroupID;
-    pOpTerm->btOpTermType = TYPE_GLOSSARY_TISHI;
+    pOpTerm->btOpTermType = TYPE_OPTERM_TISHI;
     pOpTerm->wOpTermID = generatorID();
     qstrcpy(pOpTerm->szOpTerm,"");
     opTermGroup.wOpTermCounts++;
@@ -104,7 +104,7 @@ bool HOpTermGroup::delOpTermTishi(ushort wTermID)
     for(int i =0; i < pOpTermList.count();i++)
     {
         OPTERM* pOpTerm = (OPTERM*)pOpTermList[i];
-        if(pOpTerm->btOpTermType == TYPE_GLOSSARY_TISHI && pOpTerm->wOpTermID == wTermID)
+        if(pOpTerm->btOpTermType == TYPE_OPTERM_TISHI && pOpTerm->wOpTermID == wTermID)
         {
             opTermGroup.wOpTermCounts--;
             pOpTermList.removeOne(pOpTerm);

@@ -420,7 +420,7 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         {
             qstrcpy(pDigital->szEquipmentID,value.toString().toLocal8Bit().data());
             // pDigital->strEquipmentID = value.toString();
-            POINTTERM* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTYPE* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             POWERGRADE* pPower=pNowStation->findPowerGrade(pDigital->nPowerGrade);
             EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)pNowStation->findEquipmentGroupByID(pDigital->wGroupID);
             if(pTerm!=NULL && pPower!=NULL && strlen(pDigital->szEquipmentID)>0)
@@ -467,7 +467,7 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         }
         else if(col == COL_DIGITAL_OPERATERM) //操作术语
         {
-            pDigital->wGlossaryID = value.toUInt();
+            pDigital->wOpTermID = value.toUInt();
         }
         else if(col == COL_DIGITAL_OPENRULE)//分规则
         {
@@ -896,7 +896,7 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
             strDigitalList.clear();
             strDigitalList<<QString(pDigital->szDigitalName);
             strDigitalList<<QString(pDigital->szDigitalOriginalName);//显示组合名称和自定义名称
-            POINTTERM* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
+            POINTTYPE* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
             if(pTerm != NULL)
                 strDigitalList<<QString(pTerm->szTermName);//测点类型：开关、刀闸等信息
             else
@@ -911,9 +911,9 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
             if(!strTrans.isEmpty())
                 strTrans = strTrans.left(strTrans.length() - 1);
 			strDigitalList<<strTrans;//
-            HOpTermGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
-            if(pGlossaryGroup)
-                strDigitalList<<QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
+            HOpTermGroup* pOpTermGroup = HMainDataHandle::Instance()->findOpTermGroupID(pDigital->wOpTermID);
+            if(pOpTermGroup)
+                strDigitalList<<QString(pOpTermGroup->opTermGroup.szOpTermGroup);
             else
                 strDigitalList << "";
 
@@ -1152,7 +1152,7 @@ QVariant MainTableModel::digitalData(const QModelIndex & index, int role) const
         }
         else if(col == COL_DIGITAL_OPERATERM) //操作术语
         {
-            return pDigital->wGlossaryID;
+            return pDigital->wOpTermID;
         }
         else if(col == COL_DIGITAL_OPENRULE)//分规则
         {

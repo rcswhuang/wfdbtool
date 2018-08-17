@@ -274,7 +274,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
             pCombo->addItem("",(int)-1);
             for(int i = 0; i < nPointTermCount;i++)
 			{
-                POINTTERM* pointTerm = (POINTTERM*)HMainDataHandle::m_pInstance->m_pointTermList[i];
+                POINTTYPE* pointTerm = (POINTTYPE*)HMainDataHandle::m_pInstance->m_pointTermList[i];
                 pCombo->addItem(pointTerm->szTermName,pointTerm->wTermID);
 			}
             pCombo->setMaxVisibleItems(nPointTermCount + 1);
@@ -302,24 +302,24 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
 		{
 			QComboBox* pCombo = new QComboBox(parent);
             pCombo->addItem("",(int)-1);
-            HOpTermGroup *pGlossaryGroup = NULL;
-            pGlossaryGroup = HMainDataHandle::Instance()->defaultGloassaryGroup();
-            if(pGlossaryGroup)
+            HOpTermGroup *pOpTermGroup = NULL;
+            pOpTermGroup = HMainDataHandle::Instance()->defaultOpTermGroup();
+            if(pOpTermGroup)
             {
-                pCombo->addItem(pGlossaryGroup->glossaryGroup.szGloassaryGroup,QVariant(pGlossaryGroup->glossaryGroup.wGlossaryGroupID));
+                pCombo->addItem(pOpTermGroup->opTermGroup.szOpTermGroup,QVariant(pOpTermGroup->opTermGroup.wOpTermGroupID));
             }
 			//要按照当前遥信的类型进行设置
             DIGITAL *pDigital = ((HStation*)pCurItemObject)->findDigitalByIndex(wGroupID,index.row());
             //if(!pDigital) return false;
-            POINTTERM* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTYPE* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             if(pPointTerm)
             {
-                QList<HOpTermGroup*> glossaryList;
-                HMainDataHandle::Instance()->glossaryListByGroupType(pPointTerm->btType,glossaryList);
-                for(int i = 0; i < glossaryList.count();i++)
+                QList<HOpTermGroup*> opTermList;
+                HMainDataHandle::Instance()->opTermListByGroupType(pPointTerm->btType,opTermList);
+                for(int i = 0; i < opTermList.count();i++)
                 {
-                    pGlossaryGroup = glossaryList[i];
-                    pCombo->addItem(pGlossaryGroup->glossaryGroup.szGloassaryGroup,QVariant(pGlossaryGroup->glossaryGroup.wGlossaryGroupID));
+                    pOpTermGroup = opTermList[i];
+                    pCombo->addItem(pOpTermGroup->opTermGroup.szOpTermGroup,QVariant(pOpTermGroup->opTermGroup.wOpTermGroupID));
                 }
             }
 			pWidget = pCombo;

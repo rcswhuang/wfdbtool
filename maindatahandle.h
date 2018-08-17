@@ -54,23 +54,23 @@ public:
 	void getAppTermTypeName(QStringList&);
 	void getAppTermTypeID(QVector<ushort>&);
     bool addPointTerm(uchar btType,const char* szName="",const char* szAttr="");
-    POINTTERM* findPointTerm(ushort wTermID);
+    POINTTYPE* findPointTerm(ushort wTermID);
     bool delPointTerm(ushort wTermID);
     bool loadDefaultPointTerm();
     bool saveDefaultPointTerm();
 	//获取全局操作术语
-	void getAppOperaGlossaryName(QStringList&,uchar type);
-	void getAppOperaGlossaryID(QVector<ushort>&,uchar type);
+    void getAppOperaOpTermName(QStringList&,uchar type);
+    void getAppOperaOpTermID(QVector<ushort>&,uchar type);
 
     //操作术语重新定义部分
-    HOpTermGroup* findGlossaryGroupID(ushort wGroupID);
-    int addGlossaryGroup(uchar btGroupType);
-    int glossaryListByGroupType(uchar btGroupType,QList<HOpTermGroup*> &list);//通过类型来获取下面所有的术语组
-    bool delGlossary(uchar btGroupType,ushort wGroupID);
-    bool addTishiGlossary(uchar btGroupType,ushort wGroupID);//类型 下面的组号
-    bool delTishiGlossary(uchar btGroupType,ushort wGroupID,ushort wGlossaryID);//类型 下面的组号 术语ID
-    HOpTermGroup* defaultGloassaryGroup();//获得默认的操作术语组，通常只有一组
-    ushort defaultGloassaryGroupID();//获得默认的操作术语组，通常只有一组
+    HOpTermGroup* findOpTermGroupID(ushort wGroupID);
+    int addOpTermGroup(uchar btGroupType);
+    int opTermListByGroupType(uchar btGroupType,QList<HOpTermGroup*> &list);//通过类型来获取下面所有的术语组
+    bool delOpTerm(uchar btGroupType,ushort wGroupID);
+    bool addTishiOpTerm(uchar btGroupType,ushort wGroupID);//类型 下面的组号
+    bool delTishiOpTerm(uchar btGroupType,ushort wGroupID,ushort wOpTermID);//类型 下面的组号 术语ID
+    HOpTermGroup* defaultOpTermGroup();//获得默认的操作术语组，通常只有一组
+    ushort defaultOpTermGroupID();//获得默认的操作术语组，通常只有一组
 	//设置厂站信息
     void setStationAddr(HStation* pStation,ushort wAddr);
 	void setStationName(HStation* pStation,QString strName);
@@ -88,8 +88,8 @@ public:
 public:
 	QObject* pCurItemObject;//当前对象，点击树结构时，设置树关联对象到handle里面
 	QList<HStation*> m_stationList;//厂站列表
-    QList<POINTTERM*> m_pointTermList;//所有测点类型定义
-    QList<HOpTermGroup*> m_pGlossaryGroupList;
+    QList<POINTTYPE*> m_pointTermList;//所有测点类型定义
+    QList<HOpTermGroup*> m_pOpTermGroupList;
     QList<HUserDb*> m_pUserDbList;
 	
 private:

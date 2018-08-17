@@ -40,7 +40,7 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
         strDigitalList.clear();
         strDigitalList<<QString(pDigital->szDigitalName);
         strDigitalList<<QString(pDigital->szDigitalOriginalName);//显示组合名称和自定义名称
-        POINTTERM* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
+        POINTTYPE* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
         if(pTerm != NULL)
             strDigitalList<<QString(pTerm->szTermName);//测点类型：开关、刀闸等信息
         else
@@ -56,9 +56,9 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
             strTrans = strTrans.left(strTrans.length() - 1);
         strDigitalList<<strTrans;
 
-        HOpTermGroup* pGlossaryGroup = HMainDataHandle::Instance()->findGlossaryGroupID(pDigital->wGlossaryID);
-        if(pGlossaryGroup)
-            strDigitalList<<QString(pGlossaryGroup->glossaryGroup.szGloassaryGroup);
+        HOpTermGroup* pOpTermGroup = HMainDataHandle::Instance()->findOpTermGroupID(pDigital->wOpTermID);
+        if(pOpTermGroup)
+            strDigitalList<<QString(pOpTermGroup->opTermGroup.szOpTermGroup);
         else
             strDigitalList << "";
         QString strFen,strHe,strJXFen,strJXHe; //分规则、合规则、检修分规则、检修合规则（未完成）

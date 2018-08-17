@@ -22,11 +22,11 @@
         <file>image/yx.png</file>
         <file>image/config.png</file>
         <file>image/term.png</file>
-        <file>image/glossary.png</file>
+        <file>image/opterm.png</file>
         <file>image/exit.png</file>
         <file>image/exportkey.png</file>
         <file>image/exportrule.png</file>
-        <file>image/glossarymgr.png</file>
+        <file>image/optermmgr.png</file>
         <file>image/keymgr.png</file>
         <file>image/save.png</file>
         <file>image/about.png</file>

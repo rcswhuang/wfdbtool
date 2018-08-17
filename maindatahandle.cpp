@@ -53,12 +53,12 @@ bool HMainDataHandle::loadData()
     DATAFILEHEADER dataFileHandle;
 
     //测点类型
-    openDB(FILE_TYPE_POINTTERM);
-    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
+    openDB(FILE_TYPE_POINTTYPE);
+    loadDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
     for(int i = 0; i < dataFileHandle.wTotal;i++)
     {
-        POINTTERM* pointterm = new POINTTERM;
-        if(false == loadDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointTerm,pointterm))
+        POINTTYPE* pointterm = new POINTTYPE;
+        if(false == loadDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointterm))
         {
             delete pointterm;
             break;
@@ -67,32 +67,32 @@ bool HMainDataHandle::loadData()
     }
 
     //操作术语
-    openDB(FILE_TYPE_GLOSSARYGROUP);
-    loadDataFileHeader(FILE_TYPE_GLOSSARYGROUP,&dataFileHandle);
+    openDB(FILE_TYPE_OPTERMGROUP);
+    loadDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
     for(int i = 0; i < dataFileHandle.wTotal;i++)
     {
-        HOpTermGroup* pGlossaryGroup = new HOpTermGroup;
-        if(!pGlossaryGroup)
+        HOpTermGroup* pOpTermGroup = new HOpTermGroup;
+        if(!pOpTermGroup)
             break;
-        if(false == loadDBRecord(FILE_TYPE_GLOSSARYGROUP,++fileHandle.wGlossaryGroup,&pGlossaryGroup->glossaryGroup))
+        if(false == loadDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
         {
-            delete pGlossaryGroup;
-            pGlossaryGroup = NULL;
+            delete pOpTermGroup;
+            pOpTermGroup = NULL;
             break;
         }
-        if(false == pGlossaryGroup->loadData(fileHandle))
+        if(false == pOpTermGroup->loadData(fileHandle))
         {
-            delete pGlossaryGroup;
-            pGlossaryGroup = NULL;
+            delete pOpTermGroup;
+            pOpTermGroup = NULL;
             break;
         }
-        m_pGlossaryGroupList.append(pGlossaryGroup);
+        m_pOpTermGroupList.append(pOpTermGroup);
     }
     bool bfind = false;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == TYPE_POINT_DEFAULT)
         {
             bfind = true;
             break;
@@ -100,7 +100,7 @@ bool HMainDataHandle::loadData()
     }
     if(!bfind)
     {
-        addGlossaryGroup(TYPE_POINT_DEFAULT);
+        addOpTermGroup(TYPE_POINT_DEFAULT);
     }
 
     //厂站信息
@@ -170,24 +170,24 @@ void HMainDataHandle::saveData()
     FILEHANDLE fileHandle;
     memset(&fileHandle,0,sizeof(FILEHANDLE));
     //先打开测点类型
-    createDB(FILE_TYPE_POINTTERM);
+    createDB(FILE_TYPE_POINTTYPE);
     for(int i = 0; i < m_pointTermList.count();i++)
     {
-        POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
+        POINTTYPE* pointTerm = (POINTTYPE*)m_pointTermList[i];
         if(pointTerm)
         {
-            saveDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointTerm,pointTerm);
+            saveDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointTerm);
         }
     }
     //操作术语
-    createDB(FILE_TYPE_GLOSSARYGROUP);
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    createDB(FILE_TYPE_OPTERMGROUP);
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        if(pGlossaryGroup)
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        if(pOpTermGroup)
         {
-            pGlossaryGroup->saveData(fileHandle);
-            saveDBRecord(FILE_TYPE_GLOSSARYGROUP,++fileHandle.wGlossaryGroup,&pGlossaryGroup->glossaryGroup);
+            pOpTermGroup->saveData(fileHandle);
+            saveDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup);
         }
     }
 
@@ -203,19 +203,19 @@ void HMainDataHandle::saveData()
 
     DATAFILEHEADER dataFileHandle;
     //测点类型
-    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wPointTerm;
-    saveDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
+    loadDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
+    dataFileHandle.wTotal = fileHandle.wPointType;
+    saveDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
 
     //操作术语组
-    loadDataFileHeader(FILE_TYPE_GLOSSARYGROUP,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wGlossaryGroup;
-    saveDataFileHeader(FILE_TYPE_GLOSSARYGROUP,&dataFileHandle);
+    loadDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
+    dataFileHandle.wTotal = fileHandle.wOpTermGroup;
+    saveDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
 
     //操作术语项
-    loadDataFileHeader(FILE_TYPE_GLOSSARY,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wGlossary;
-    saveDataFileHeader(FILE_TYPE_GLOSSARY,&dataFileHandle);
+    loadDataFileHeader(FILE_TYPE_OPTERM,&dataFileHandle);
+    dataFileHandle.wTotal = fileHandle.wOpTerm;
+    saveDataFileHeader(FILE_TYPE_OPTERM,&dataFileHandle);
 
     //厂站
     loadDataFileHeader(FILE_TYPE_STATION,&dataFileHandle);
@@ -344,7 +344,7 @@ void HMainDataHandle::getAppTermTypeName(QStringList& strTypeNameList)
 		return;
 	for(int i = 0; i < m_pointTermList.count();i++)
 	{
-        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
+        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
 		Q_ASSERT(pTerm);
 		QString strTemp = QString(pTerm->szTermName);
 		strTypeNameList << strTemp;
@@ -357,7 +357,7 @@ void HMainDataHandle::getAppTermTypeID(QVector<ushort>& vecTypeIDList)
 		return;
 	for(int i = 0; i < m_pointTermList.count();i++)
 	{
-        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
+        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
 		Q_ASSERT(pTerm);
         vecTypeIDList.append(pTerm->wTermID);
 	}
@@ -368,7 +368,7 @@ bool HMainDataHandle::addPointTerm(uchar btType,const char* szName,const char* s
     int nID = m_pointTermList.count();
     while(findPointTerm(nID) != NULL)
         nID++;
-    POINTTERM *pointTerm = new POINTTERM;
+    POINTTYPE *pointTerm = new POINTTYPE;
     if(pointTerm)
     {
         pointTerm->btType = btType;
@@ -380,13 +380,13 @@ bool HMainDataHandle::addPointTerm(uchar btType,const char* szName,const char* s
     return true;
 }
 
-POINTTERM* HMainDataHandle::findPointTerm(ushort wTermID)
+POINTTYPE* HMainDataHandle::findPointTerm(ushort wTermID)
 {
     if(m_pointTermList.count() == 0)
         return NULL;
     for(int i = 0; i < m_pointTermList.count();i++)
     {
-        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
+        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
         Q_ASSERT(pTerm);
         if(pTerm->wTermID == wTermID)
             return pTerm;
@@ -396,7 +396,7 @@ POINTTERM* HMainDataHandle::findPointTerm(ushort wTermID)
 
 bool HMainDataHandle::delPointTerm(ushort wTermID)
 {
-    POINTTERM* pointTerm = findPointTerm(wTermID);
+    POINTTYPE* pointTerm = findPointTerm(wTermID);
     if(pointTerm)
     {
         if(m_pointTermList.removeOne(pointTerm))
@@ -412,7 +412,7 @@ bool HMainDataHandle::delPointTerm(ushort wTermID)
 bool HMainDataHandle::loadDefaultPointTerm()
 {
     while(!m_pointTermList.isEmpty())
-        delete (POINTTERM*)m_pointTermList.takeFirst();
+        delete (POINTTYPE*)m_pointTermList.takeFirst();
     //找到文件加载
     char szPath[1024];
     getDataFilePath(DFPATH_INI,szPath);
@@ -468,7 +468,7 @@ bool HMainDataHandle::saveDefaultPointTerm()
     QString strLine = "";
     while (wIndex < m_pointTermList.count())
     {
-        POINTTERM *pointTerm = m_pointTermList[wIndex];
+        POINTTYPE *pointTerm = m_pointTermList[wIndex];
         strLine += QString("%1").arg(pointTerm->btType);
         strLine += '#';
         strLine += pointTerm->szTermName;
@@ -485,154 +485,138 @@ bool HMainDataHandle::saveDefaultPointTerm()
 }
 
 
-void HMainDataHandle::getAppOperaGlossaryName(QStringList& strList,uchar btType)
+void HMainDataHandle::getAppOperaOpTermName(QStringList& strList,uchar btType)
 {
-/*	if(m_pointGlossaryList.count() == 0)
-		return;
-	for(int i = 0; i < m_pointGlossaryList.count();i++)
-	{
-        POINTTERMGLOSSARY* pGlo = (POINTTERMGLOSSARY*)m_pointGlossaryList.at(i);
-		Q_ASSERT(pGlo);
-        if(pGlo->nGlossaryGroupType == type)
-			strList << QString(pGlo->szGloassaryGroup);
-    }*/
+
 }
 
-void HMainDataHandle::getAppOperaGlossaryID(QVector<ushort>& vecList,uchar btType)
+void HMainDataHandle::getAppOperaOpTermID(QVector<ushort>& vecList,uchar btType)
 {
-    /*if(m_pointGlossaryList.count() == 0)
-		return;
-	for(int i = 0; i < m_pointGlossaryList.count();i++)
-	{
-        POINTTERMGLOSSARY* pGlo = (POINTTERMGLOSSARY*)m_pointGlossaryList.at(i);
-		Q_ASSERT(pGlo);
-        if(pGlo->nGlossaryGroupType == type)
-            vecList.append(pGlo->nGlossaryID);
-    }*/
+
 }
 
 //寻找组号
-HOpTermGroup* HMainDataHandle::findGlossaryGroupID(ushort wGroupID)
+HOpTermGroup* HMainDataHandle::findOpTermGroupID(ushort wGroupID)
 {
-    if(m_pGlossaryGroupList.count() == 0)
+    if(m_pOpTermGroupList.count() == 0)
         return NULL;
-    HOpTermGroup* pGlossaryGroup = NULL;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    HOpTermGroup* pOpTermGroup = NULL;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        if(pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
-            return pGlossaryGroup;
+        pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        if(pOpTermGroup->opTermGroup.wOpTermGroupID == wGroupID)
+            return pOpTermGroup;
     }
     return NULL;
 
 }
 
 //类型是开关、刀闸、信号
-int HMainDataHandle::addGlossaryGroup(uchar btGlossaryType)
+int HMainDataHandle::addOpTermGroup(uchar btOpTermType)
 {
-    int nID = m_pGlossaryGroupList.count();
-    while(findGlossaryGroupID(nID) != NULL)
+    int nID = m_pOpTermGroupList.count();
+    while(findOpTermGroupID(nID) != NULL)
         nID++;
 
     QString strGroupName = QStringLiteral("新增操作术语");
-    if(btGlossaryType == TYPE_POINT_DEFAULT)
+    if(btOpTermType == TYPE_POINT_DEFAULT)
         strGroupName = QStringLiteral("缺省操作术语");
-    HOpTermGroup* pGlossaryGroup = new HOpTermGroup;
-    pGlossaryGroup->glossaryGroup.wGlossaryGroupID = nID;
-    pGlossaryGroup->glossaryGroup.btGlossaryGroupType = btGlossaryType;
-    qstrcpy(pGlossaryGroup->glossaryGroup.szGloassaryGroup,strGroupName.toLocal8Bit().data());
-    pGlossaryGroup->initFenHe();
-    m_pGlossaryGroupList.append(pGlossaryGroup);
+    HOpTermGroup* pOpTermGroup = new HOpTermGroup;
+    pOpTermGroup->opTermGroup.wOpTermGroupID = nID;
+    pOpTermGroup->opTermGroup.btOpTermGroupType = btOpTermType;
+    qstrcpy(pOpTermGroup->opTermGroup.szOpTermGroup,strGroupName.toLocal8Bit().data());
+    pOpTermGroup->initFenHe();
+    m_pOpTermGroupList.append(pOpTermGroup);
     return nID;//返回组号
 }
 
 
 //通过类型
-int HMainDataHandle::glossaryListByGroupType(uchar btGlossaryType,QList<HOpTermGroup*> &list)
+int HMainDataHandle::opTermListByGroupType(uchar btOpTermType,QList<HOpTermGroup*> &list)
 {
-     if(m_pGlossaryGroupList.count() == 0) return 0;
+     if(m_pOpTermGroupList.count() == 0) return 0;
      int nCount = 0;
-     for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+     for(int i = 0; i < m_pOpTermGroupList.count();i++)
      {
-         HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-         if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGlossaryType)
+         HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+         if(pOpTermGroup->opTermGroup.btOpTermGroupType == btOpTermType)
          {
-             list.append(pGlossaryGroup);
+             list.append(pOpTermGroup);
              nCount++;
          }
      }
      return nCount;
 }
 
-bool HMainDataHandle::delGlossary(uchar btGroupType,ushort wGroupID)
+bool HMainDataHandle::delOpTerm(uchar btGroupType,ushort wGroupID)
 {
-    if(m_pGlossaryGroupList.count() == 0) return false;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    if(m_pOpTermGroupList.count() == 0) return false;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
         //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == btGroupType && pOpTermGroup->opTermGroup.wOpTermGroupID == wGroupID)
         {
-           m_pGlossaryGroupList.removeOne(pGlossaryGroup);
-           delete pGlossaryGroup;
-           pGlossaryGroup = NULL;
+           m_pOpTermGroupList.removeOne(pOpTermGroup);
+           delete pOpTermGroup;
+           pOpTermGroup = NULL;
            break;
         }
     }
     return true;
 }
 
-bool HMainDataHandle::addTishiGlossary(uchar btGroupType,ushort wGroupID)//类型 下面的组号
+bool HMainDataHandle::addTishiOpTerm(uchar btGroupType,ushort wGroupID)//类型 下面的组号
 {
-    if(m_pGlossaryGroupList.count() == 0) return false;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    if(m_pOpTermGroupList.count() == 0) return false;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        //如果当前的groupID和术语中的groupID相同，表示找到同一个List下的分，合，或者提示术语了，应该过滤掉
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == btGroupType && pOpTermGroup->opTermGroup.wOpTermGroupID == wGroupID)
         {
-            pGlossaryGroup->addGlossaryTishi();
+            pOpTermGroup->addOpTermTishi();
         }
     }
     return true;
 }
 
-bool HMainDataHandle::delTishiGlossary(uchar btGroupType,ushort wGroupID,ushort wGlossaryID)
+bool HMainDataHandle::delTishiOpTerm(uchar btGroupType,ushort wGroupID,ushort wOpTermID)
 {
-    if(m_pGlossaryGroupList.count() == 0) return false;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    if(m_pOpTermGroupList.count() == 0) return false;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == btGroupType && pGlossaryGroup->glossaryGroup.wGlossaryGroupID == wGroupID)
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        //如果当前的groupID和术语中的groupID相同，表示找到同一个List下的分，合，或者提示术语了，应该过滤掉
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == btGroupType && pOpTermGroup->opTermGroup.wOpTermGroupID == wGroupID)
         {
-            pGlossaryGroup->delGlossaryTishi(wGlossaryID);
+            pOpTermGroup->delOpTermTishi(wOpTermID);
         }
     }
     return true;
 }
 
-HOpTermGroup* HMainDataHandle::defaultGloassaryGroup()
+HOpTermGroup* HMainDataHandle::defaultOpTermGroup()
 {
-    if(m_pGlossaryGroupList.count() == 0) return NULL;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    if(m_pOpTermGroupList.count() == 0) return NULL;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
-            return pGlossaryGroup;
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == TYPE_POINT_DEFAULT)
+            return pOpTermGroup;
 
     }
     return NULL;
 }
 
-ushort HMainDataHandle::defaultGloassaryGroupID()
+ushort HMainDataHandle::defaultOpTermGroupID()
 {
-    if(m_pGlossaryGroupList.count() == 0) return (ushort)-1;
-    for(int i = 0; i < m_pGlossaryGroupList.count();i++)
+    if(m_pOpTermGroupList.count() == 0) return (ushort)-1;
+    for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
-        HOpTermGroup* pGlossaryGroup = (HOpTermGroup*)m_pGlossaryGroupList[i];
-        if(pGlossaryGroup->glossaryGroup.btGlossaryGroupType == TYPE_POINT_DEFAULT)
-            return pGlossaryGroup->glossaryGroup.wGlossaryGroupID;
+        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+        if(pOpTermGroup->opTermGroup.btOpTermGroupType == TYPE_POINT_DEFAULT)
+            return pOpTermGroup->opTermGroup.wOpTermGroupID;
 
     }
     return (ushort)-1;

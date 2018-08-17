@@ -11,7 +11,7 @@
 #include "selectpowergradedlg.h"
 #include "pointtermdlg.h"
 #include "locktypedlg.h"
-#include "glossarysetdlg.h"
+#include "hoptermsetdlg.h"
 #include "hoptermdlg.h"
 #include "locknodlg.h"
 #include "hformulapi.h"
@@ -177,8 +177,8 @@ void MainWindow::createAction()
     exportRuleFileAct = new QAction(QIcon(":/image/exportrule.png"),QStringLiteral("导出规则文件"),this); //导出规则文件操作
     exportLockFileAct = new QAction(QIcon(":/image/exportkey.png"),QStringLiteral("导出锁类型文件"),this); //导出锁类型操作
     wfLockMgrAct = new QAction(QIcon(":/image/keymgr.png"),QStringLiteral("五防钥匙操作"),this) ; //五防钥匙操作
-    glossaryAct = new QAction(QIcon(":/image/glossarymgr.png"),QStringLiteral("五防术语操作"),this); //术语操作
-    connect(glossaryAct,SIGNAL(triggered()),this,SLOT(operatorGlossary()));
+    opTermAct = new QAction(QIcon(":/image/optermmgr.png"),QStringLiteral("五防术语操作"),this); //术语操作
+    connect(opTermAct,SIGNAL(triggered()),this,SLOT(operatorOpTerm()));
 
 
     //关于
@@ -232,7 +232,7 @@ void MainWindow::createMenus()
     operatorMenu->addAction(exportRuleFileAct);
     operatorMenu->addAction(exportLockFileAct);
     operatorMenu->addAction(wfLockMgrAct);
-    operatorMenu->addAction(glossaryAct);
+    operatorMenu->addAction(opTermAct);
 
     //关于
     infoMenu = menuBar()->addMenu(QStringLiteral("关于(&A)"));
@@ -297,14 +297,14 @@ void MainWindow::selectLockType()
 
 void MainWindow::selectTerm()
 {
-    HGlossarySetDlg dlg(this);
+    HOpTermSetDlg dlg(this);
     dlg.exec();
 
 }
 
-void MainWindow::operatorGlossary()
+void MainWindow::operatorOpTerm()
 {
-    HGlossaryDlg dlg(this);
+    HOpTermDlg dlg(this);
     dlg.exec();
 }
 

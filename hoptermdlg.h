@@ -78,4 +78,4 @@ private:
     Ui::optermdlg *ui;
 };
 
-#endif // GLOSSARYDLG_H
+#endif // HOPTERMDLG_H

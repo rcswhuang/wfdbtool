@@ -51,7 +51,7 @@ public slots:
     void selectLockType();
     void selectTerm();//工具栏上选择操作术语
     //操作
-    void operatorGlossary(); //操作术语
+    void operatorOpTerm(); //操作术语
 
     //void initPowerGrade(){};
     void treeItemSelectChanged();
@@ -88,7 +88,7 @@ private:
     QAction* exportRuleFileAct; //导出规则文件操作
     QAction* exportLockFileAct; //导出锁类型操作
     QAction* wfLockMgrAct; //五防钥匙操作
-    QAction* glossaryAct; //术语操作
+    QAction* opTermAct; //术语操作
 
     QMenu* infoMenu;
     QAction* aboutAct;

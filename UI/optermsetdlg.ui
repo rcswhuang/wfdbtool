@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GlossarySetDlg</class>
- <widget class="QDialog" name="GlossarySetDlg">
+ <class>optermsetdlg</class>
+ <widget class="QDialog" name="optermsetdlg">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -187,8 +187,8 @@
   <connection>
    <sender>modifyBtn</sender>
    <signal>clicked()</signal>
-   <receiver>GlossarySetDlg</receiver>
-   <slot>modifyGlossary()</slot>
+   <receiver>optermsetdlg</receiver>
+   <slot>modifyOpTerm()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>34</x>
@@ -203,8 +203,8 @@
   <connection>
    <sender>delBtn</sender>
    <signal>clicked()</signal>
-   <receiver>GlossarySetDlg</receiver>
-   <slot>delGlossary()</slot>
+   <receiver>optermsetdlg</receiver>
+   <slot>delOpTerm()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>273</x>
@@ -219,8 +219,8 @@
   <connection>
    <sender>addBtn</sender>
    <signal>clicked()</signal>
-   <receiver>GlossarySetDlg</receiver>
-   <slot>addGlossary()</slot>
+   <receiver>optermsetdlg</receiver>
+   <slot>addOpTerm()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>154</x>
@@ -235,8 +235,8 @@
   <connection>
    <sender>loadDefaultBtn</sender>
    <signal>clicked()</signal>
-   <receiver>GlossarySetDlg</receiver>
-   <slot>saveGlossary()</slot>
+   <receiver>optermsetdlg</receiver>
+   <slot>saveOpTerm()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
@@ -251,8 +251,8 @@
   <connection>
    <sender>saveDefaultBtn</sender>
    <signal>clicked()</signal>
-   <receiver>GlossarySetDlg</receiver>
-   <slot>closeGlossary()</slot>
+   <receiver>optermsetdlg</receiver>
+   <slot>closeOpTerm()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>222</x>
@@ -266,11 +266,11 @@
   </connection>
  </connections>
  <slots>
-  <slot>modifyGlossary()</slot>
-  <slot>addGlossary()</slot>
-  <slot>delGlossary()</slot>
-  <slot>loadGlossary()</slot>
-  <slot>saveGlossary()</slot>
-  <slot>closeGlossary()</slot>
+  <slot>modifyOpTerm()</slot>
+  <slot>addOpTerm()</slot>
+  <slot>delOpTerm()</slot>
+  <slot>loadOpTerm()</slot>
+  <slot>saveOpTerm()</slot>
+  <slot>closeOpTerm()</slot>
  </slots>
 </ui>

@@ -1,5 +1,5 @@
-﻿#ifndef GLOSSARY_H
-#define GLOSSARY_H
+﻿#ifndef HOPTERM_H
+#define HOPTERM_H
 #include "publicdata.h"
 #include "dbtoolapi.h"
 #include <QObject>
@@ -39,4 +39,4 @@ public:
     OPTERMGROUP opTermGroup;//groupID是唯一标识
     QList<OPTERM*> pOpTermList;
 };
-#endif // GLOSSARY_H
+#endif // HOPTERM_H

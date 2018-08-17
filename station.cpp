@@ -409,7 +409,7 @@ void HStation::renameEquipmentGroup(ushort wGroupID, const char* szEquipmentGrou
         DIGITAL* pDigital = (DIGITAL*)iterator.next();
         if(pDigital->wGroupID == wGroupID)
 		{
-            POINTTERM* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTYPE* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             POWERGRADE* pPower=findPowerGrade(pDigital->nPowerGrade);
             EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)findEquipmentGroupByID(pDigital->wGroupID);
             if(pTerm!=NULL && pPower!=NULL && strlen(pDigital->szEquipmentID)>0)
@@ -467,7 +467,7 @@ DIGITAL* HStation::addDigital(ushort wGroupID)
     qstrcpy(pDigital->szEquipmentID,"");//设备编号 具有唯一性
     pDigital->wGroupID = pEq->wGroupID;//设备组
     pDigital->nPowerGrade = pEq->nPowerGrade;//电压等级
-    pDigital->wGlossaryID = HMainDataHandle::Instance()->defaultGloassaryGroupID();//操作术语组
+    pDigital->wOpTermID = HMainDataHandle::Instance()->defaultOpTermGroupID();//操作术语组
     pDigital->wRuleFenID = (ushort)-1;//分规则
     pDigital->wRuleHeID = (ushort)-1;//合规则
     pDigital->wLockTypeID = (ushort)-1;//锁类型
