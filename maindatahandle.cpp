@@ -53,12 +53,12 @@ bool HMainDataHandle::loadData()
     DATAFILEHEADER dataFileHandle;
 
     //测点类型
-    openDB(FILE_TYPE_POINTTYPE);
-    loadDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
+    openDB(FILE_TYPE_POINTTERM);
+    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
     for(int i = 0; i < dataFileHandle.wTotal;i++)
     {
         POINTTERM* pointterm = new POINTTERM;
-        if(false == loadDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointterm))
+        if(false == loadDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointterm))
         {
             delete pointterm;
             break;
@@ -170,13 +170,13 @@ void HMainDataHandle::saveData()
     FILEHANDLE fileHandle;
     memset(&fileHandle,0,sizeof(FILEHANDLE));
     //先打开测点类型
-    createDB(FILE_TYPE_POINTTYPE);
+    createDB(FILE_TYPE_POINTTERM);
     for(int i = 0; i < m_pointTermList.count();i++)
     {
         POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
         if(pointTerm)
         {
-            saveDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointTerm);
+            saveDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointTerm);
         }
     }
     //操作术语
@@ -203,9 +203,9 @@ void HMainDataHandle::saveData()
 
     DATAFILEHEADER dataFileHandle;
     //测点类型
-    loadDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
+    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
     dataFileHandle.wTotal = fileHandle.wPointType;
-    saveDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
+    saveDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
 
     //操作术语组
     loadDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
@@ -554,7 +554,7 @@ bool HMainDataHandle::delOpTerm(uchar btGroupType,ushort wGroupID)
     for(int i = 0; i < m_pOpTermGroupList.count();i++)
     {
         HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
-        //如果当前的groupID和术语中的groupID相同，表示找到同一个GlossaryList下的分，合，或者提示术语了，应该过滤掉
+        //如果当前的groupID和术语中的groupID相同，表示找到同一个OpTermList下的分，合，或者提示术语了，应该过滤掉
         if(pOpTermGroup->opTermGroup.btOpTermGroupType == btGroupType && pOpTermGroup->opTermGroup.wOpTermGroupID == wGroupID)
         {
            m_pOpTermGroupList.removeOne(pOpTermGroup);
