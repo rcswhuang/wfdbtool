@@ -1,8 +1,8 @@
-﻿#include "maintablemodel.h"
+﻿#include "hmaintablemodel.h"
 #include "dbtoolapi.h"
-#include "station.h"
+#include "hstation.h"
 #include "publicdata.h"
-#include "maindatahandle.h"
+#include "hmaindatahandle.h"
 #include <QVector>
 /*
  * 由于maintablemodel.cpp文件中的函数较多，有关转发和接受的部分移植到本cpp中来完成

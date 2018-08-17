@@ -1,7 +1,7 @@
-﻿#include "pointtermdlg.h"
+﻿#include "hpointtermdlg.h"
 #include "ui_pointtypedlg.h"
 #include "dbtoolapi.h"
-#include "maindatahandle.h"
+#include "hmaindatahandle.h"
 #include <QMessageBox>
 HPointTermDlg::HPointTermDlg(QWidget *parent) :
     QDialog(parent),

@@ -6,7 +6,7 @@
 #include "dbtoolapi.h"
 #include "hformulapi.h"
 #include "hruleeditapi.h"
-#include "station.h"
+#include "hstation.h"
 #include "hopterm.h"
 #include "huserdb.h"
 #include <QList>

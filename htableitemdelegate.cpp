@@ -1,10 +1,10 @@
 ﻿#include "dbtoolapi.h"
 #include "publicdata.h"
-#include "tableitemdelegate.h"
-#include "maindatahandle.h"
-#include "maintable.h"
-#include "maintablemodel.h"
-#include "mulcombobox.h"
+#include "htableitemdelegate.h"
+#include "hmaindatahandle.h"
+#include "hmaintable.h"
+#include "hmaintablemodel.h"
+#include "hmulcombobox.h"
 #include "hformuladlg.h"
 #include <QLineEdit>
 #include <QPushButton>

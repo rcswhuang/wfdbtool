@@ -1,6 +1,6 @@
 ﻿#ifndef MAINTABLE_H_
 #define MAINTABLE_H_
-#include "table.h"
+#include "htable.h"
 #include <QVector>
 
 /*

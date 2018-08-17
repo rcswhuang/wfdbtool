@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QLineEdit>
 #include "publicdata.h"
-#include "maindatahandle.h"
+#include "hmaindatahandle.h"
 #include <QMetaType>
 #define TYPE_OPERATOR 0x00
 #define TYPE_STATE    0x01

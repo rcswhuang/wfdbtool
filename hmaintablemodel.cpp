@@ -1,11 +1,11 @@
 ﻿#if defined (_MSC_VER) && (_MSC_VER >=1600)
 #pragma execution_character_set("utf-8")
 #endif
-#include "maintablemodel.h"
+#include "hmaintablemodel.h"
 #include "dbtoolapi.h"
-#include "station.h"
+#include "hstation.h"
 #include "publicdata.h"
-#include "maindatahandle.h"
+#include "hmaindatahandle.h"
 MainTableModel::MainTableModel(QObject * parent)
                :QAbstractTableModel(parent)
 {
