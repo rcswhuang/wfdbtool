@@ -2,8 +2,8 @@
 #pragma execution_character_set("utf-8")
 #endif
 #include "hdbtoolcallback.h"
-#include "maindatahandle.h"
-#include "pointselectdlg.h"
+#include "hmaindatahandle.h"
+#include "hpointselectdlg.h"
 //公式类的回调函数
 bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int nDBID)
 {

@@ -15,58 +15,58 @@ INCLUDEPATH += \
                 ../include \
 
 SOURCES +=  main.cpp\
-    wftreewidgetitem.cpp \
-    wftreewidget.cpp \
-    tableitemdelegate.cpp \
-    station.cpp \
-    mulcombobox.cpp \
-    maintablemodel.cpp \
-    maintable.cpp \
-    maindatahandle.cpp \
-        mainwindow.cpp \
-    maintabwidget.cpp \
-    toolbar.cpp \
-    selectpowergradedlg.cpp \
-    powergradedlg.cpp \
-    locktypedlg.cpp \
-    pointselectdlg.cpp \
-    pointtermdlg.cpp \
-    maintablemodeltrans.cpp \
-    locknodlg.cpp \
     htransdatadlg.cpp \
     hdbtoolcallback.cpp \
     huserdb.cpp \
     hformuladlg.cpp \
     hopterm.cpp \
     hoptermdlg.cpp \
-    hoptermsetdlg.cpp
+    hoptermsetdlg.cpp \
+    hlocknodlg.cpp \
+    hlocktypedlg.cpp \
+    hmaindatahandle.cpp \
+    hmaintable.cpp \
+    hmaintablemodel.cpp \
+    hmaintablemodeltrans.cpp \
+    hmaintabwidget.cpp \
+    hmainwindow.cpp \
+    hmulcombobox.cpp \
+    hpointselectdlg.cpp \
+    hpointtermdlg.cpp \
+    hpowergradedlg.cpp \
+    hselectpowergradedlg.cpp \
+    hstation.cpp \
+    htableitemdelegate.cpp \
+    htoolbar.cpp \
+    hwftreewidget.cpp \
+    hwftreewidgetitem.cpp
 
 HEADERS  +=    \
-    wftreewidgetitem.h \
-    wftreewidget.h \
-    tableitemdelegate.h \
-    Table.h \
-    station.h \
-    mulcombobox.h \
-    maintablemodel.h \
-    maintable.h \
-    maindatahandle.h \
-    mainwindow.h \
-    maintabwidget.h \
-    toolbar.h \
-    selectpowergradedlg.h \
-    powergradedlg.h \
-    locktypedlg.h \
-    pointselectdlg.h \
-    pointtermdlg.h \
-    locknodlg.h \
     htransdatadlg.h \
     hdbtoolcallback.h \
     huserdb.h \
     hformuladlg.h \
     hopterm.h \
     hoptermdlg.h \
-    hoptermsetdlg.h
+    hoptermsetdlg.h \
+    hlocknodlg.h \
+    hlocktypedlg.h \
+    hmaindatahandle.h \
+    hmaintable.h \
+    hmaintablemodel.h \
+    hmaintabwidget.h \
+    hmainwindow.h \
+    hmulcombobox.h \
+    hpointselectdlg.h \
+    hpointtermdlg.h \
+    hpowergradedlg.h \
+    hselectpowergradedlg.h \
+    hstation.h \
+    hTable.h \
+    htoolbar.h \
+    htableitemdelegate.h \
+    hwftreewidget.h \
+    hwftreewidgetitem.h
 
 FORMS    += mainwindow.ui \
     UI/powergradedlg.ui \

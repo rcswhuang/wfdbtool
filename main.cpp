@@ -1,7 +1,7 @@
 ﻿#include <QApplication>
 #include<QTextCodec>
-#include "mainwindow.h"
-#include "maindatahandle.h"
+#include "hmainwindow.h"
+#include "hmaindatahandle.h"
 //extern HMainDataHandle* HMainDataHandle::m_pInstance;
 int main(int argv,char* args[])
 {
