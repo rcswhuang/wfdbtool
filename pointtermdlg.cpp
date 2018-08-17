@@ -65,7 +65,7 @@ void HPointTermDlg::modifyPointType()
     }
     QTableWidgetItem* pItem = (QTableWidgetItem*)ui->tableWidget->item(nCurrentRow,0);
     int nTermID = pItem->data(Qt::UserRole).toInt();
-    POINTTYPE *pointTerm = NULL;
+    POINTTERM *pointTerm = NULL;
     pointTerm = pDataHandle->findPointTerm(nTermID);
     if(pointTerm)
     {
@@ -139,7 +139,7 @@ void HPointTermDlg::updateTable(int nPointType)
     int index = -1;
     for(int i = 0;i < pDataHandle->m_pointTermList.count();i++)
     {
-        POINTTYPE* pointTerm = (POINTTYPE*)pDataHandle->m_pointTermList[i];
+        POINTTERM* pointTerm = (POINTTERM*)pDataHandle->m_pointTermList[i];
         if(pointTerm->btType == nPointType)
         {
             index++;
@@ -163,7 +163,7 @@ void HPointTermDlg::tableWidgetPress(QTableWidgetItem *pItem1)
         return;
     QTableWidgetItem* pItem = (QTableWidgetItem*)ui->tableWidget->item(nCurrentRow,0);
     int nTermID = pItem->data(Qt::UserRole).toInt();
-    POINTTYPE *pointTerm = NULL;
+    POINTTERM *pointTerm = NULL;
     pointTerm = pDataHandle->findPointTerm(nTermID);
     if(pointTerm)
     {

@@ -409,7 +409,7 @@ void HStation::renameEquipmentGroup(ushort wGroupID, const char* szEquipmentGrou
         DIGITAL* pDigital = (DIGITAL*)iterator.next();
         if(pDigital->wGroupID == wGroupID)
 		{
-            POINTTYPE* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTERM* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             POWERGRADE* pPower=findPowerGrade(pDigital->nPowerGrade);
             EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)findEquipmentGroupByID(pDigital->wGroupID);
             if(pTerm!=NULL && pPower!=NULL && strlen(pDigital->szEquipmentID)>0)

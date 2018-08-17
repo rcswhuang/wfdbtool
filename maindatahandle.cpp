@@ -57,7 +57,7 @@ bool HMainDataHandle::loadData()
     loadDataFileHeader(FILE_TYPE_POINTTYPE,&dataFileHandle);
     for(int i = 0; i < dataFileHandle.wTotal;i++)
     {
-        POINTTYPE* pointterm = new POINTTYPE;
+        POINTTERM* pointterm = new POINTTERM;
         if(false == loadDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointterm))
         {
             delete pointterm;
@@ -173,7 +173,7 @@ void HMainDataHandle::saveData()
     createDB(FILE_TYPE_POINTTYPE);
     for(int i = 0; i < m_pointTermList.count();i++)
     {
-        POINTTYPE* pointTerm = (POINTTYPE*)m_pointTermList[i];
+        POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
         if(pointTerm)
         {
             saveDBRecord(FILE_TYPE_POINTTYPE,++fileHandle.wPointType,pointTerm);
@@ -344,7 +344,7 @@ void HMainDataHandle::getAppTermTypeName(QStringList& strTypeNameList)
 		return;
 	for(int i = 0; i < m_pointTermList.count();i++)
 	{
-        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
+        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
 		Q_ASSERT(pTerm);
 		QString strTemp = QString(pTerm->szTermName);
 		strTypeNameList << strTemp;
@@ -357,7 +357,7 @@ void HMainDataHandle::getAppTermTypeID(QVector<ushort>& vecTypeIDList)
 		return;
 	for(int i = 0; i < m_pointTermList.count();i++)
 	{
-        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
+        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
 		Q_ASSERT(pTerm);
         vecTypeIDList.append(pTerm->wTermID);
 	}
@@ -368,7 +368,7 @@ bool HMainDataHandle::addPointTerm(uchar btType,const char* szName,const char* s
     int nID = m_pointTermList.count();
     while(findPointTerm(nID) != NULL)
         nID++;
-    POINTTYPE *pointTerm = new POINTTYPE;
+    POINTTERM *pointTerm = new POINTTERM;
     if(pointTerm)
     {
         pointTerm->btType = btType;
@@ -380,13 +380,13 @@ bool HMainDataHandle::addPointTerm(uchar btType,const char* szName,const char* s
     return true;
 }
 
-POINTTYPE* HMainDataHandle::findPointTerm(ushort wTermID)
+POINTTERM* HMainDataHandle::findPointTerm(ushort wTermID)
 {
     if(m_pointTermList.count() == 0)
         return NULL;
     for(int i = 0; i < m_pointTermList.count();i++)
     {
-        POINTTYPE* pTerm = (POINTTYPE*)m_pointTermList.at(i);
+        POINTTERM* pTerm = (POINTTERM*)m_pointTermList.at(i);
         Q_ASSERT(pTerm);
         if(pTerm->wTermID == wTermID)
             return pTerm;
@@ -396,7 +396,7 @@ POINTTYPE* HMainDataHandle::findPointTerm(ushort wTermID)
 
 bool HMainDataHandle::delPointTerm(ushort wTermID)
 {
-    POINTTYPE* pointTerm = findPointTerm(wTermID);
+    POINTTERM* pointTerm = findPointTerm(wTermID);
     if(pointTerm)
     {
         if(m_pointTermList.removeOne(pointTerm))
@@ -412,7 +412,7 @@ bool HMainDataHandle::delPointTerm(ushort wTermID)
 bool HMainDataHandle::loadDefaultPointTerm()
 {
     while(!m_pointTermList.isEmpty())
-        delete (POINTTYPE*)m_pointTermList.takeFirst();
+        delete (POINTTERM*)m_pointTermList.takeFirst();
     //找到文件加载
     char szPath[1024];
     getDataFilePath(DFPATH_INI,szPath);
@@ -468,7 +468,7 @@ bool HMainDataHandle::saveDefaultPointTerm()
     QString strLine = "";
     while (wIndex < m_pointTermList.count())
     {
-        POINTTYPE *pointTerm = m_pointTermList[wIndex];
+        POINTTERM *pointTerm = m_pointTermList[wIndex];
         strLine += QString("%1").arg(pointTerm->btType);
         strLine += '#';
         strLine += pointTerm->szTermName;

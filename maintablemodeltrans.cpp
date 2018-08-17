@@ -40,7 +40,7 @@ bool MainTableModel::insertDigitalTransPoint(uchar btType,int row, int count, co
         strDigitalList.clear();
         strDigitalList<<QString(pDigital->szDigitalName);
         strDigitalList<<QString(pDigital->szDigitalOriginalName);//显示组合名称和自定义名称
-        POINTTYPE* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
+        POINTTERM* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
         if(pTerm != NULL)
             strDigitalList<<QString(pTerm->szTermName);//测点类型：开关、刀闸等信息
         else

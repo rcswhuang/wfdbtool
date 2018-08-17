@@ -54,7 +54,7 @@ public:
 	void getAppTermTypeName(QStringList&);
 	void getAppTermTypeID(QVector<ushort>&);
     bool addPointTerm(uchar btType,const char* szName="",const char* szAttr="");
-    POINTTYPE* findPointTerm(ushort wTermID);
+    POINTTERM* findPointTerm(ushort wTermID);
     bool delPointTerm(ushort wTermID);
     bool loadDefaultPointTerm();
     bool saveDefaultPointTerm();
@@ -88,7 +88,7 @@ public:
 public:
 	QObject* pCurItemObject;//当前对象，点击树结构时，设置树关联对象到handle里面
 	QList<HStation*> m_stationList;//厂站列表
-    QList<POINTTYPE*> m_pointTermList;//所有测点类型定义
+    QList<POINTTERM*> m_pointTermList;//所有测点类型定义
     QList<HOpTermGroup*> m_pOpTermGroupList;
     QList<HUserDb*> m_pUserDbList;
 	

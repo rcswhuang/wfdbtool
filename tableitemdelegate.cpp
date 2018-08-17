@@ -274,7 +274,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
             pCombo->addItem("",(int)-1);
             for(int i = 0; i < nPointTermCount;i++)
 			{
-                POINTTYPE* pointTerm = (POINTTYPE*)HMainDataHandle::m_pInstance->m_pointTermList[i];
+                POINTTERM* pointTerm = (POINTTERM*)HMainDataHandle::m_pInstance->m_pointTermList[i];
                 pCombo->addItem(pointTerm->szTermName,pointTerm->wTermID);
 			}
             pCombo->setMaxVisibleItems(nPointTermCount + 1);
@@ -311,7 +311,7 @@ QWidget* HTableItemDelegate::createEqiupmentDigitalEditor( QWidget * parent, con
 			//要按照当前遥信的类型进行设置
             DIGITAL *pDigital = ((HStation*)pCurItemObject)->findDigitalByIndex(wGroupID,index.row());
             //if(!pDigital) return false;
-            POINTTYPE* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTERM* pPointTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             if(pPointTerm)
             {
                 QList<HOpTermGroup*> opTermList;

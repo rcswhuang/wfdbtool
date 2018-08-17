@@ -420,7 +420,7 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         {
             qstrcpy(pDigital->szEquipmentID,value.toString().toLocal8Bit().data());
             // pDigital->strEquipmentID = value.toString();
-            POINTTYPE* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
+            POINTTERM* pTerm= HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);
             POWERGRADE* pPower=pNowStation->findPowerGrade(pDigital->nPowerGrade);
             EQUIPMENTGROUP *pGroup = (EQUIPMENTGROUP*)pNowStation->findEquipmentGroupByID(pDigital->wGroupID);
             if(pTerm!=NULL && pPower!=NULL && strlen(pDigital->szEquipmentID)>0)
@@ -896,7 +896,7 @@ bool  MainTableModel::insertDigitalPoint(int row, int count, const QModelIndex &
             strDigitalList.clear();
             strDigitalList<<QString(pDigital->szDigitalName);
             strDigitalList<<QString(pDigital->szDigitalOriginalName);//显示组合名称和自定义名称
-            POINTTYPE* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
+            POINTTERM* pTerm = HMainDataHandle::Instance()->findPointTerm(pDigital->wPointTermID);//通过测点描述找测点类型
             if(pTerm != NULL)
                 strDigitalList<<QString(pTerm->szTermName);//测点类型：开关、刀闸等信息
             else
