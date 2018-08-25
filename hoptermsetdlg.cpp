@@ -1,6 +1,6 @@
 ﻿#include "hoptermsetdlg.h"
 #include "ui_optermsetdlg.h"
-#include "maindatahandle.h"
+#include "hmaindatahandle.h"
 #include <QFile>
 #include <QStringList>
 #include <QMessageBox>

@@ -47,7 +47,7 @@ bool HUserDb::exitProc()
 
 void HUserDb::updateData(void* handle,UPDATAPOINT* point)
 {
-    m_pluginProc(PLG_CHANGEDYX,(unsigned int)handle,(long)point);
+    //m_pluginProc(PLG_CHANGEDYX,(unsigned int)handle,(long)point);
 }
 
 void HUserDb::showMsgWindow(bool bShow)
