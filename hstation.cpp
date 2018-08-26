@@ -63,81 +63,105 @@ HStation::~HStation()
 bool HStation::loadData(FILEHANDLE &fileHandle)
 {
     //电压等级
-    openDB(FILE_TYPE_POWERGRADE);
-    for(int i = 0; i < m_station.wPowerGradeCounts;i++)
+    int fd = openDB(FILE_TYPE_POWERGRADE);
+    if(fd != (int)-1)
     {
-        POWERGRADE* power = new POWERGRADE;
-        if(false == loadDBRecord(FILE_TYPE_POWERGRADE,++fileHandle.wPowerGrade,power))
+        for(int i = 0; i < m_station.wPowerGradeCounts;i++)
         {
-            delete power;
-            break;
+            POWERGRADE* power = new POWERGRADE;
+            if(false == loadDBRecord(fd,++fileHandle.wPowerGrade,power))
+            {
+                delete power;
+                break;
+            }
+            m_pPowerGradeList.append(power);
         }
-        m_pPowerGradeList.append(power);
+        closeDB(FILE_TYPE_POWERGRADE);
     }
 
     //间隔
-    openDB(FILE_TYPE_EQUIPMENTGROUP);
-    for(int i = 0; i < m_station.wEquipmentGroupCounts;i++)
+    fd = openDB(FILE_TYPE_EQUIPMENTGROUP);
+    if(fd != (int)-1)
     {
-        EQUIPMENTGROUP* pEquip = new EQUIPMENTGROUP;
-        if(false == loadDBRecord(FILE_TYPE_EQUIPMENTGROUP,++fileHandle.wEquipmentGroup,pEquip))
+        for(int i = 0; i < m_station.wEquipmentGroupCounts;i++)
         {
-            delete pEquip;
-            break;
+            EQUIPMENTGROUP* pEquip = new EQUIPMENTGROUP;
+            if(false == loadDBRecord(fd,++fileHandle.wEquipmentGroup,pEquip))
+            {
+                delete pEquip;
+                break;
+            }
+            m_pEQGroupList.append(pEquip);
         }
-        m_pEQGroupList.append(pEquip);
+        closeDB(FILE_TYPE_EQUIPMENTGROUP);
     }
 
     //锁类型
-    openDB(FILE_TYPE_LOCKTYPE);
-    for(int i = 0; i < m_station.wLockTypeCounts;i++)
+    fd = openDB(FILE_TYPE_LOCKTYPE);
+    if(fd != (int)-1)
     {
-        WFLOCKTYPE* wfLockType = new WFLOCKTYPE;
-        if(false == loadDBRecord(FILE_TYPE_LOCKTYPE,++fileHandle.wLockType,wfLockType))
+        for(int i = 0; i < m_station.wLockTypeCounts;i++)
         {
-            delete wfLockType;
-            break;
+            WFLOCKTYPE* wfLockType = new WFLOCKTYPE;
+            if(false == loadDBRecord(fd,++fileHandle.wLockType,wfLockType))
+            {
+                delete wfLockType;
+                break;
+            }
+            m_pLockTypeList.append(wfLockType);
         }
-        m_pLockTypeList.append(wfLockType);
+        closeDB(FILE_TYPE_LOCKTYPE);
     }
 
     //遥测
-    openDB(FILE_TYPE_ANALOGUE);
-    for(int i = 0; i < m_station.wAnalogueCounts;i++)
+    fd = openDB(FILE_TYPE_ANALOGUE);
+    if(fd != (int)-1)
     {
-        ANALOGUE* pAna = new ANALOGUE;
-        if(false == loadDBRecord(FILE_TYPE_ANALOGUE,++fileHandle.wAnalogue,pAna))
+        for(int i = 0; i < m_station.wAnalogueCounts;i++)
         {
-            delete pAna;
-            break;
+            ANALOGUE* pAna = new ANALOGUE;
+            if(false == loadDBRecord(fd,++fileHandle.wAnalogue,pAna))
+            {
+                delete pAna;
+                break;
+            }
+            m_pAnalogueList.append(pAna);
         }
-        m_pAnalogueList.append(pAna);
+        closeDB(FILE_TYPE_ANALOGUE);
     }
 
     //遥信
-    openDB(FILE_TYPE_DIGITAL);
-    for(int i = 0; i < m_station.wDigitalCounts;i++)
+    fd = openDB(FILE_TYPE_DIGITAL);
+    if(fd != (int)-1)
     {
-        DIGITAL* pDigital = new DIGITAL;
-        if(false == loadDBRecord(FILE_TYPE_DIGITAL,++fileHandle.wDigital,pDigital))
+        for(int i = 0; i < m_station.wDigitalCounts;i++)
         {
-            delete pDigital;
-            break;
+            DIGITAL* pDigital = new DIGITAL;
+            if(false == loadDBRecord(fd,++fileHandle.wDigital,pDigital))
+            {
+                delete pDigital;
+                break;
+            }
+            m_pDigitalList.append(pDigital);
         }
-        m_pDigitalList.append(pDigital);
+        closeDB(FILE_TYPE_DIGITAL);
     }
 
     //遥信扩展锁号
-    openDB(FILE_TYPE_DIGITALLOCKNO);
-    for(int i = 0; i < m_station.wDigitalCounts;i++)//扩展的遥信锁号数目和遥信数目必须一致
+    fd = openDB(FILE_TYPE_DIGITALLOCKNO);
+    if(fd != (int)-1)
     {
-        DIGITALLOCKNO* pDigitalLockNo = new DIGITALLOCKNO;
-        if(false == loadDBRecord(FILE_TYPE_DIGITALLOCKNO,++fileHandle.wDigitalLockNo,pDigitalLockNo))
+        for(int i = 0; i < m_station.wDigitalCounts;i++)//扩展的遥信锁号数目和遥信数目必须一致
         {
-            delete pDigitalLockNo;
-            break;
+            DIGITALLOCKNO* pDigitalLockNo = new DIGITALLOCKNO;
+            if(false == loadDBRecord(fd,++fileHandle.wDigitalLockNo,pDigitalLockNo))
+            {
+                delete pDigitalLockNo;
+                break;
+            }
+            m_pDigitalLockNoList.append(pDigitalLockNo);
         }
-        m_pDigitalLockNoList.append(pDigitalLockNo);
+        closeDB(FILE_TYPE_DIGITALLOCKNO);
     }
 
 
@@ -150,18 +174,11 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
 
     startTransListIndex(TREEPARAM_DIGITALFROMSCADA);
     startTransListIndex(TREEPARAM_DIGITALTOSCADA);
-    startTransListIndex(TREEPARAM_DIGITALTOSIM);
+    //startTransListIndex(TREEPARAM_DIGITALTOSIM);
 
     startTransListIndex(TREEPARAM_ANALOGUEFROMSCADA);
     startTransListIndex(TREEPARAM_ANALOGUETOSCADA);
-    startTransListIndex(TREEPARAM_ANALOGUETOSIM);
-
-    closeDB(FILE_TYPE_POWERGRADE);
-    closeDB(FILE_TYPE_EQUIPMENTGROUP);
-    closeDB(FILE_TYPE_LOCKTYPE);
-    closeDB(FILE_TYPE_ANALOGUE);
-    closeDB(FILE_TYPE_DIGITAL);
-    closeDB(FILE_TYPE_DIGITALLOCKNO);
+    //startTransListIndex(TREEPARAM_ANALOGUETOSIM);
     return true;
 }
 
@@ -170,11 +187,11 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
 
     refreshTransListIndex(TREEPARAM_DIGITALFROMSCADA);
     refreshTransListIndex(TREEPARAM_DIGITALTOSCADA);
-    refreshTransListIndex(TREEPARAM_DIGITALTOSIM);
+    //refreshTransListIndex(TREEPARAM_DIGITALTOSIM);
 
     refreshTransListIndex(TREEPARAM_ANALOGUEFROMSCADA);
     refreshTransListIndex(TREEPARAM_ANALOGUETOSCADA);
-    refreshTransListIndex(TREEPARAM_ANALOGUETOSIM);
+    //refreshTransListIndex(TREEPARAM_ANALOGUETOSIM);
 
     m_station.wEquipmentGroupCounts = m_pEQGroupList.count();
     m_station.wPowerGradeCounts = m_pPowerGradeList.count();
@@ -182,65 +199,90 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
     m_station.wAnalogueCounts = m_pAnalogueList.count();
     m_station.wDigitalCounts = m_pDigitalList.count();
 
-
-    createDB(FILE_TYPE_POWERGRADE);
-    createDB(FILE_TYPE_EQUIPMENTGROUP);
-    createDB(FILE_TYPE_LOCKTYPE);
-    createDB(FILE_TYPE_ANALOGUE);
-    createDB(FILE_TYPE_DIGITAL);
-    createDB(FILE_TYPE_DIGITALLOCKNO);
-
+    DATAFILEHEADER dataFileHandle;
+    memset(&dataFileHandle,0,sizeof(DATAFILEHEADER));
     //电压等级保存
-    if(m_pPowerGradeList.count() > 0)
+    int fd = createDB(FILE_TYPE_POWERGRADE);
+    if(fd != (int)-1 && m_pPowerGradeList.count() > 0)
     {
         for(int i = 0;i < m_pPowerGradeList.count();i++)
         {
             POWERGRADE* pPower = (POWERGRADE*)m_pPowerGradeList[i];
             saveDBRecord(FILE_TYPE_POWERGRADE,++fileHandle.wPowerGrade,pPower);
         }
+        //电压等级
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wPowerGrade;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_POWERGRADE);
     }
 
     //间隔保存
-    if(m_pEQGroupList.count() > 0)
+    fd = createDB(FILE_TYPE_EQUIPMENTGROUP);
+    if(fd != (int)-1 && m_pEQGroupList.count() > 0)
     {
         for(int i = 0;i < m_pEQGroupList.count();i++)
         {
             EQUIPMENTGROUP* pGroup = (EQUIPMENTGROUP*)m_pEQGroupList[i];
-            saveDBRecord(FILE_TYPE_EQUIPMENTGROUP,++fileHandle.wEquipmentGroup,pGroup);
+            saveDBRecord(fd,++fileHandle.wEquipmentGroup,pGroup);
         }
+        //间隔
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wEquipmentGroup;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_EQUIPMENTGROUP);
     }
 
     //锁类型保存
-    if(m_pLockTypeList.count() > 0)
+    fd = createDB(FILE_TYPE_LOCKTYPE);
+    if(fd != (int)-1 && m_pLockTypeList.count() > 0)
     {
         for(int i = 0;i < m_pLockTypeList.count();i++)
         {
             WFLOCKTYPE* pLockType = (WFLOCKTYPE*)m_pLockTypeList[i];
-            saveDBRecord(FILE_TYPE_LOCKTYPE,++fileHandle.wLockType,pLockType);
+            saveDBRecord(fd,++fileHandle.wLockType,pLockType);
         }
+        //锁类型
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wLockType;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_LOCKTYPE);
     }
 
     //遥测保存
-    if(m_pAnalogueList.count() > 0)
+    fd = createDB(FILE_TYPE_ANALOGUE);
+    if(fd != (int)-1 && m_pAnalogueList.count() > 0)
     {
         for(int i = 0;i < m_pAnalogueList.count();i++)
         {
             ANALOGUE* pAna = (ANALOGUE*)m_pAnalogueList[i];
             saveDBRecord(FILE_TYPE_ANALOGUE,++fileHandle.wAnalogue,pAna);
         }
+        //遥测
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wAnalogue;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_ANALOGUE);
     }
 
     //遥信保存
-    if(m_pDigitalList.count() > 0)
+    fd = createDB(FILE_TYPE_DIGITAL);
+    if(fd != (int)-1 && m_pDigitalList.count() > 0)
     {
         for(int i = 0;i < m_pDigitalList.count();i++)
         {
             DIGITAL* pDigital = (DIGITAL*)m_pDigitalList[i];
-            saveDBRecord(FILE_TYPE_DIGITAL,++fileHandle.wDigital,pDigital);
+            saveDBRecord(fd,++fileHandle.wDigital,pDigital);
         }
+        //遥信
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wDigital;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_DIGITAL);
     }
 
     //遥信锁类型保存
+    fd = createDB(FILE_TYPE_DIGITALLOCKNO);
     if(m_pDigitalLockNoList.count() > 0)
     {
         for(int i = 0;i < m_pDigitalLockNoList.count();i++)
@@ -248,15 +290,13 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
             DIGITALLOCKNO* pDigitalLockNo = (DIGITALLOCKNO*)m_pDigitalLockNoList[i];
             saveDBRecord(FILE_TYPE_DIGITALLOCKNO,++fileHandle.wDigitalLockNo,pDigitalLockNo);
         }
+        //遥信锁扩展
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wDigitalLockNo;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_DIGITALLOCKNO);
     }
 
-/*
-    closeDB(FILE_TYPE_POWERGRADE);
-    closeDB(FILE_TYPE_EQUIPMENTGROUP);
-    closeDB(FILE_TYPE_LOCKTYPE);
-    closeDB(FILE_TYPE_ANALOGUE);
-    closeDB(FILE_TYPE_DIGITAL);
-    */
     return true;
 }
 

@@ -53,81 +53,93 @@ bool HMainDataHandle::loadData()
     DATAFILEHEADER dataFileHandle;
 
     //测点类型
-    openDB(FILE_TYPE_POINTTERM);
-    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
-    for(int i = 0; i < dataFileHandle.wTotal;i++)
+    int fd = openDB(FILE_TYPE_POINTTERM);
+    if(fd != (int)-1)
     {
-        POINTTERM* pointterm = new POINTTERM;
-        if(false == loadDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointterm))
+        loadDataFileHeader(fd,&dataFileHandle);
+        for(int i = 0; i < dataFileHandle.wTotal;i++)
         {
-            delete pointterm;
-            break;
+            POINTTERM* pointterm = new POINTTERM;
+            if(false == loadDBRecord(fd,++fileHandle.wPointType,pointterm))
+            {
+                delete pointterm;
+                break;
+            }
+            m_pointTermList.append(pointterm);
         }
-        m_pointTermList.append(pointterm);
+        closeDB(FILE_TYPE_POINTTERM);
     }
 
     //操作术语
-    openDB(FILE_TYPE_OPTERMGROUP);
-    loadDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
-    for(int i = 0; i < dataFileHandle.wTotal;i++)
+    fd = openDB(FILE_TYPE_OPTERMGROUP);
+    if(fd != (int)-1)
     {
-        HOpTermGroup* pOpTermGroup = new HOpTermGroup;
-        if(!pOpTermGroup)
-            break;
-        if(false == loadDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
+        loadDataFileHeader(fd,&dataFileHandle);
+        for(int i = 0; i < dataFileHandle.wTotal;i++)
         {
-            delete pOpTermGroup;
-            pOpTermGroup = NULL;
-            break;
+            HOpTermGroup* pOpTermGroup = new HOpTermGroup;
+            if(!pOpTermGroup)
+                break;
+            if(false == loadDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
+            {
+                delete pOpTermGroup;
+                pOpTermGroup = NULL;
+                break;
+            }
+            if(false == pOpTermGroup->loadData(fileHandle))
+            {
+                delete pOpTermGroup;
+                pOpTermGroup = NULL;
+                break;
+            }
+            m_pOpTermGroupList.append(pOpTermGroup);
         }
-        if(false == pOpTermGroup->loadData(fileHandle))
+        closeDB(FILE_TYPE_OPTERMGROUP);
+
+        bool bfind = false;
+        for(int i = 0; i < m_pOpTermGroupList.count();i++)
         {
-            delete pOpTermGroup;
-            pOpTermGroup = NULL;
-            break;
+            HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+            if(pOpTermGroup->opTermGroup.btOpTermGroupType == TYPE_POINT_DEFAULT)
+            {
+                bfind = true;
+                break;
+            }
         }
-        m_pOpTermGroupList.append(pOpTermGroup);
-    }
-    bool bfind = false;
-    for(int i = 0; i < m_pOpTermGroupList.count();i++)
-    {
-        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
-        if(pOpTermGroup->opTermGroup.btOpTermGroupType == TYPE_POINT_DEFAULT)
+        if(!bfind)
         {
-            bfind = true;
-            break;
+            addOpTermGroup(TYPE_POINT_DEFAULT);
         }
-    }
-    if(!bfind)
-    {
-        addOpTermGroup(TYPE_POINT_DEFAULT);
     }
 
     //厂站信息
-    openDB(FILE_TYPE_STATION);
-    loadDataFileHeader(FILE_TYPE_STATION,&dataFileHandle);
-    //int wStation = 0;
-    for(int i = 0 ; i < dataFileHandle.wTotal; i++)
-	{
-		HStation* pStation = new HStation;
-        if(!pStation)
-            break;
+    fd = openDB(FILE_TYPE_STATION);
+    if(fd != (int)-1)
+    {
+        loadDataFileHeader(fd,&dataFileHandle);
+        //int wStation = 0;
+        for(int i = 0 ; i < dataFileHandle.wTotal; i++)
+        {
+            HStation* pStation = new HStation;
+            if(!pStation)
+                break;
 
-        if ( false == loadDBRecord(FILE_TYPE_STATION, ++fileHandle.wStation, &pStation->m_station ) )
-        {
-            delete pStation;
-            pStation=NULL;
-            break;
+            if ( false == loadDBRecord(fd, ++fileHandle.wStation, &pStation->m_station ) )
+            {
+                delete pStation;
+                pStation=NULL;
+                break;
+            }
+            if(false == pStation->loadData(fileHandle))
+            {
+                delete pStation;
+                pStation = NULL;
+                break;
+            }
+            m_stationList.append(pStation);
         }
-        if(false == pStation->loadData(fileHandle))
-        {
-            delete pStation;
-            pStation = NULL;
-            break;
-        }
-		m_stationList.append(pStation);
+        closeDB(FILE_TYPE_STATION);
     }
-	//closeDBDataFile(filehandle);
 
     //加载插件代码  用 MACRO这个来代替  加载Qt编译出来的动态库
     char szPluginPath[128];
@@ -169,88 +181,62 @@ void HMainDataHandle::saveData()
 {
     FILEHANDLE fileHandle;
     memset(&fileHandle,0,sizeof(FILEHANDLE));
-    //先打开测点类型
-    createDB(FILE_TYPE_POINTTERM);
-    for(int i = 0; i < m_pointTermList.count();i++)
-    {
-        POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
-        if(pointTerm)
-        {
-            saveDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointTerm);
-        }
-    }
-    //操作术语
-    createDB(FILE_TYPE_OPTERMGROUP);
-    for(int i = 0; i < m_pOpTermGroupList.count();i++)
-    {
-        HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
-        if(pOpTermGroup)
-        {
-            pOpTermGroup->saveData(fileHandle);
-            saveDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup);
-        }
-    }
-
-    //厂站信息
-    createDB(FILE_TYPE_STATION);
-    for(int i = 0; i < m_stationList.count();i++)
-    {
-        HStation* pStation = m_stationList[i];
-        Q_ASSERT(pStation);
-        pStation->saveData(fileHandle);
-        saveDBRecord(FILE_TYPE_STATION,++fileHandle.wStation,&pStation->m_station);
-    }
-
     DATAFILEHEADER dataFileHandle;
-    //测点类型
-    loadDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wPointType;
-    saveDataFileHeader(FILE_TYPE_POINTTERM,&dataFileHandle);
+    //先打开测点类型
+    int fd = createDB(FILE_TYPE_POINTTERM);
+    if(fd != (int)-1)
+    {
+        for(int i = 0; i < m_pointTermList.count();i++)
+        {
+            POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
+            if(pointTerm)
+            {
+                saveDBRecord(fd,++fileHandle.wPointType,pointTerm);
+            }
+        }
+        //测点类型
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wPointType;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_POINTTERM);
+    }
 
-    //操作术语组
-    loadDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wOpTermGroup;
-    saveDataFileHeader(FILE_TYPE_OPTERMGROUP,&dataFileHandle);
-
-    //操作术语项
-    loadDataFileHeader(FILE_TYPE_OPTERM,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wOpTerm;
-    saveDataFileHeader(FILE_TYPE_OPTERM,&dataFileHandle);
-
-    //厂站
-    loadDataFileHeader(FILE_TYPE_STATION,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wStation;
-    saveDataFileHeader(FILE_TYPE_STATION,&dataFileHandle);
-
-    //电压等级
-    loadDataFileHeader(FILE_TYPE_POWERGRADE,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wPowerGrade;
-    saveDataFileHeader(FILE_TYPE_POWERGRADE,&dataFileHandle);
-
-    //间隔
-    loadDataFileHeader(FILE_TYPE_EQUIPMENTGROUP,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wEquipmentGroup;
-    saveDataFileHeader(FILE_TYPE_EQUIPMENTGROUP,&dataFileHandle);
-
-    //锁类型
-    loadDataFileHeader(FILE_TYPE_LOCKTYPE,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wLockType;
-    saveDataFileHeader(FILE_TYPE_LOCKTYPE,&dataFileHandle);
-
-    //遥测
-    loadDataFileHeader(FILE_TYPE_ANALOGUE,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wAnalogue;
-    saveDataFileHeader(FILE_TYPE_ANALOGUE,&dataFileHandle);
-
-    //遥信
-    loadDataFileHeader(FILE_TYPE_DIGITAL,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wDigital;
-    saveDataFileHeader(FILE_TYPE_DIGITAL,&dataFileHandle);
-
-    //遥信锁扩展
-    loadDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wDigitalLockNo;
-    saveDataFileHeader(FILE_TYPE_DIGITALLOCKNO,&dataFileHandle);
+    //操作术语
+    fd = createDB(FILE_TYPE_OPTERMGROUP);
+    if(fd != (int)-1)
+    {
+        for(int i = 0; i < m_pOpTermGroupList.count();i++)
+        {
+            HOpTermGroup* pOpTermGroup = (HOpTermGroup*)m_pOpTermGroupList[i];
+            if(pOpTermGroup)
+            {
+                pOpTermGroup->saveData(fileHandle);
+                saveDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup);
+            }
+        }
+        //操作术语组
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wOpTermGroup;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_OPTERMGROUP);
+    }
+    //厂站信息
+    fd = createDB(FILE_TYPE_STATION);
+    if(fd != (int)-1)
+    {
+        for(int i = 0; i < m_stationList.count();i++)
+        {
+            HStation* pStation = m_stationList[i];
+            Q_ASSERT(pStation);
+            pStation->saveData(fileHandle);
+            saveDBRecord(fd,++fileHandle.wStation,&pStation->m_station);
+        }
+        //厂站
+        loadDataFileHeader(fd,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wStation;
+        saveDataFileHeader(fd,&dataFileHandle);
+        closeDB(FILE_TYPE_STATION);
+    }
 
     //插件保存
     for(int i = 0; i < m_pUserDbList.count();i++)
@@ -760,23 +746,28 @@ bool HMainDataHandle::loadFormulaList()
     QList<ITEM*> itemList;
     DATAFILEHEADER head;
     memset(&head,0,sizeof(DATAFILEHEADER));
-    openDB(FILE_TYPE_FORMULA);
-    loadDataFileHeader(FILE_TYPE_FORMULA,&head);
-    for(int i = 1; i <= head.wTotal;i++)
+    int fd = openDB(FILE_TYPE_FORMULA);
+    if(fd == (int)-1)
+        return true;
+    loadDataFileHeader(fd,&head);
+    for(int i = 0; i < head.wTotal;i++)
     {
         FORMULA* formula = new FORMULA;
-        loadDBRecord(FILE_TYPE_FORMULA,i,formula);
+        loadDBRecord(fd,i,formula);
         formulaList.append(formula);
     }
     closeDB(FILE_TYPE_FORMULA);
 
-    openDB(FILE_TYPE_ITEM);
+
     memset(&head,0,sizeof(DATAFILEHEADER));
-    loadDataFileHeader(FILE_TYPE_ITEM,&head);
-    for(int i = 1; i <= head.wTotal;i++)
+    fd = openDB(FILE_TYPE_ITEM);
+    if(fd == (int)-1)
+        return true;
+    loadDataFileHeader(fd,&head);
+    for(int i = 0; i < head.wTotal;i++)
     {
         ITEM* item = new ITEM;
-        loadDBRecord(FILE_TYPE_ITEM,i,item);
+        loadDBRecord(fd,i,item);
         itemList.append(item);
     }
     closeDB(FILE_TYPE_ITEM);

@@ -18,29 +18,41 @@ HOpTermGroup::~HOpTermGroup()
 
 bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
 {
-    openDB(FILE_TYPE_OPTERM);
+    int fd = openDB(FILE_TYPE_OPTERM);
+    if(fd == (int)-1)
+        return false;
     for(int i = 0; i < opTermGroup.wOpTermCounts;i++)
     {
         OPTERM* pOpTerm = new OPTERM;
-        if(false == loadDBRecord(FILE_TYPE_OPTERM,++fileHandle.wOpTerm,pOpTerm))
+        if(false == loadDBRecord(fd,++fileHandle.wOpTerm,pOpTerm))
         {
             delete pOpTerm;
             break;
         }
         pOpTermList.append(pOpTerm);
     }
+    closeDB(FILE_TYPE_OPTERM);
     return true;
 }
 
 void HOpTermGroup::saveData(FILEHANDLE &fileHandle)
 {
     opTermGroup.wOpTermCounts = pOpTermList.count();
-    createDB(FILE_TYPE_OPTERM);
+    int fd = createDB(FILE_TYPE_OPTERM);
+    if(fd == (int)-1)
+        return;
+    DATAFILEHEADER dataFileHandle;
+    memset(&dataFileHandle,0,sizeof(DATAFILEHEADER));
     for(int i = 0; i < pOpTermList.count();i++)
     {
         OPTERM* pOpTerm = (OPTERM*)pOpTermList[i];
         saveDBRecord(FILE_TYPE_OPTERM,++fileHandle.wOpTerm,pOpTerm);
     }
+    //操作术语项
+    loadDataFileHeader(fd,&dataFileHandle);
+    dataFileHandle.wTotal = fileHandle.wOpTerm;
+    saveDataFileHeader(fd,&dataFileHandle);
+    closeDB(FILE_TYPE_OPTERM);
 }
 
 

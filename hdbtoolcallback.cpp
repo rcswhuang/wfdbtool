@@ -139,28 +139,32 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         FORMULAITEMLIST* param = (FORMULAITEMLIST*)lParam;
         DATAFILEHEADER head;
         memset(&head,0,sizeof(DATAFILEHEADER));
-        createDB(FILE_TYPE_FORMULA);
-        loadDataFileHeader(FILE_TYPE_FORMULA,&head);
+        int fd = createDB(FILE_TYPE_FORMULA);
+        if(fd == (int)-1)
+            return false;
+        loadDataFileHeader(fd,&head);
         head.wTotal = param->pFormulaList->count();
-        saveDataFileHeader(FILE_TYPE_FORMULA,&head);
+        saveDataFileHeader(fd,&head);
         for(int i = 0; i < param->pFormulaList->count();i++)
         {
             FORMULA* formula = (FORMULA*)param->pFormulaList->at(i);
             if(!formula) continue;
-            saveDBRecord(FILE_TYPE_FORMULA,i,formula);
+            saveDBRecord(fd,i,formula);
         }
         closeDB(FILE_TYPE_FORMULA);
 
         memset(&head,0,sizeof(DATAFILEHEADER));
-        createDB(FILE_TYPE_ITEM);
-        loadDataFileHeader(FILE_TYPE_ITEM,&head);
+        fd = createDB(FILE_TYPE_ITEM);
+        if(fd == (int)-1)
+            return false;
+        loadDataFileHeader(fd,&head);
         head.wTotal = param->pItemList->count();
-        saveDataFileHeader(FILE_TYPE_ITEM,&head);
+        saveDataFileHeader(fd,&head);
         for(int i = 0; i < param->pItemList->count();i++)
         {
             ITEM* item = (ITEM*)param->pItemList->at(i);
             if(!item) continue;
-            saveDBRecord(FILE_TYPE_ITEM,i,item);
+            saveDBRecord(fd,i,item);
         }
         closeDB(FILE_TYPE_ITEM);
         break;
