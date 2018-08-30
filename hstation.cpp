@@ -531,7 +531,6 @@ DIGITAL* HStation::addDigital(ushort wGroupID)
     pDigital->wRNo = (ushort)-1; //相关遥控点ID
     pDigital->wFormulaID =(ushort)-1; //计算点 计算公式
     pDigital->wToScadaIndex = (ushort)-1;
-    pDigital->wToSimIndex = (ushort)-1;
     pDigital->wFromScadaIndex = (ushort)-1;
 
 	m_pDigitalList.append(pDigital);
@@ -959,7 +958,6 @@ ANALOGUE* HStation::addAnalogue(ushort wGroupID)
     pAna->fGrades = 0.0;//梯度
     pAna->wToScadaIndex = (ushort)-1; //转发索引 到监控
     pAna->wFromScadaIndex = (ushort)-1; //从监控
-    pAna->wToSimIndex = (ushort)-1; //发给第三方
 	m_pAnalogueList.append(pAna);
     //初始化扩展遥测信息
 	return pAna;
