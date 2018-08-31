@@ -23,6 +23,7 @@ public:
 public:
     QString m_strPluginName;
     quint16 m_npluginID;
+    //数据库组态、运行实时库都需要从插件里面获取相关内容
     PLUGINPROC m_pluginProc;//为所有插件统一处理函数地址，回调函数
 };
 

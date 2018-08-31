@@ -8,7 +8,7 @@
 bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int nDBID)
 {
     switch (nMsgType) {
-    case FM_GETDBINFO:
+    case FM_GETDBINFO: //ID
     {
         FORMULAPARAMETER *param = (FORMULAPARAMETER*)lParam;
         HStation *pStation = HMainDataHandle::Instance()->findStation(param->wStation);
@@ -69,7 +69,7 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         }
         break;
     }
-    case FM_FINDDBINFO:
+    case FM_FINDDBINFO: //index
     {
         FORMULAPARAMETER *param = (FORMULAPARAMETER*)lParam;
         HStation *pStation = NULL;
@@ -247,7 +247,8 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
     }
     return true;
 }
-/////
+
+//插件配置的转发点表相关信息都需要从数据库里面获取
 bool __cdecl pluginCallback(int nMsgType,HWPARAM wParam,HLPARAM lParam)
 {
     switch (nMsgType) {
