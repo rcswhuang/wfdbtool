@@ -24,7 +24,7 @@ bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
     for(int i = 0; i < opTermGroup.wOpTermCounts;i++)
     {
         OPTERM* pOpTerm = new OPTERM;
-        if(false == loadDBRecord(fd,++fileHandle.wOpTerm,pOpTerm))
+        if((int)-1 == loadDBRecord(fd,++fileHandle.wOpTerm,pOpTerm))
         {
             delete pOpTerm;
             break;

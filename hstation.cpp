@@ -69,7 +69,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wPowerGradeCounts;i++)
         {
             POWERGRADE* power = new POWERGRADE;
-            if(false == loadDBRecord(fd,++fileHandle.wPowerGrade,power))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wPowerGrade,power))
             {
                 delete power;
                 break;
@@ -86,7 +86,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wEquipmentGroupCounts;i++)
         {
             EQUIPMENTGROUP* pEquip = new EQUIPMENTGROUP;
-            if(false == loadDBRecord(fd,++fileHandle.wEquipmentGroup,pEquip))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wEquipmentGroup,pEquip))
             {
                 delete pEquip;
                 break;
@@ -103,7 +103,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wLockTypeCounts;i++)
         {
             WFLOCKTYPE* wfLockType = new WFLOCKTYPE;
-            if(false == loadDBRecord(fd,++fileHandle.wLockType,wfLockType))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wLockType,wfLockType))
             {
                 delete wfLockType;
                 break;
@@ -120,7 +120,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wAnalogueCounts;i++)
         {
             ANALOGUE* pAna = new ANALOGUE;
-            if(false == loadDBRecord(fd,++fileHandle.wAnalogue,pAna))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wAnalogue,pAna))
             {
                 delete pAna;
                 break;
@@ -137,7 +137,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wDigitalCounts;i++)
         {
             DIGITAL* pDigital = new DIGITAL;
-            if(false == loadDBRecord(fd,++fileHandle.wDigital,pDigital))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wDigital,pDigital))
             {
                 delete pDigital;
                 break;
@@ -154,7 +154,7 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wDigitalCounts;i++)//扩展的遥信锁号数目和遥信数目必须一致
         {
             DIGITALLOCKNO* pDigitalLockNo = new DIGITALLOCKNO;
-            if(false == loadDBRecord(fd,++fileHandle.wDigitalLockNo,pDigitalLockNo))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wDigitalLockNo,pDigitalLockNo))
             {
                 delete pDigitalLockNo;
                 break;
@@ -208,7 +208,7 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
         for(int i = 0;i < m_pPowerGradeList.count();i++)
         {
             POWERGRADE* pPower = (POWERGRADE*)m_pPowerGradeList[i];
-            saveDBRecord(FILE_TYPE_POWERGRADE,++fileHandle.wPowerGrade,pPower);
+            saveDBRecord(fd,++fileHandle.wPowerGrade,pPower);
         }
         //电压等级
         loadDataFileHeader(fd,&dataFileHandle);
@@ -256,7 +256,7 @@ bool HStation::saveData(FILEHANDLE &fileHandle)
         for(int i = 0;i < m_pAnalogueList.count();i++)
         {
             ANALOGUE* pAna = (ANALOGUE*)m_pAnalogueList[i];
-            saveDBRecord(FILE_TYPE_ANALOGUE,++fileHandle.wAnalogue,pAna);
+            saveDBRecord(fd,++fileHandle.wAnalogue,pAna);
         }
         //遥测
         loadDataFileHeader(fd,&dataFileHandle);

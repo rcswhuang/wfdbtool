@@ -60,7 +60,7 @@ bool HMainDataHandle::loadData()
         for(int i = 0; i < dataFileHandle.wTotal;i++)
         {
             POINTTERM* pointterm = new POINTTERM;
-            if(false == loadDBRecord(fd,++fileHandle.wPointType,pointterm))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wPointType,pointterm))
             {
                 delete pointterm;
                 break;
@@ -80,7 +80,7 @@ bool HMainDataHandle::loadData()
             HOpTermGroup* pOpTermGroup = new HOpTermGroup;
             if(!pOpTermGroup)
                 break;
-            if(false == loadDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
+            if((int)-1 == loadDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
             {
                 delete pOpTermGroup;
                 pOpTermGroup = NULL;
@@ -124,7 +124,7 @@ bool HMainDataHandle::loadData()
             if(!pStation)
                 break;
 
-            if ( false == loadDBRecord(fd, ++fileHandle.wStation, &pStation->m_station ) )
+            if ( (int)-1 == loadDBRecord(fd, ++fileHandle.wStation, &pStation->m_station ) )
             {
                 delete pStation;
                 pStation=NULL;
