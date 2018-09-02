@@ -54,13 +54,14 @@ bool HMainDataHandle::loadData()
 
     //测点类型
     int fd = openDB(FILE_TYPE_POINTTERM);
-    if(fd != (int)-1)
+    fileHandle.wPointTypeID = fd;
+    if(fileHandle.wPointTypeID != (int)-1)
     {
-        loadDataFileHeader(fd,&dataFileHandle);
+        loadDataFileHeader(fileHandle.wPointTypeID,&dataFileHandle);
         for(int i = 0; i < dataFileHandle.wTotal;i++)
         {
             POINTTERM* pointterm = new POINTTERM;
-            if((int)-1 == loadDBRecord(fd,++fileHandle.wPointType,pointterm))
+            if((int)-1 == loadDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointterm))
             {
                 delete pointterm;
                 break;
@@ -72,15 +73,16 @@ bool HMainDataHandle::loadData()
 
     //操作术语
     fd = openDB(FILE_TYPE_OPTERMGROUP);
+    fileHandle.wOpTermGroupID = fd;
     if(fd != (int)-1)
     {
-        loadDataFileHeader(fd,&dataFileHandle);
+        loadDataFileHeader(fileHandle.wOpTermGroupID,&dataFileHandle);
         for(int i = 0; i < dataFileHandle.wTotal;i++)
         {
             HOpTermGroup* pOpTermGroup = new HOpTermGroup;
             if(!pOpTermGroup)
                 break;
-            if((int)-1 == loadDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
+            if((int)-1 == loadDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup))
             {
                 delete pOpTermGroup;
                 pOpTermGroup = NULL;
@@ -114,17 +116,29 @@ bool HMainDataHandle::loadData()
 
     //厂站信息
     fd = openDB(FILE_TYPE_STATION);
+    fileHandle.wStationID = fd;
+    fd = openDB(FILE_TYPE_POWERGRADE);
+    fileHandle.wPowerGradeID = fd;
+    fd = openDB(FILE_TYPE_EQUIPMENTGROUP);
+    fileHandle.wEquipmentGroup = fd;
+    fd = openDB(FILE_TYPE_LOCKTYPE);
+    fileHandle.wLockTypeID = fd;
+    fd = openDB(FILE_TYPE_ANALOGUE);
+    fileHandle.wAnalogueID = fd;
+    fd = openDB(FILE_TYPE_DIGITAL);
+    fileHandle.wDigitalID = fd;
+    fd = openDB(FILE_TYPE_DIGITALLOCKNO);
+    fileHandle.wDigitalLockNoID = fd;
     if(fd != (int)-1)
     {
-        loadDataFileHeader(fd,&dataFileHandle);
-        //int wStation = 0;
+        loadDataFileHeader(fileHandle.wStationID,&dataFileHandle);
         for(int i = 0 ; i < dataFileHandle.wTotal; i++)
         {
             HStation* pStation = new HStation;
             if(!pStation)
                 break;
 
-            if ( (int)-1 == loadDBRecord(fd, ++fileHandle.wStation, &pStation->m_station ) )
+            if ( (int)-1 == loadDBRecord(FILE_TYPE_STATION, ++fileHandle.wStation, &pStation->m_station ) )
             {
                 delete pStation;
                 pStation=NULL;
@@ -184,6 +198,7 @@ void HMainDataHandle::saveData()
     DATAFILEHEADER dataFileHandle;
     //先打开测点类型
     int fd = createDB(FILE_TYPE_POINTTERM);
+    fileHandle.wPointTypeID = fd;
     if(fd != (int)-1)
     {
         for(int i = 0; i < m_pointTermList.count();i++)
@@ -191,19 +206,22 @@ void HMainDataHandle::saveData()
             POINTTERM* pointTerm = (POINTTERM*)m_pointTermList[i];
             if(pointTerm)
             {
-                saveDBRecord(fd,++fileHandle.wPointType,pointTerm);
+                saveDBRecord(FILE_TYPE_POINTTERM,++fileHandle.wPointType,pointTerm);
             }
         }
         //测点类型
-        loadDataFileHeader(fd,&dataFileHandle);
+        loadDataFileHeader(fileHandle.wPointTypeID,&dataFileHandle);
         dataFileHandle.wTotal = fileHandle.wPointType;
-        saveDataFileHeader(fd,&dataFileHandle);
+        saveDataFileHeader(fileHandle.wPointTypeID,&dataFileHandle);
         closeDB(FILE_TYPE_POINTTERM);
     }
 
     //操作术语
     fd = createDB(FILE_TYPE_OPTERMGROUP);
-    if(fd != (int)-1)
+    fileHandle.wOpTermGroupID = fd;
+    fd = createDB(FILE_TYPE_OPTERM);
+    fileHandle.wOpTermID = fd;
+    if(fileHandle.wOpTermGroupID != (int)-1 || fileHandle.wOpTermID != (int)-1)
     {
         for(int i = 0; i < m_pOpTermGroupList.count();i++)
         {
@@ -211,30 +229,81 @@ void HMainDataHandle::saveData()
             if(pOpTermGroup)
             {
                 pOpTermGroup->saveData(fileHandle);
-                saveDBRecord(fd,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup);
+                saveDBRecord(FILE_TYPE_OPTERMGROUP,++fileHandle.wOpTermGroup,&pOpTermGroup->opTermGroup);
             }
         }
         //操作术语组
-        loadDataFileHeader(fd,&dataFileHandle);
+        loadDataFileHeader(fileHandle.wOpTermGroupID,&dataFileHandle);
         dataFileHandle.wTotal = fileHandle.wOpTermGroup;
-        saveDataFileHeader(fd,&dataFileHandle);
+        saveDataFileHeader(fileHandle.wOpTermGroupID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wOpTermID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wOpTerm;
+        saveDataFileHeader(fileHandle.wOpTermID,&dataFileHandle);
+
+        closeDB(FILE_TYPE_OPTERM);
         closeDB(FILE_TYPE_OPTERMGROUP);
     }
     //厂站信息
     fd = createDB(FILE_TYPE_STATION);
-    if(fd != (int)-1)
+    fileHandle.wStationID = fd;
+    fd = createDB(FILE_TYPE_POWERGRADE);
+    fileHandle.wPowerGradeID = fd;
+    fd = createDB(FILE_TYPE_EQUIPMENTGROUP);
+    fileHandle.wEquipmentGroup = fd;
+    fd = createDB(FILE_TYPE_LOCKTYPE);
+    fileHandle.wLockTypeID = fd;
+    fd = createDB(FILE_TYPE_ANALOGUE);
+    fileHandle.wAnalogueID = fd;
+    fd = createDB(FILE_TYPE_DIGITAL);
+    fileHandle.wDigitalID = fd;
+    fd = createDB(FILE_TYPE_DIGITALLOCKNO);
+    fileHandle.wDigitalLockNoID = fd;
+    if(fileHandle.wStationID != (int)-1 || fileHandle.wPowerGradeID != (int)-1 || fileHandle.wEquipmentGroupID!= (int)-1 || fileHandle.wLockTypeID != (int)-1 ||
+            fileHandle.wAnalogueID != (int)-1 || fileHandle.wDigitalID != (int)-1 || fileHandle.wDigitalLockNoID != (int)-1)
     {
         for(int i = 0; i < m_stationList.count();i++)
         {
             HStation* pStation = m_stationList[i];
             Q_ASSERT(pStation);
             pStation->saveData(fileHandle);
-            saveDBRecord(fd,++fileHandle.wStation,&pStation->m_station);
+            saveDBRecord(FILE_TYPE_STATION,++fileHandle.wStation,&pStation->m_station);
         }
         //厂站
-        loadDataFileHeader(fd,&dataFileHandle);
+        loadDataFileHeader(fileHandle.wStationID,&dataFileHandle);
         dataFileHandle.wTotal = fileHandle.wStation;
-        saveDataFileHeader(fd,&dataFileHandle);
+        saveDataFileHeader(fileHandle.wStationID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wPowerGradeID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wPowerGrade;
+        saveDataFileHeader(fileHandle.wPowerGradeID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wEquipmentGroupID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wEquipmentGroup;
+        saveDataFileHeader(fileHandle.wEquipmentGroupID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wLockTypeID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wLockType;
+        saveDataFileHeader(fileHandle.wLockTypeID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wAnalogueID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wAnalogue;
+        saveDataFileHeader(fileHandle.wAnalogueID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wDigitalID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wDigital;
+        saveDataFileHeader(fileHandle.wDigitalID,&dataFileHandle);
+
+        loadDataFileHeader(fileHandle.wDigitalLockNoID,&dataFileHandle);
+        dataFileHandle.wTotal = fileHandle.wDigitalLockNo;
+        saveDataFileHeader(fileHandle.wDigitalLockNoID,&dataFileHandle);
+
+        closeDB(FILE_TYPE_POWERGRADE);
+        closeDB(FILE_TYPE_EQUIPMENTGROUP);
+        closeDB(FILE_TYPE_LOCKTYPE);
+        closeDB(FILE_TYPE_ANALOGUE);
+        closeDB(FILE_TYPE_DIGITAL);
+        closeDB(FILE_TYPE_DIGITALLOCKNO);
         closeDB(FILE_TYPE_STATION);
     }
 

@@ -18,13 +18,12 @@ HOpTermGroup::~HOpTermGroup()
 
 bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
 {
-    int fd = openDB(FILE_TYPE_OPTERM);
-    if(fd == (int)-1)
+    if(fileHandle.wOpTermID == (int)-1)
         return false;
     for(int i = 0; i < opTermGroup.wOpTermCounts;i++)
     {
         OPTERM* pOpTerm = new OPTERM;
-        if((int)-1 == loadDBRecord(fd,++fileHandle.wOpTerm,pOpTerm))
+        if((int)-1 == loadDBRecord(FILE_TYPE_OPTERM,++fileHandle.wOpTerm,pOpTerm))
         {
             delete pOpTerm;
             break;
@@ -38,9 +37,6 @@ bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
 void HOpTermGroup::saveData(FILEHANDLE &fileHandle)
 {
     opTermGroup.wOpTermCounts = pOpTermList.count();
-    int fd = createDB(FILE_TYPE_OPTERM);
-    if(fd == (int)-1)
-        return;
     DATAFILEHEADER dataFileHandle;
     memset(&dataFileHandle,0,sizeof(DATAFILEHEADER));
     for(int i = 0; i < pOpTermList.count();i++)
@@ -48,11 +44,6 @@ void HOpTermGroup::saveData(FILEHANDLE &fileHandle)
         OPTERM* pOpTerm = (OPTERM*)pOpTermList[i];
         saveDBRecord(FILE_TYPE_OPTERM,++fileHandle.wOpTerm,pOpTerm);
     }
-    //操作术语项
-    loadDataFileHeader(fd,&dataFileHandle);
-    dataFileHandle.wTotal = fileHandle.wOpTerm;
-    saveDataFileHeader(fd,&dataFileHandle);
-    closeDB(FILE_TYPE_OPTERM);
 }
 
 
