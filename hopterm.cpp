@@ -30,7 +30,6 @@ bool HOpTermGroup::loadData(FILEHANDLE &fileHandle)
         }
         pOpTermList.append(pOpTerm);
     }
-    closeDB(FILE_TYPE_OPTERM);
     return true;
 }
 

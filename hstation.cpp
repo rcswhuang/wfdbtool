@@ -75,7 +75,6 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
             }
             m_pPowerGradeList.append(power);
         }
-        closeDB(FILE_TYPE_POWERGRADE);
     }
 
     //间隔
@@ -84,14 +83,13 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
         for(int i = 0; i < m_station.wEquipmentGroupCounts;i++)
         {
             EQUIPMENTGROUP* pEquip = new EQUIPMENTGROUP;
-            if((int)-1 == loadDBRecord(FILE_TYPE_POWERGRADE,++fileHandle.wEquipmentGroup,pEquip))
+            if((int)-1 == loadDBRecord(FILE_TYPE_EQUIPMENTGROUP,++fileHandle.wEquipmentGroup,pEquip))
             {
                 delete pEquip;
                 break;
             }
             m_pEQGroupList.append(pEquip);
         }
-        closeDB(FILE_TYPE_EQUIPMENTGROUP);
     }
 
     //锁类型
@@ -107,7 +105,6 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
             }
             m_pLockTypeList.append(wfLockType);
         }
-        closeDB(FILE_TYPE_LOCKTYPE);
     }
 
     //遥测
@@ -123,7 +120,6 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
             }
             m_pAnalogueList.append(pAna);
         }
-        closeDB(FILE_TYPE_ANALOGUE);
     }
 
     //遥信
@@ -139,7 +135,6 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
             }
             m_pDigitalList.append(pDigital);
         }
-        closeDB(FILE_TYPE_DIGITAL);
     }
 
     //遥信扩展锁号
@@ -155,7 +150,6 @@ bool HStation::loadData(FILEHANDLE &fileHandle)
             }
             m_pDigitalLockNoList.append(pDigitalLockNo);
         }
-        closeDB(FILE_TYPE_DIGITALLOCKNO);
     }
 
 

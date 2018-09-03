@@ -74,6 +74,8 @@ bool HMainDataHandle::loadData()
     //操作术语
     fd = openDB(FILE_TYPE_OPTERMGROUP);
     fileHandle.wOpTermGroupID = fd;
+    fd = openDB(FILE_TYPE_OPTERM);
+    fileHandle.wOpTermID = fd;
     if(fd != (int)-1)
     {
         loadDataFileHeader(fileHandle.wOpTermGroupID,&dataFileHandle);
@@ -97,6 +99,7 @@ bool HMainDataHandle::loadData()
             m_pOpTermGroupList.append(pOpTermGroup);
         }
         closeDB(FILE_TYPE_OPTERMGROUP);
+        closeDB(FILE_TYPE_OPTERM);
 
         bool bfind = false;
         for(int i = 0; i < m_pOpTermGroupList.count();i++)
@@ -120,7 +123,7 @@ bool HMainDataHandle::loadData()
     fd = openDB(FILE_TYPE_POWERGRADE);
     fileHandle.wPowerGradeID = fd;
     fd = openDB(FILE_TYPE_EQUIPMENTGROUP);
-    fileHandle.wEquipmentGroup = fd;
+    fileHandle.wEquipmentGroupID = fd;
     fd = openDB(FILE_TYPE_LOCKTYPE);
     fileHandle.wLockTypeID = fd;
     fd = openDB(FILE_TYPE_ANALOGUE);
@@ -142,17 +145,23 @@ bool HMainDataHandle::loadData()
             {
                 delete pStation;
                 pStation=NULL;
-                break;
+                continue;
             }
             if(false == pStation->loadData(fileHandle))
             {
                 delete pStation;
                 pStation = NULL;
-                break;
+                continue;
             }
             m_stationList.append(pStation);
         }
         closeDB(FILE_TYPE_STATION);
+        closeDB(FILE_TYPE_POWERGRADE);
+        closeDB(FILE_TYPE_EQUIPMENTGROUP);
+        closeDB(FILE_TYPE_LOCKTYPE);
+        closeDB(FILE_TYPE_ANALOGUE);
+        closeDB(FILE_TYPE_DIGITAL);
+        closeDB(FILE_TYPE_DIGITALLOCKNO);
     }
 
     //加载插件代码  用 MACRO这个来代替  加载Qt编译出来的动态库
@@ -250,7 +259,7 @@ void HMainDataHandle::saveData()
     fd = createDB(FILE_TYPE_POWERGRADE);
     fileHandle.wPowerGradeID = fd;
     fd = createDB(FILE_TYPE_EQUIPMENTGROUP);
-    fileHandle.wEquipmentGroup = fd;
+    fileHandle.wEquipmentGroupID = fd;
     fd = createDB(FILE_TYPE_LOCKTYPE);
     fileHandle.wLockTypeID = fd;
     fd = createDB(FILE_TYPE_ANALOGUE);
