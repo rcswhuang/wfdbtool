@@ -219,7 +219,9 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
     {
         HStation* pStation = (HStation*)HMainDataHandle::Instance()->findStation(ruleParam->wStationNo);
         if(!pStation) return false;
-        ruleParam->strStationName = QString(pStation->m_station.szStationName);
+        const char* sz = pStation->m_station.szStationName;
+        QString strTemp = QString(sz);
+        ruleParam->strStationName = strTemp;//pStation->m_station.szStationName;
 
         if(TYPE_DIGITAL == ruleParam->btPointType)
         {
@@ -227,13 +229,13 @@ bool __cdecl ruleCallback (int msgType,RULEINFO *ruleParam)
             if(!digital) return false;
             ruleParam->strPointName = digital->szDigitalName;
             ruleParam->strAttr = QStringLiteral("工程值");
-            ruleParam->strProtectName = QString(digital->szEquipmentID);
+            ruleParam->strProtectName = QString::fromLocal8Bit(digital->szEquipmentID);
         }
         else if(TYPE_ANALOGUE == ruleParam->btPointType)
         {
             ANALOGUE* analogue = pStation->findAnalogue(ruleParam->wPointNo);
             if(!analogue) return false;
-            ruleParam->strPointName = QString(analogue->szAnalogueName);
+            ruleParam->strPointName = QString::fromLocal8Bit(analogue->szAnalogueName);
             ruleParam->strAttr = QStringLiteral("工程值");
         }
         else

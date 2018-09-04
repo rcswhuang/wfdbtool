@@ -825,30 +825,31 @@ bool HMainDataHandle::loadFormulaList()
     DATAFILEHEADER head;
     memset(&head,0,sizeof(DATAFILEHEADER));
     int fd = openDB(FILE_TYPE_FORMULA);
-    if(fd == (int)-1)
-        return true;
-    loadDataFileHeader(fd,&head);
-    for(int i = 0; i < head.wTotal;i++)
+    if((int)-1 != fd)
     {
-        FORMULA* formula = new FORMULA;
-        loadDBRecord(fd,i,formula);
-        formulaList.append(formula);
+        loadDataFileHeader(fd,&head);
+        for(int i = 0; i < head.wTotal;i++)
+        {
+            FORMULA* formula = new FORMULA;
+            loadDBRecord(FILE_TYPE_FORMULA,i,formula);
+            formulaList.append(formula);
+        }
+        closeDB(FILE_TYPE_FORMULA);
     }
-    closeDB(FILE_TYPE_FORMULA);
-
 
     memset(&head,0,sizeof(DATAFILEHEADER));
     fd = openDB(FILE_TYPE_ITEM);
-    if(fd == (int)-1)
-        return true;
-    loadDataFileHeader(fd,&head);
-    for(int i = 0; i < head.wTotal;i++)
+    if((int)-1 == fd)
     {
-        ITEM* item = new ITEM;
-        loadDBRecord(fd,i,item);
-        itemList.append(item);
+        loadDataFileHeader(fd,&head);
+        for(int i = 0; i < head.wTotal;i++)
+        {
+            ITEM* item = new ITEM;
+            loadDBRecord(FILE_TYPE_ITEM,i,item);
+            itemList.append(item);
+        }
+        closeDB(FILE_TYPE_ITEM);
     }
-    closeDB(FILE_TYPE_ITEM);
 
     bool bret = loadFormulaData(formulaList,itemList);
 
