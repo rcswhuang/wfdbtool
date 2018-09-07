@@ -341,14 +341,9 @@ void HMainDataHandle::closeDBDataFile(FILEHANDLE* filehandle)
 //索引就是按厂站的地址来寻找的
 HStation* HMainDataHandle::findStationByIndex(ushort wIndex)
 {
-	QListIterator<HStation* > iterator(m_stationList);
-	while(iterator.hasNext())
-	{
-		HStation* pStation = (HStation*)iterator.next();
-        if(wIndex == pStation->m_station.wStationAddress)
-			return pStation;
-	}
-	return NULL;
+    if(wIndex > m_stationList.count())
+        return NULL;
+    return m_stationList[wIndex];
 }
 
 HStation* HMainDataHandle::findStation(ushort wStationID)
