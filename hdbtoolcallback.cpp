@@ -149,7 +149,7 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         {
             FORMULA* formula = (FORMULA*)param->pFormulaList->at(i);
             if(!formula) continue;
-            saveDBRecord(fd,i,formula);
+            saveDBRecord(FILE_TYPE_FORMULA,i,formula);
         }
         closeDB(FILE_TYPE_FORMULA);
 
@@ -164,7 +164,7 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         {
             ITEM* item = (ITEM*)param->pItemList->at(i);
             if(!item) continue;
-            saveDBRecord(fd,i,item);
+            saveDBRecord(FILE_TYPE_FORMULA,i,item);
         }
         closeDB(FILE_TYPE_ITEM);
         break;
