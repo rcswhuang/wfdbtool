@@ -164,7 +164,7 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         {
             ITEM* item = (ITEM*)param->pItemList->at(i);
             if(!item) continue;
-            saveDBRecord(FILE_TYPE_FORMULA,i,item);
+            saveDBRecord(FILE_TYPE_ITEM,i,item);
         }
         closeDB(FILE_TYPE_ITEM);
         break;

@@ -834,7 +834,7 @@ bool HMainDataHandle::loadFormulaList()
 
     memset(&head,0,sizeof(DATAFILEHEADER));
     fd = openDB(FILE_TYPE_ITEM);
-    if((int)-1 == fd)
+    if((int)-1 != fd)
     {
         loadDataFileHeader(fd,&head);
         for(int i = 0; i < head.wTotal;i++)
