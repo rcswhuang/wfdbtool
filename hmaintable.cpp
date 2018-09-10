@@ -406,7 +406,6 @@ void MainTableView::upSelectRow()
 
             pStation->refreshTransListIndex(TREEPARAM_DIGITALFROMSCADA);
             pStation->refreshTransListIndex(TREEPARAM_DIGITALTOSCADA);
-            pStation->refreshTransListIndex(TREEPARAM_DIGITALTOSIM);
         }
     }
     else if(btType == TREEPARAM_ANALOGUE)
@@ -429,7 +428,6 @@ void MainTableView::upSelectRow()
             }
             pStation->refreshTransListIndex(TREEPARAM_ANALOGUEFROMSCADA);
             pStation->refreshTransListIndex(TREEPARAM_ANALOGUETOSCADA);
-            pStation->refreshTransListIndex(TREEPARAM_ANALOGUETOSIM);
         }
     }
     else if(btType == TREEPARAM_DIGITALFROMSCADA)
