@@ -145,11 +145,11 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         loadDataFileHeader(fd,&head);
         head.wTotal = param->pFormulaList->count();
         saveDataFileHeader(fd,&head);
-        for(int i = 0; i < param->pFormulaList->count();i++)
+        for(int i = 0; i < param->pFormulaList->count();)
         {
             FORMULA* formula = (FORMULA*)param->pFormulaList->at(i);
             if(!formula) continue;
-            saveDBRecord(FILE_TYPE_FORMULA,i,formula);
+            saveDBRecord(FILE_TYPE_FORMULA,++i,formula);
         }
         closeDB(FILE_TYPE_FORMULA);
 
@@ -160,11 +160,11 @@ bool __cdecl formulaCallback(int nMsgType, HWPARAM wParam, HLPARAM lParam, int n
         loadDataFileHeader(fd,&head);
         head.wTotal = param->pItemList->count();
         saveDataFileHeader(fd,&head);
-        for(int i = 0; i < param->pItemList->count();i++)
+        for(int i = 0; i < param->pItemList->count();)
         {
             ITEM* item = (ITEM*)param->pItemList->at(i);
             if(!item) continue;
-            saveDBRecord(FILE_TYPE_ITEM,i,item);
+            saveDBRecord(FILE_TYPE_ITEM,++i,item);
         }
         closeDB(FILE_TYPE_ITEM);
         break;

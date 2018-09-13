@@ -341,7 +341,7 @@ void HMainDataHandle::closeDBDataFile(FILEHANDLE* filehandle)
 //索引就是按厂站的地址来寻找的
 HStation* HMainDataHandle::findStationByIndex(ushort wIndex)
 {
-    if(wIndex > m_stationList.count())
+    if(wIndex >= m_stationList.count())
         return NULL;
     return m_stationList[wIndex];
 }
@@ -823,10 +823,10 @@ bool HMainDataHandle::loadFormulaList()
     if((int)-1 != fd)
     {
         loadDataFileHeader(fd,&head);
-        for(int i = 0; i < head.wTotal;i++)
+        for(int i = 0; i < head.wTotal;)
         {
             FORMULA* formula = new FORMULA;
-            loadDBRecord(FILE_TYPE_FORMULA,i,formula);
+            loadDBRecord(FILE_TYPE_FORMULA,++i,formula);
             formulaList.append(formula);
         }
         closeDB(FILE_TYPE_FORMULA);
@@ -837,10 +837,10 @@ bool HMainDataHandle::loadFormulaList()
     if((int)-1 != fd)
     {
         loadDataFileHeader(fd,&head);
-        for(int i = 0; i < head.wTotal;i++)
+        for(int i = 0; i < head.wTotal;)
         {
             ITEM* item = new ITEM;
-            loadDBRecord(FILE_TYPE_ITEM,i,item);
+            loadDBRecord(FILE_TYPE_ITEM,++i,item);
             itemList.append(item);
         }
         closeDB(FILE_TYPE_ITEM);

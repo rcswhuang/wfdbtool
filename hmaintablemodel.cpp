@@ -434,14 +434,21 @@ bool MainTableModel::setDigitalData( const QModelIndex & index, const QVariant &
         }
         else if(col == COL_DIGITAL_MAINLOCKNO)//主锁号
         {
+            //锁号默认10位
+            QString str = QString("%1").arg(value.toString(),10,'0');
+            (*strItemList)[col] = str;
             pDigital->dwLockNo = (ulong)value.toULongLong();
         }
         else if(col == COL_DIGITAL_OPENLOCKNO)//分锁号
         {
+            QString str = QString("%1").arg(value.toString(),10,'0');
+            (*strItemList)[col] = str;
             pDigital->dwFenLockNo = (ulong)value.toULongLong();
         }
         else if(col == COL_DIGITAL_CLOSELOCKNO)//合锁号
         {
+            QString str = QString("%1").arg(value.toString(),10,'0');
+            (*strItemList)[col] = str;
             pDigital->dwHeLockNo = (ulong)value.toULongLong();
         }
     }
