@@ -26,6 +26,11 @@ MainTableView::MainTableView(QWidget * parent):QTableView(parent)
     pView->setHighlightSections(false);
     QFont headerviewFont(QStringLiteral("微软雅黑"), 10, QFont::Bold);
     pView->setFont(headerviewFont);
+    pView->setFrameShape(QFrame::NoFrame);
+    pView->setStyleSheet("QHeaderView::section{background:skyblue;}");
+    QHeaderView* pVerView = verticalHeader();
+    pVerView->setFrameShape(QFrame::NoFrame);
+    pVerView->setStyleSheet("QHeaderView::section{background:skyblue;}");
 
     QFont modelFont(QStringLiteral("微软雅黑"), 10, QFont::Normal);
     setFont(modelFont);
