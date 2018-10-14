@@ -82,28 +82,16 @@ FORMS    += mainwindow.ui \
 RESOURCES += \
     mainwindow.qrc
 
-
+LIBS += -L../lib -ldatafile -lformula -lrule -lprivilege
 unix{
-  #  UI_DIR = .ui
-   # MOC_DIR = .moc
-   # OBJECTS_DIR	= .obj
-
-    DEFINES += \
-
-    LIBPATH +=	\
-
-    LIBS += -L ../lib -ldatafile -lformula -lrule
-
+    UI_DIR = temp/ui
+    MOC_DIR = temp/moc
+    OBJECTS_DIR	= temp/obj
 }
 
 win32{
     UI_DIR = temp/ui
     MOC_DIR = temp/moc
     OBJECTS_DIR	= temp/obj
-    LIBS += \
-         ../lib/datafile.lib \
-         ../lib/formula.lib \
-         ../lib/rule.lib
-
 }
 

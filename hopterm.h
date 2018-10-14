@@ -1,7 +1,7 @@
 ﻿#ifndef HOPTERM_H
 #define HOPTERM_H
-#include "publicdata.h"
-#include "dbtoolapi.h"
+//#include "publicdata.h"
+#include "hdbtoolapi.h"
 #include <QObject>
 
 class HOpTerm : public QObject

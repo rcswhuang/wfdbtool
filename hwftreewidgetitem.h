@@ -1,6 +1,6 @@
 ﻿#ifndef WFTREEWIDGETITEM_H
 #define WFTREEWIDGETITEM_H
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include <QTreeWidgetItem>
 class QObject;
 class HTreeWidgetItem : public QTreeWidgetItem

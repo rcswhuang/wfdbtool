@@ -1,5 +1,5 @@
 ﻿#include "hmulcombobox.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include<QVBoxLayout>
 #include <QLineEdit>
 #include <QApplication>

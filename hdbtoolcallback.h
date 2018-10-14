@@ -1,6 +1,7 @@
 #ifndef HDBTOOLCALLBACK_H
 #define HDBTOOLCALLBACK_H
-#include "publicdata.h"
+#include "hnamespace.h"
+#include "hkernelapi.h"
 /******************************************定义回调函数********************************/
 #include "hruleeditapi.h"
 //公式类的回调函数

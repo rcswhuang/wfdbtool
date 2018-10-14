@@ -1,6 +1,6 @@
 ﻿#include "hoptermdlg.h"
 #include "ui_optermdlg.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include <QTreeWidgetItem>
 #include <QFile>
 #include <QContextMenuEvent>

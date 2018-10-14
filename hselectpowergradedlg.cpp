@@ -1,7 +1,7 @@
 ﻿#include <QtGui>
 #include "hselectpowergradedlg.h"
 #include "hstation.h"
-#include "publicdata.h"
+//#include "publicdata.h"
 HSelectPowerGradeDlg::HSelectPowerGradeDlg(QDialog *parent):QDialog(parent)
 {
 	setupUi(this);

@@ -1,7 +1,7 @@
 ﻿#include "hlocktypedlg.h"
 #include "ui_locktype.h"
 #include "hmaindatahandle.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include <QMessageBox>
 
 HLockTypeDlg::HLockTypeDlg(QWidget *parent) :

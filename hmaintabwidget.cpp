@@ -1,5 +1,5 @@
 ﻿#include "hmaintabwidget.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include <QTabBar>
 #include <QMessageBox>
 

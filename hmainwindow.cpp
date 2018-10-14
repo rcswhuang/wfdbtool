@@ -1,11 +1,11 @@
 ﻿#include "hmaintable.h"
-#include "publicdata.h"
+#include "hfileapi.h"
 #include "hmaintablemodel.h"
 #include "hwftreewidgetitem.h"
 #include "htableitemdelegate.h"
 #include "hwftreewidget.h"
 #include "hmainwindow.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include "hmaintabwidget.h"
 #include "hpowergradedlg.h"
 #include "hselectpowergradedlg.h"
@@ -15,6 +15,8 @@
 #include "hoptermdlg.h"
 #include "hlocknodlg.h"
 #include "hformulapi.h"
+#include "hprivilegeapi.h"
+#include "hnamespace.h"
 #include <QDockWidget>
 #include <QSplitter>
 #include <QMenuBar>
@@ -201,6 +203,12 @@ void MainWindow::createAction()
 //更新登录Action的图标
 void MainWindow::lockActtoggled(bool checked)
 {
+    QString strName;
+    bool bok= checkPrivilege(HPrivis::ConfigureToolPrivi,strName,QString("组态工具"));
+    if(!bok)
+    {
+        return;
+    }
     lockAct->setChecked(checked);//1 0
     if(checked)
     {

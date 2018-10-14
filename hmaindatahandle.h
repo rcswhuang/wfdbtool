@@ -2,8 +2,8 @@
 #define MAINDATAHANDLE_H
 //这个类封装了对五防厂站所有的操作
 //供树形、表格型对象使用，避免直接对厂站的操作
-#include "publicdata.h"
-#include "dbtoolapi.h"
+#include "hfileapi.h"
+#include "hdbtoolapi.h"
 #include "hformulapi.h"
 #include "hruleeditapi.h"
 #include "hstation.h"

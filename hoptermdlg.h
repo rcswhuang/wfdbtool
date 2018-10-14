@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QLineEdit>
-#include "publicdata.h"
+//#include "publicdata.h"
 #include "hmaindatahandle.h"
 #include <QMetaType>
 #define TYPE_OPERATOR 0x00

@@ -2,9 +2,9 @@
 #pragma execution_character_set("utf-8")
 #endif
 #include "hmaintable.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include "hformulapi.h"
-#include "publicdata.h"
+//#include "publicdata.h"
 #include "hmaintablemodel.h"
 #include "htableitemdelegate.h"
 #include "hpointselectdlg.h"
@@ -564,7 +564,7 @@ void MainTableView::showFormulaDialog(quint8 type,quint8 col)
     ushort wGroupID = pDelegate->groupID();
     int nDigitalIndex = modelIndex.row();
     DIGITAL* pDigital = HMainDataHandle::Instance()->findDigitalByIndex(pStation,wGroupID,nDigitalIndex);
-    if(!pDigital) return;
+    //if(NULL == pDigital) return;
     if(type == 1) //编辑规则
     {
         QString strRuleFormula;//规则公式
@@ -688,7 +688,8 @@ void MainTableView::showDoubleDgtDialog()
     ushort wGroupID = pDelegate->groupID();
     int nDigitalIndex = modelIndex.row();
     DIGITAL* pDigital = HMainDataHandle::Instance()->findDigitalByIndex(pStation,wGroupID,nDigitalIndex);
-
+    if(NULL == pDigital)
+        return;
     //双位置点信息
     int nDoubleDigitalID = modelIndex.data(Qt::UserRole).toInt();
 

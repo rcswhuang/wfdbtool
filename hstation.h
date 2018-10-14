@@ -2,8 +2,8 @@
 #define STATION_H
 #include <QObject>
 #include <QVector>
-#include "publicdata.h"
-
+#include "hfileapi.h"
+#include "hkernelapi.h"
 //定义独立五防厂站类
 class HStation : public QObject
 {

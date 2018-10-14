@@ -1,7 +1,7 @@
 ﻿#include "hmaintablemodel.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include "hstation.h"
-#include "publicdata.h"
+//#include "publicdata.h"
 #include "hmaindatahandle.h"
 #include <QVector>
 /*

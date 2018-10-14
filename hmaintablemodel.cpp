@@ -2,9 +2,9 @@
 #pragma execution_character_set("utf-8")
 #endif
 #include "hmaintablemodel.h"
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 #include "hstation.h"
-#include "publicdata.h"
+//#include "publicdata.h"
 #include "hmaindatahandle.h"
 MainTableModel::MainTableModel(QObject * parent)
                :QAbstractTableModel(parent)

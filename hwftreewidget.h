@@ -3,7 +3,7 @@
 
 
 #include <QTreeWidget>
-#include "dbtoolapi.h"
+#include "hdbtoolapi.h"
 class QWidget;
 class HTreeWidgetItem;
 class QContextMenuEvent;

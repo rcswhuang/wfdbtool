@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "hstation.h"
-#include "publicdata.h"
+//#include "hfileapi.h"
 namespace Ui {
 class pointSelectDlg;
 }
