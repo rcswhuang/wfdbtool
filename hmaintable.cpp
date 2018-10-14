@@ -24,7 +24,7 @@ MainTableView::MainTableView(QWidget * parent):QTableView(parent)
     setShowGrid(true);
     QHeaderView* pView = horizontalHeader();
     pView->setHighlightSections(false);
-    QFont headerviewFont(QStringLiteral("微软雅黑"), 10, QFont::Bold);
+    QFont headerviewFont(QStringLiteral("宋体"), 10, QFont::Bold);
     pView->setFont(headerviewFont);
     pView->setFrameShape(QFrame::NoFrame);
     pView->setStyleSheet("QHeaderView::section{background:skyblue;}");
@@ -32,13 +32,8 @@ MainTableView::MainTableView(QWidget * parent):QTableView(parent)
     pVerView->setFrameShape(QFrame::NoFrame);
     pVerView->setStyleSheet("QHeaderView::section{background:skyblue;}");
 
-    QFont modelFont(QStringLiteral("微软雅黑"), 10, QFont::Normal);
+    QFont modelFont(QStringLiteral("宋体"), 10, QFont::Normal);
     setFont(modelFont);
-
-
-    //setRowHeight(height+10);
-    //resizeColumnsToContents();
-
 }
 
 MainTableView::~MainTableView()
@@ -81,7 +76,7 @@ void MainTableView::resetColumnWidth()
         break;
     }
 
-    QFont modelFont(QStringLiteral("微软雅黑"), 10, QFont::Normal);
+    QFont modelFont(QStringLiteral("宋体"), 10, QFont::Normal);
     //好像不能单独通过类保存起来再用
     QFontMetrics modelFontMetrics(modelFont);
     int nRowHeight;
@@ -209,7 +204,6 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
                 menuDgt->popup(event->globalPos());
             }
         }
-
     }
     QTableView::mousePressEvent(event);
 }

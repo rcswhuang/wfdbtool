@@ -27,10 +27,12 @@ void HLockNoDlg::initHeader()
     ui->tableWidget->setShowGrid(true);
     QHeaderView* pView = ui->tableWidget->horizontalHeader();
     pView->setHighlightSections(false);
-    QFont headerviewFont(QStringLiteral("微软雅黑"), 10, QFont::Bold);
+    QFont headerviewFont(QStringLiteral("宋体"), 10, QFont::Bold);
     pView->setFont(headerviewFont);
+    pView->setFrameShape(QFrame::NoFrame);
+    pView->setStyleSheet("QHeaderView::section{background:skyblue;}");
 
-    QFont modelFont(QStringLiteral("微软雅黑"), 10, QFont::Normal);
+    QFont modelFont(QStringLiteral("宋体"), 10, QFont::Normal);
     ui->tableWidget->setFont(modelFont);
 
     ui->tableWidget->setColumnCount(LOCKNOHEADER);
