@@ -62,7 +62,7 @@
         </font>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="czdcTab">
         <attribute name="title">
@@ -73,7 +73,6 @@
         <attribute name="title">
          <string>状态与位置</string>
         </attribute>
-        <zorder>tableWidget</zorder>
        </widget>
        <widget class="QWidget" name="bhmTab">
         <attribute name="title">

@@ -9,7 +9,7 @@ HPowerGradeDlg::HPowerGradeDlg(QWidget *parent) :
     ui(new Ui::PowerGradeDlg)
 {
     ui->setupUi(this);
-
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     initpower();
     initConnect();
     initAllList();

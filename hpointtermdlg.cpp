@@ -8,6 +8,7 @@ HPointTermDlg::HPointTermDlg(QWidget *parent) :
     ui(new Ui::pointTypeDlg)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     pDataHandle = HMainDataHandle::Instance();
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(tableWidgetPress(QTableWidgetItem*)));
     initDlg();
@@ -31,9 +32,9 @@ void HPointTermDlg::initDlg()
     QStringList headerLabels;
     headerLabels<<QStringLiteral("属性")<<QStringLiteral("值");
     ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
+    ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:LightCyan;}"); //设置表头背景色
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setHighlightSections(false);
-    //ui->tableWidget->horizontalHeader()->resizeSection(1, 180);
 
     ui->typeCombo->addItem(QStringLiteral("开关元件"),QVariant(TYPE_POINT_KAIGUAN));
     ui->typeCombo->addItem(QStringLiteral("刀闸元件"),QVariant(TYPE_POINT_DAOZHA));

@@ -24,8 +24,7 @@
 #include <QHeaderView>
 #include <QCloseEvent>
 #include <QMessageBox>
-
-
+bool g_blogin = false;
 MainWindow::MainWindow(QWidget * parent/* = 0*/, Qt::WindowFlags flags /*= 0*/)
             :QMainWindow(parent,flags)
 {
@@ -60,6 +59,7 @@ MainWindow::MainWindow(QWidget * parent/* = 0*/, Qt::WindowFlags flags /*= 0*/)
     setWindowTitle(QStringLiteral("五防数据库组态工具"));
     setWindowIcon(QIcon(":/image/config.png"));
 	connectAction();
+    updateMenu();
 }
 
 MainWindow::~MainWindow()
@@ -98,12 +98,15 @@ void MainWindow::treeItemSelectChanged()
     uchar btType = pItem->getTreeWidgetItemType();
     if(btType == TREEPARAM_USERDBROOT || btType == TREEPARAM_USERDB)
     {
-        if(btType == TREEPARAM_USERDB)
+        if(g_blogin)
         {
-            HUserDb *userDb = (HUserDb*)pItem->itemData();
-            if(userDb)
+            if(btType == TREEPARAM_USERDB)
             {
-                userDb->showConfigWindow();
+                HUserDb *userDb = (HUserDb*)pItem->itemData();
+                if(userDb)
+                {
+                    userDb->showConfigWindow();
+                }
             }
         }
         return;
@@ -135,10 +138,7 @@ void MainWindow::treeItemSelectChanged()
     {
         mainTabWidget->setTabText(TYPE_TAB_STATION,QStringLiteral("送监控遥信"));
     }
-    if(btType == TREEPARAM_DIGITALTOSIM)
-    {
-        mainTabWidget->setTabText(TYPE_TAB_STATION,QStringLiteral("送模拟屏遥信"));
-    }
+
     if(btType == TREEPARAM_ANALOGUEFROMSCADA)
     {
         mainTabWidget->setTabText(TYPE_TAB_STATION,QStringLiteral("从监控接收遥测"));
@@ -147,10 +147,7 @@ void MainWindow::treeItemSelectChanged()
     {
         mainTabWidget->setTabText(TYPE_TAB_STATION,QStringLiteral("送监控遥测"));
     }
-    if(btType == TREEPARAM_ANALOGUETOSIM)
-    {
-        mainTabWidget->setTabText(TYPE_TAB_STATION,QStringLiteral("送模拟屏遥测"));
-    }
+
 
     mainTableModel->initData(btType);
     mainTableView->setModelType(btType);
@@ -209,6 +206,7 @@ void MainWindow::lockActtoggled(bool checked)
     {
         return;
     }
+    g_blogin = checked;
     lockAct->setChecked(checked);//1 0
     if(checked)
     {
@@ -218,6 +216,8 @@ void MainWindow::lockActtoggled(bool checked)
     {
         lockAct->setIcon(QIcon(":/image/lock1.png"));
     }
+    updateMenu();
+    //发射信号解锁菜单
 }
 
 void MainWindow::createMenus()
@@ -227,6 +227,7 @@ void MainWindow::createMenus()
     sysMenu->addAction(saveDbAct);
     sysMenu->addSeparator();
     sysMenu->addAction(exitAct);
+
 
     //配置
     configMenu = menuBar()->addMenu(QStringLiteral("配置(&C)"));
@@ -249,13 +250,20 @@ void MainWindow::createMenus()
 
 void MainWindow::createToolBar()
 {
+    loginToolBar = new QToolBar(this);
+    loginToolBar->setAllowedAreas(Qt::TopToolBarArea);
+    loginToolBar->setMovable(false);
+    loginToolBar->setIconSize(QSize(32,32));
+    loginToolBar->addAction(lockAct);
+
     mainToolBar = new QToolBar(this);
     mainToolBar->setAllowedAreas(Qt::TopToolBarArea);
     mainToolBar->setMovable(false);
     mainToolBar->setIconSize(QSize(32,32));
-    mainToolBar->addAction(lockAct);
+    //mainToolBar->addAction(lockAct);
     mainToolBar->addAction(upAct);
     mainToolBar->addAction(downAct);
+
 
     defToolBar = new QToolBar(this);
     defToolBar->setAllowedAreas(Qt::TopToolBarArea);
@@ -265,6 +273,8 @@ void MainWindow::createToolBar()
     defToolBar->addAction(lockTypeAct);
     defToolBar->addAction(stationPointAct);
     defToolBar->addAction(termAct);
+
+    addToolBar(loginToolBar);
     addToolBar(mainToolBar);
     addToolBar(defToolBar);
 }
@@ -418,3 +428,11 @@ void MainWindow::configDigitalLockEx()//配置遥信扩展锁
     dlg.exec();
 }
 
+void MainWindow::updateMenu()
+{
+    defToolBar->setEnabled(g_blogin);
+    mainToolBar->setEnabled(g_blogin);
+    operatorMenu->setEnabled(g_blogin);
+    configMenu->setEnabled(g_blogin);
+    sysMenu->setEnabled(g_blogin);
+}

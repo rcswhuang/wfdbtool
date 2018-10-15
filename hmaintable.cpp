@@ -19,6 +19,7 @@
 #include <QMap>
 #include <QItemSelectionModel>
 #include <QTextCodec>
+extern bool g_blogin;
 MainTableView::MainTableView(QWidget * parent):QTableView(parent)
 {
     setShowGrid(true);
@@ -141,7 +142,7 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
     if(QGuiApplication::mouseButtons() == Qt::RightButton)
     {
         //setSelectionBehavior(QAbstractItemView::SelectRows);
-
+        if(!g_blogin) return;
         if(nModelType == TREEPARAM_ANALOGUE)
         {
             if(colSelect())
@@ -170,10 +171,10 @@ void MainTableView::mousePressEvent(QMouseEvent *event)
                 menuAna->addAction(delAnaAction);
                 connect(delAnaAction,SIGNAL(triggered()),this,SLOT(delAnalogue()));
 
-            menuAna->popup(event->globalPos());
+                menuAna->popup(event->globalPos());
             }
         }
-        if(nModelType == TREEPARAM_DIGITAL)
+        else if(nModelType == TREEPARAM_DIGITAL)
         {
             //要判断如果有行选择中则弹出选中列信息
             if(colSelect())

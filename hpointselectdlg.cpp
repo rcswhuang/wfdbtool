@@ -7,6 +7,7 @@ HPointSelectDlg::HPointSelectDlg(QWidget *parent) :
     ui(new Ui::pointSelectDlg)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     wGroupID = (int)-1;
     wPointID = (int)-1;
     strDoubleDigitalName = "";

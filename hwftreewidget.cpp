@@ -11,6 +11,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QMessageBox>
+extern bool g_blogin;
 //厂站/间隔/电压等级/设备/YXYC
 /*
 注意:
@@ -276,6 +277,7 @@ void HTreeWidget::contextMenuEvent(QContextMenuEvent * event )
 //弹出菜单 包含新增和删除
 void HTreeWidget::initStation(QContextMenuEvent * event)
 {
+    if(!g_blogin) return;
 	QMenu *menuStation = new QMenu;
     QAction* addStationAction = new QAction(QStringLiteral("新增厂站"),this);   /*新增一个新厂站*/
     addStationAction->setStatusTip(QStringLiteral("增加一个新的厂站"));               /*增加一个新的厂站*/
@@ -326,7 +328,7 @@ void HTreeWidget::delStation()
 
 void HTreeWidget::addStationItem(HTreeWidgetItem* pItem,HStation* pStation)
 {
-    if(NULL == pStation) return;
+    if(NULL == pStation || !g_blogin) return;
     HTreeWidgetItem *stationItem = new HTreeWidgetItem((HTreeWidgetItem*)0,TREEPARAM_STATION);//厂站 根目录
     Q_ASSERT(stationItem);
     stationItem->setItemData((QObject*)pStation);
@@ -424,8 +426,8 @@ void HTreeWidget::updateItemName(QString strName,int nGroupID )
 //大间隔
 void HTreeWidget::initEquipmentGroup(QContextMenuEvent * event)
 {
+    if(!g_blogin) return;
 	QMenu* equipmentGroupMenu = new QMenu();
-	
     QAction* addEquipmentAction = new QAction(QStringLiteral("新增间隔"),this); /*新增一个间隔*/
 	equipmentGroupMenu->addAction(addEquipmentAction);
     addEquipmentAction->setIcon(QIcon(":/image/additem.png"));
@@ -535,8 +537,8 @@ void HTreeWidget::addEquipmentGroup()
 //电压等级下的设备间隔
 void HTreeWidget::initEquipment(QContextMenuEvent * event)
 {
+    if(!g_blogin) return;
 	QMenu* equipmentMenu = new QMenu();
-	
     QAction* delEquipmentAction = new QAction(QStringLiteral("删除选中间隔"),this);   /*删除选中间隔*/
 	equipmentMenu->addAction(delEquipmentAction);
     delEquipmentAction->setIcon(QIcon(":/image/delitem.png"));
@@ -585,8 +587,8 @@ void HTreeWidget::copyEquipment()
 
 void HTreeWidget::initConfigDigitalLockEx(QContextMenuEvent* event)
 {
+    if(!g_blogin) return;
     QMenu* digitalLockExMenu = new QMenu();
-
     QAction* configLockExAct = new QAction(QStringLiteral("配置扩展锁"),this);
     digitalLockExMenu->addAction(configLockExAct);
     configLockExAct->setIcon(QIcon(":/image/lockex.png"));

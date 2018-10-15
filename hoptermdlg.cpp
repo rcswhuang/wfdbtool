@@ -15,6 +15,7 @@ HOpTermDlg::HOpTermDlg(QWidget *parent) :
     ui(new Ui::optermdlg)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     pDataHandle = HMainDataHandle::Instance();
     initLeftTree();
     initRightWidget();

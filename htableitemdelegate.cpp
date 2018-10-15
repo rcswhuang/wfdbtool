@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QMenu>
 #include <QAction>
-
+extern bool g_blogin;
 HTableItemDelegate::HTableItemDelegate(QObject* parent)
 					:QItemDelegate(parent)
 {
@@ -27,6 +27,7 @@ HTableItemDelegate::~HTableItemDelegate()
 //ok
 QWidget*  HTableItemDelegate::createEditor ( QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    if(!g_blogin) return NULL;
     MainTableView* pMainTableView = qobject_cast<MainTableView*>(this->parent());
     if(pMainTableView->selectionBehavior() == QAbstractItemView::SelectRows)
         return NULL;

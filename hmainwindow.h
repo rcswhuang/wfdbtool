@@ -59,9 +59,9 @@ public slots:
     void modelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
     void powergradeChanged();//电压等级定义改变
     void saveData();
-
-
     void configDigitalLockEx();//配置遥信扩展锁
+
+    void updateMenu();
 public:
 	MainTableView* mainTableView;
 	HTreeWidget* pTreeWidget;
@@ -112,12 +112,13 @@ private:
 
     //工具栏图标
     //主要操作的action
-    QToolBar * mainToolBar;
     QAction* lockAct;//解闭锁
     QAction* upAct;  //上移
     QAction* downAct; //下移
 
     //定义方面的action
+    QToolBar* loginToolBar;
+    QToolBar* mainToolBar;
     QToolBar* defToolBar;//工具栏:主要涉及定义方面的(电压等级定义，锁类型定义等等)
 
 };

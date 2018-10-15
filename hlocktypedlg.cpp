@@ -9,6 +9,7 @@ HLockTypeDlg::HLockTypeDlg(QWidget *parent) :
     ui(new Ui::lockTypeDlg)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     pDataHandle = HMainDataHandle::Instance();
     connect(ui->lockTypeTable,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(tableWidgetPress(QTableWidgetItem*)));
     initDlg();
@@ -26,15 +27,19 @@ void HLockTypeDlg::initDlg()
     ui->lockTypeTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->lockTypeTable->setSortingEnabled(false);
     ui->lockTypeTable->setShowGrid(true);
+
     ui->lockTypeTable->setColumnCount(3);
-    ui->lockTypeTable->setColumnWidth(0,ui->lockTypeTable->width()*2/5);
-    ui->lockTypeTable->setColumnWidth(1,ui->lockTypeTable->width()*3/10-20);
-    ui->lockTypeTable->setColumnWidth(2,ui->lockTypeTable->width()*3/10-20);
+    ui->lockTypeTable->horizontalHeader()->setDefaultSectionSize(312);
+    ui->lockTypeTable->horizontalHeader()->setHighlightSections(false);
+    ui->lockTypeTable->horizontalHeader()->setStyleSheet("QHeaderView::section{background:LightCyan;}"); //设置表头背景色
+
+    int width = ui->lockTypeTable->horizontalHeader()->defaultSectionSize();
+    ui->lockTypeTable->setColumnWidth(0,width*2/5);
+    ui->lockTypeTable->setColumnWidth(1,width*3/10-20);
+    ui->lockTypeTable->setColumnWidth(2,width*3/10-20);
     QStringList headerLabels;
     headerLabels << QStringLiteral("锁名称")<<QStringLiteral("锁类型")<<QStringLiteral("锁属性");
     ui->lockTypeTable->setHorizontalHeaderLabels(headerLabels);
-    //ui->lockTypeTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->lockTypeTable->horizontalHeader()->setHighlightSections(false);
 
     connect(ui->stationCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(stationComboChanged(int)));
     for(int i = 0; i < pDataHandle->m_stationList.count();i++)

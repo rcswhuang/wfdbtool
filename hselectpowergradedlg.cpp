@@ -5,6 +5,7 @@
 HSelectPowerGradeDlg::HSelectPowerGradeDlg(QDialog *parent):QDialog(parent)
 {
 	setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
 	pStation = NULL;
     nPowerID = (int)-1;
 	strPowerName = "";

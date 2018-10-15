@@ -11,6 +11,7 @@ HOpTermSetDlg::HOpTermSetDlg(QWidget *parent) :
     ui(new Ui::optermsetdlg)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags()&~Qt::WindowContextHelpButtonHint);
     strFileName = "";
     initDlg();
     bModifyed = false;
@@ -30,13 +31,12 @@ void HOpTermSetDlg::initDlg()
     ui->tableWidget->setSortingEnabled(false);
     ui->tableWidget->setShowGrid(true);
     ui->tableWidget->setColumnCount(1);
-    ui->tableWidget->setColumnWidth(0,ui->tableWidget->width()/3);
+    ui->tableWidget->setColumnWidth(0,120);
+    ui->tableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:LightCyan;}"); //设置表头背景色
+    ui->tableWidget->horizontalHeader()->setHighlightSections(false);
     QStringList headerLabels;
     headerLabels << QStringLiteral("术语名");
     ui->tableWidget->setHorizontalHeaderLabels(headerLabels);
-   // ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setHighlightSections(false);
-
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(refreshTable(int)));
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(tableItemClicked(QTableWidgetItem*)));
     ui->tabWidget->setCurrentIndex(0);

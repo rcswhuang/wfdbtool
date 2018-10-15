@@ -84,7 +84,26 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="QTableWidget" name="lockTypeTable"/>
+       <widget class="QTableWidget" name="lockTypeTable">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>313</width>
+          <height>230</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>宋体</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
